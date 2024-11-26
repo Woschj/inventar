@@ -5,6 +5,8 @@ from datetime import datetime
 import os
 import traceback
 from functools import wraps
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
 # Flask-App initialisieren
 app = Flask(__name__)
@@ -1115,57 +1117,72 @@ def tool_details(barcode):
         flash('Ein Fehler ist aufgetreten', 'error')
         return redirect(url_for('index'))
 
-@app.route('/tool/<barcode>/update', methods=['POST'])
-def update_tool(barcode):
+@app.route('/tool/<tool_barcode>/update', methods=['POST'])
+@admin_required
+def update_tool(tool_barcode):
     try:
         with get_db_connection(TOOLS_DB) as conn:
-            # Aktuellen Status prüfen
-            current_tool = conn.execute('SELECT status FROM tools WHERE barcode = ?', 
-                                      (barcode,)).fetchone()
+            # Alte Werte abrufen
+            old_data = conn.execute('SELECT * FROM tools WHERE barcode = ?', 
+                                  (tool_barcode,)).fetchone()
+            old_values = {
+                'gegenstand': old_data['gegenstand'],
+                'ort': old_data['ort'],
+                'typ': old_data['typ'],
+                'status': old_data['status']
+            }
             
-            if not current_tool:
-                flash('Werkzeug nicht gefunden', 'error')
-                return redirect(url_for('index'))
+            # Neue Werte
+            new_values = {
+                'gegenstand': request.form['gegenstand'],
+                'ort': request.form['ort'],
+                'typ': request.form['typ'],
+                'status': request.form['status']
+            }
             
-            # Wenn ausgeliehen, nur bestimmte Änderungen erlauben
-            if current_tool['status'] == 'Ausgeliehen':
-                conn.execute('''
-                    UPDATE tools 
-                    SET gegenstand = ?,
-                        typ = ?
-                    WHERE barcode = ?
-                ''', (
-                    request.form['gegenstand'],
-                    request.form['typ'],
-                    barcode
-                ))
-            else:
-                # Alle Änderungen erlauben
-                conn.execute('''
-                    UPDATE tools 
-                    SET gegenstand = ?,
-                        typ = ?,
-                        ort = ?,
-                        status = ?
-                    WHERE barcode = ?
-                ''', (
-                    request.form['gegenstand'],
-                    request.form['typ'],
-                    request.form['ort'],
-                    request.form['status'],
-                    barcode
-                ))
+            # Wenn Status auf "Verfügbar" gesetzt wird und vorher ausgeliehen war
+            if new_values['status'] == 'Verfügbar' and old_values['status'] == 'Ausgeliehen':
+                # Offene Ausleihe in lendings DB abschließen
+                with get_db_connection(LENDINGS_DB) as lendings_conn:
+                    lendings_conn.execute('''
+                        UPDATE lendings 
+                        SET return_time = datetime('now', 'localtime')
+                        WHERE tool_barcode = ? AND return_time IS NULL
+                    ''', (tool_barcode,))
+                    lendings_conn.commit()
             
+            # Tool Update durchführen
+            conn.execute('''
+                UPDATE tools 
+                SET gegenstand = ?, ort = ?, typ = ?, status = ?
+                WHERE barcode = ?
+            ''', (
+                new_values['gegenstand'],
+                new_values['ort'],
+                new_values['typ'],
+                new_values['status'],
+                tool_barcode
+            ))
             conn.commit()
-            flash('Werkzeug erfolgreich aktualisiert', 'success')
             
-        return redirect(url_for('tool_details', barcode=barcode))
-        
+            # Logging der Änderungen
+            log_db_change(
+                action="Update",
+                table="tools",
+                details=f"Werkzeug {tool_barcode}",
+                old_values=old_values,
+                new_values=new_values,
+                user=session.get('username', 'Admin')
+            )
+            
+            flash('Werkzeug erfolgreich aktualisiert', 'success')
+            return redirect(url_for('tool_details', tool_barcode=tool_barcode))
+            
     except Exception as e:
         print(f"Fehler beim Aktualisieren: {str(e)}")
         traceback.print_exc()
         flash('Fehler beim Aktualisieren des Werkzeugs', 'error')
-        return redirect(url_for('tool_details', barcode=barcode))
+        return redirect(url_for('tool_details', tool_barcode=tool_barcode))
 
 @app.route('/consumable/<barcode>/update', methods=['POST'])
 def update_consumable(barcode):
@@ -1227,30 +1244,117 @@ def logout():
 def update_worker(worker_barcode):
     try:
         with get_db_connection(WORKERS_DB) as conn:
+            # Alte Werte abrufen
+            old_data = conn.execute('SELECT * FROM workers WHERE barcode = ?', 
+                                  (worker_barcode,)).fetchone()
+            old_values = {
+                'name': old_data['name'],
+                'lastname': old_data['lastname'],
+                'email': old_data['email'],
+                'bereich': old_data['bereich']
+            }
+            
+            # Neue Werte
+            new_values = {
+                'name': request.form['name'],
+                'lastname': request.form['lastname'],
+                'email': request.form['email'],
+                'bereich': request.form['bereich']
+            }
+            
+            # Update durchführen
             conn.execute('''
                 UPDATE workers 
-                SET name = ?,
-                    lastname = ?,
-                    email = ?,
-                    bereich = ?
+                SET name = ?, lastname = ?, email = ?, bereich = ?
                 WHERE barcode = ?
             ''', (
-                request.form['name'],
-                request.form['lastname'],
-                request.form['email'],
-                request.form['bereich'],
+                new_values['name'],
+                new_values['lastname'],
+                new_values['email'],
+                new_values['bereich'],
                 worker_barcode
             ))
             conn.commit()
-            flash('Mitarbeiter erfolgreich aktualisiert', 'success')
             
-        return redirect(url_for('worker_details', worker_barcode=worker_barcode))
+            # Logging der Änderung mit alten und neuen Werten
+            log_db_change(
+                action="Update",
+                table="workers",
+                details=f"Mitarbeiter {worker_barcode}",
+                old_values=old_values,
+                new_values=new_values,
+                user=session.get('username', 'Admin')
+            )
+            
+            flash('Mitarbeiter erfolgreich aktualisiert', 'success')
+            return redirect(url_for('worker_details', worker_barcode=worker_barcode))
         
     except Exception as e:
         print(f"Fehler beim Aktualisieren: {str(e)}")
         traceback.print_exc()
         flash('Fehler beim Aktualisieren des Mitarbeiters', 'error')
         return redirect(url_for('worker_details', worker_barcode=worker_barcode))
+
+@app.route('/return_tool/<lending_id>', methods=['POST'])
+@admin_required
+def return_tool(lending_id):
+    try:
+        # Verbindung zu beiden Datenbanken
+        with get_db_connection(TOOLS_DB) as tools_conn, \
+             get_db_connection(LENDINGS_DB) as lendings_conn:
+            
+            # Aktuelle Ausleihe finden
+            lending = lendings_conn.execute('''
+                SELECT * FROM lendings 
+                WHERE id = ? AND return_time IS NULL
+            ''', (lending_id,)).fetchone()
+            
+            if lending:
+                tool_barcode = lending['tool_barcode']
+                
+                # Rückgabe in lendings DB eintragen
+                lendings_conn.execute('''
+                    UPDATE lendings 
+                    SET return_time = datetime('now', 'localtime')
+                    WHERE id = ?
+                ''', (lending_id,))
+                lendings_conn.commit()
+                
+                # Status in tools DB aktualisieren
+                tools_conn.execute('''
+                    UPDATE tools 
+                    SET status = 'Verfügbar'
+                    WHERE barcode = ?
+                ''', (tool_barcode,))
+                tools_conn.commit()
+                
+                # Logging der Rückgabe
+                log_db_change(
+                    action="Return",
+                    table="lendings",
+                    details=f"Werkzeug {tool_barcode} zurückgegeben",
+                    old_values={'status': 'Ausgeliehen'},
+                    new_values={'status': 'Verfügbar'},
+                    user=session.get('username', 'Admin')
+                )
+                
+                return jsonify({
+                    'success': True,
+                    'message': 'Werkzeug erfolgreich zurückgegeben'
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': 'Keine aktive Ausleihe gefunden'
+                })
+                
+    except Exception as e:
+        print(f"Fehler bei der Rückgabe: {str(e)}")
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': f'Fehler bei der Rückgabe: {str(e)}'
+        })
 
 # App starten
 if __name__ == '__main__':
@@ -1260,5 +1364,46 @@ if __name__ == '__main__':
     
     print("\nPrüfe Datenbankstatus:")
     check_dbs()
+    
+    # Logging-Konfiguration
+    log_directory = os.path.join(BASE_DIR, 'logs')
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+
+    # Logger für Datenbankänderungen
+    db_logger = logging.getLogger('db_changes')
+    db_logger.setLevel(logging.INFO)
+
+    # Handler konfigurieren (14 Tage Aufbewahrung)
+    handler = TimedRotatingFileHandler(
+        os.path.join(log_directory, 'db_changes.log'),
+        when='midnight',
+        interval=1,
+        backupCount=14
+    )
+
+    # Format für Log-Einträge
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    db_logger.addHandler(handler)
+
+    # Logging-Funktion für Datenbankänderungen
+    def log_db_change(action, table, details, old_values=None, new_values=None, user="System"):
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Basis-Nachricht
+        message = f"{timestamp} | {action} | Tabelle: {table} | "
+        
+        # Detaillierte Änderungen hinzufügen
+        if old_values and new_values:
+            changes = []
+            for key in old_values:
+                if key in new_values and old_values[key] != new_values[key]:
+                    changes.append(f"{key}: '{old_values[key]}' → '{new_values[key]}'")
+            if changes:
+                message += "Änderungen: " + " | ".join(changes) + " | "
+        
+        message += f"Details: {details} | Benutzer: {user}"
+        db_logger.info(message)
     
     app.run(debug=True)

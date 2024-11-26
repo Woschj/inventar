@@ -1,0 +1,2 @@
+2024-11-26 16:21:16,409 - INFO - Aktion: Update | Tabelle: workers | Details: Mitarbeiter M0006 aktualisiert | Benutzer: Admin
+2024-11-26 19:38:46,388 - INFO - 2024-11-26 19:38:46 | Return | Tabelle: lendings | Änderungen: status: 'Ausgeliehen' → 'Verfügbar' | Details: Werkzeug W0068 zurückgegeben | Benutzer: Admin
