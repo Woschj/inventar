@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1F2937">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Inventar">
+    <title>{% block title %}{% endblock %} - Werkzeugverwaltung</title>
+    
+    <!-- Tailwind CSS über CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome für Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- Fügen Sie dies im Head-Bereich hinzu -->
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="{{ url_for('index') }}" class="text-white font-bold">Inventar</a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-center space-x-4">
+                            <a href="{{ url_for('index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Werkzeuge</a>
+                            <a href="{{ url_for('workers') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Mitarbeiter</a>
+                            <a href="{{ url_for('consumables') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Verbrauchsmaterial</a>
+                            <a href="{{ url_for('manual_lending') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Manuelle Ausgabe</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 flex items-center">
+                    <button onclick="startQuickScan()" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white 
+                                   w-24 h-24 rounded-full 
+                                   flex items-center justify-center 
+                                   transform hover:scale-105 transition-transform
+                                   focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500
+                                   shadow-lg
+                                   mt-2">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-qrcode text-3xl mb-1"></i>
+                            <span class="text-xs font-medium">Quick Scan</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <a href="{{ url_for('admin_panel') }}" 
+                           class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-cog mr-2"></i>Administration
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hauptinhalt -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded 
+                        {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Content Block -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Quick Scan Modal -->
+    <div id="quickScanModal" class="modal hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 id="scanTitle" class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                    Werkzeug oder Material scannen
+                </h3>
+                
+                <!-- Scan-Schritte -->
+                <div class="flex justify-center space-x-4 mb-4">
+                    <div id="step1" class="flex items-center">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">1</span>
+                        <span class="ml-2">Werkzeug/Material</span>
+                    </div>
+                    <div class="text-gray-300">→</div>
+                    <div id="step2" class="flex items-center opacity-50">
+                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-white font-bold">2</span>
+                        <span class="ml-2">Mitarbeiter</span>
+                    </div>
+                </div>
+
+                <!-- Kamera-Vorschau -->
+                <div class="mt-4 relative">
+                    <div class="relative w-full h-64 bg-black rounded-lg overflow-hidden">
+                        <!-- Video Element -->
+                        <video id="scanner-video" 
+                               class="absolute inset-0 w-full h-full object-cover"
+                               playsinline autoplay muted></video>
+                               
+                        <!-- Scan-Bereich Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-64 h-48 border-2 border-white rounded-lg">
+                                <!-- Eckmarkierungen -->
+                                <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-blue-500"></div>
+                                <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-blue-500"></div>
+                                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-blue-500"></div>
+                                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-blue-500"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scan-Button Overlay -->
+                        <div id="scanButtonOverlay" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                            <button onclick="startScanning()" 
+                                    class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+                                Scannen starten
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Control Buttons -->
+                    <div class="mt-4 flex justify-between items-center">
+                        <button id="resetScanButton" 
+                                onclick="resetScanning()"
+                                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 hidden">
+                            Neu scannen
+                        </button>
+                        
+                        <button onclick="closeQuickScan()"
+                                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 ml-auto">
+                            Abbrechen
+                        </button>
+                    </div>
+                    
+                    <!-- Feedback Area -->
+                    <div id="scanFeedback" class="mt-2 text-center text-sm"></div>
+                </div>
+                
+                <!-- Manuelle Eingabe als Fallback -->
+                <div class="mt-2 px-7 py-3">
+                    <input type="text" id="quickScanInput"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Oder Barcode manuell eingeben..."
+                           autofocus>
+                </div>
+                
+                <!-- Feedback -->
+                <div id="scanFeedback" class="mt-2 text-sm hidden"></div>
+                
+                <!-- Buttons -->
+                <div class="items-center px-4 py-3">
+                    <button id="quickScanClose"
+                            onclick="closeQuickScan()"
+                            class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let firstBarcode = null;
+    let currentStep = 1;
+    let videoStream = null;
+    let isScanning = false;
+    let codeReader = null;
+
+    async function startCamera() {
+        const video = document.getElementById('scanner-video');
+        const debugInfo = document.getElementById('debugInfo');
+        
+        try {
+            // Liste verfügbare Kameras
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const cameras = devices.filter(device => device.kind === 'videoinput');
+            debugInfo.textContent = `Gefundene Kameras: ${cameras.length}`;
+            
+            // Kamerazugriff anfordern
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            
+            videoStream = stream;
+            video.srcObject = stream;
+            
+            // Warten bis Video lädt
+            video.onloadedmetadata = async () => {
+                try {
+                    await video.play();
+                    debugInfo.textContent += ' | Video gestartet';
+                    
+                    // ZXing Scanner starten
+                    const codeReader = new ZXing.BrowserMultiFormatReader();
+                    codeReader.decodeFromVideoDevice(null, 'scanner-video', (result, err) => {
+                        if (result) {
+                            handleBarcode(result.text);
+                        }
+                    });
+                    
+                } catch (error) {
+                    debugInfo.textContent += ` | Videofehler: ${error.message}`;
+                }
+            };
+            
+            // Fehlerbehandlung für Video
+            video.onerror = (error) => {
+                debugInfo.textContent += ` | Video-Fehler: ${error}`;
+            };
+            
+            return true;
+            
+        } catch (error) {
+            debugInfo.textContent = `Kamera-Fehler: ${error.message}`;
+            console.error('Kamera-Fehler:', error);
+            return false;
+        }
+    }
+
+    async function handleBarcode(barcode) {
+        if (!barcode) return;
+        
+        // Validiere Barcode
+        if (await validateBarcode(barcode, currentStep)) {
+            if (currentStep === 1) {
+                firstBarcode = barcode;
+                currentStep = 2;
+                updateScanStep(2);
+                document.getElementById('quickScanInput').value = '';
+                showFeedback('Werkzeug/Material erkannt! Bitte Mitarbeiter scannen', 'success');
+            } else {
+                window.location.href = `/quick_scan/${firstBarcode}/${barcode}`;
+            }
+        } else {
+            showFeedback('Ungültiger Barcode!', 'error');
+        }
+    }
+
+    function stopCamera() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+    }
+
+    function showFeedback(message, type = 'info') {
+        const feedback = document.getElementById('scanFeedback');
+        feedback.textContent = message;
+        feedback.className = `mt-2 text-sm ${type === 'error' ? 'text-red-600' : 'text-green-600'}`;
+        feedback.classList.remove('hidden');
+    }
+
+    function updateScanStep(step) {
+        const title = document.getElementById('scanTitle');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        
+        if (step === 1) {
+            title.textContent = 'Werkzeug oder Material scannen';
+            step1.classList.remove('opacity-50');
+            step2.classList.add('opacity-50');
+            step1.querySelector('span:first-child').classList.remove('bg-gray-300');
+            step1.querySelector('span:first-child').classList.add('bg-blue-500');
+        } else {
+            title.textContent = 'Mitarbeiter scannen';
+            step1.classList.add('opacity-50');
+            step2.classList.remove('opacity-50');
+            step2.querySelector('span:first-child').classList.remove('bg-gray-300');
+            step2.querySelector('span:first-child').classList.add('bg-blue-500');
+        }
+    }
+
+    async function validateBarcode(barcode, step) {
+        try {
+            const response = await fetch(`/validate_barcode/${barcode}/${step}`);
+            const data = await response.json();
+            return data.valid;
+        } catch (error) {
+            console.error('Validierungsfehler:', error);
+            return false;
+        }
+    }
+
+    async function startScanning() {
+        if (isScanning) return;
+        
+        const video = document.getElementById('scanner-video');
+        const scanButtonOverlay = document.getElementById('scanButtonOverlay');
+        const resetButton = document.getElementById('resetScanButton');
+        
+        try {
+            // Kamera starten
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            
+            videoStream = stream;
+            video.srcObject = stream;
+            
+            // Scanner initialisieren
+            codeReader = new ZXing.BrowserMultiFormatReader();
+            isScanning = true;
+            scanButtonOverlay.classList.add('hidden');
+            
+            // Einmaliges Scannen
+            codeReader.decodeFromVideoDevice(null, 'scanner-video', async (result, err) => {
+                if (result && isScanning) {
+                    isScanning = false; // Verhindert mehrfaches Scannen
+                    
+                    // Validiere Barcode
+                    const isValid = await validateBarcode(result.text, currentStep);
+                    
+                    if (isValid) {
+                        showFeedback(`Barcode erkannt: ${result.text}`, 'success');
+                        await handleBarcode(result.text);
+                    } else {
+                        showFeedback('Ungültiger Barcode!', 'error');
+                        resetButton.classList.remove('hidden');
+                    }
+                    
+                    // Scanner stoppen
+                    if (codeReader) {
+                        codeReader.reset();
+                    }
+                }
+            });
+            
+        } catch (error) {
+            console.error('Kamera-Fehler:', error);
+            showFeedback('Kamera konnte nicht gestartet werden', 'error');
+        }
+    }
+
+    function resetScanning() {
+        const resetButton = document.getElementById('resetScanButton');
+        const scanButtonOverlay = document.getElementById('scanButtonOverlay');
+        
+        // Reset UI
+        resetButton.classList.add('hidden');
+        scanButtonOverlay.classList.remove('hidden');
+        showFeedback('');
+        
+        // Reset Scanner
+        if (codeReader) {
+            codeReader.reset();
+        }
+        
+        isScanning = false;
+    }
+
+    function closeQuickScan() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+        
+        if (codeReader) {
+            codeReader.reset();
+        }
+        
+        isScanning = false;
+        const modal = document.getElementById('quickScanModal');
+        modal.classList.add('hidden');
+    }
+
+    function startQuickScan() {
+        const modal = document.getElementById('quickScanModal');
+        const resetButton = document.getElementById('resetScanButton');
+        const scanButtonOverlay = document.getElementById('scanButtonOverlay');
+        
+        // Reset UI
+        modal.classList.remove('hidden');
+        resetButton.classList.add('hidden');
+        scanButtonOverlay.classList.remove('hidden');
+        showFeedback('');
+        
+        // Scanner wird erst durch Button-Klick gestartet
+    }
+
+    // Event Listener für Escape und Klick außerhalb
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeQuickScan();
+        }
+    });
+
+    document.getElementById('quickScanModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeQuickScan();
+        }
+    });
+
+    // Service Worker für PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/static/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registriert');
+                })
+                .catch(error => {
+                    console.error('ServiceWorker Fehler:', error);
+                });
+        });
+    }
+    </script>
+
+    <!-- Modal für Löschbestätigung -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Löschen bestätigen</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500" id="deleteModalText">
+                        Möchten Sie diesen Eintrag wirklich löschen?
+                    </p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="deleteConfirmButton"
+                            class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Löschen
+                    </button>
+                    <button onclick="closeDeleteModal()"
+                            class="ml-3 px-4 py-2 bg-gray-100 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let currentDeleteUrl = '';
+
+    function confirmDelete(type, id) {
+        const modal = document.getElementById('deleteModal');
+        const modalText = document.getElementById('deleteModalText');
+        
+        // Setze den Text basierend auf dem Typ
+        if (type === 'worker') {
+            modalText.textContent = 'Möchten Sie diesen Mitarbeiter wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+            currentDeleteUrl = `/worker/delete/${id}`;
+        } else if (type === 'tool') {
+            modalText.textContent = 'Möchten Sie dieses Werkzeug wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+            currentDeleteUrl = `/tool/delete/${id}`;
+        } else if (type === 'consumable') {
+            modalText.textContent = 'Möchten Sie dieses Verbrauchsmaterial wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+            currentDeleteUrl = `/consumable/delete/${id}`;
+        }
+        
+        modal.classList.remove('hidden');
+        
+        // Event-Listener für den Bestätigungs-Button
+        document.getElementById('deleteConfirmButton').onclick = function() {
+            window.location.href = currentDeleteUrl;
+        };
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    // Schließen Modal wenn außerhalb geklickt wird
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            closeDeleteModal();
+        }
+    }
+    </script>
+
+    <!-- Fügen Sie diese CSS-Animationen hinzu -->
+    <style>
+    @keyframes scan-line {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(calc(48rem - 4px)); }
+        100% { transform: translateY(0); }
+    }
+
+    .animate-scan-line {
+        animation: scan-line 2s linear infinite;
+    }
+
+    /* Verhindert Flackern mit allen Präfixen */
+    video {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        -moz-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        
+        perspective: 1000;
+        -webkit-perspective: 1000;
+        -moz-perspective: 1000;
+        -ms-perspective: 1000;
+    }
+    </style>
+</body>
+</html>

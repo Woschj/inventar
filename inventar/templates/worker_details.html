@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Mitarbeiterdetails{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">
+            Details für {{ worker.name }} {{ worker.lastname }}
+        </h1>
+        <a href="{{ url_for('workers') }}" 
+           class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 transition duration-300">
+            Zurück
+        </a>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold mb-4">Mitarbeiterinformationen</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-500">Barcode</p>
+                <p class="text-gray-900">{{ worker.barcode }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">E-Mail</p>
+                <p class="text-gray-900">{{ worker.email or '-' }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Bereich</p>
+                <p class="text-gray-900">{{ worker.bereich or '-' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2 class="text-lg font-semibold mb-4">Aktuell ausgeliehene Werkzeuge</h2>
+        {% if lendings %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ort</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgeliehen am</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for lending in lendings %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.tool_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.tool_barcode }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.tool_location }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">Keine aktiven Ausleihen</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

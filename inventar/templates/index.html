@@ -1,0 +1,192 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Werkzeuge{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Werkzeugübersicht</h1>
+        <a href="{{ url_for('add_tool') }}" 
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+            Neues Werkzeug hinzufügen
+        </a>
+    </div>
+
+    <!-- Erweiterter Filter-Bereich -->
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
+            <select id="filterOrt" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Orte</option>
+                {% for ort in orte %}
+                    <option value="{{ ort }}">{{ ort }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
+            <select id="filterTyp" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Typen</option>
+                {% for typ in typen %}
+                    <option value="{{ typ }}">{{ typ }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="filterStatus" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Status</option>
+                <option value="Verfügbar">Verfügbar</option>
+                <option value="Ausgeliehen">Ausgeliehen</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Verliehen seit</label>
+            <select id="filterZeit" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle</option>
+                <option value="1">Heute</option>
+                <option value="7">Letzte Woche</option>
+                <option value="30">Letzter Monat</option>
+                <option value="90">Über 3 Monate</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Sortierung</label>
+            <select id="sortierung" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="gegenstand">Name</option>
+                <option value="ort">Ort</option>
+                <option value="typ">Typ</option>
+                <option value="status">Status</option>
+                <option value="checkout">Verleihdatum</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Erweiterte Werkzeug-Tabelle -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200" id="toolsTable">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ort</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Typ</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verliehen seit</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgeliehen von</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for tool in tools %}
+                <tr class="tool-row" data-checkout="{{ tool.checkout_time or '' }}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ tool.gegenstand }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.ort }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.typ }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if tool.status == 'Verfügbar' %}bg-green-100 text-green-800
+                            {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            {{ tool.status }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ tool.checkout_time or '-' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ tool.current_worker or '-' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.barcode }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button onclick="confirmDelete('tool', '{{ tool.barcode }}')" 
+                                class="text-red-600 hover:text-red-800">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterOrt = document.getElementById('filterOrt');
+    const filterTyp = document.getElementById('filterTyp');
+    const filterStatus = document.getElementById('filterStatus');
+    const filterZeit = document.getElementById('filterZeit');
+    const sortierung = document.getElementById('sortierung');
+    const toolRows = document.querySelectorAll('.tool-row');
+
+    function getDaysDifference(dateStr) {
+        if (!dateStr) return 0;
+        const [datePart, timePart] = dateStr.split(' ');
+        const [day, month, year] = datePart.split('.');
+        const date = new Date(year, month - 1, day);
+        const now = new Date();
+        return Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    }
+
+    function filterAndSortTools() {
+        const selectedOrt = filterOrt.value.toLowerCase();
+        const selectedTyp = filterTyp.value.toLowerCase();
+        const selectedStatus = filterStatus.value;
+        const selectedZeit = parseInt(filterZeit.value) || 0;
+        const selectedSort = sortierung.value;
+
+        let rows = Array.from(toolRows);
+
+        // Filtern
+        rows.forEach(row => {
+            const werkzeug = row.children[0].textContent.toLowerCase();
+            const ort = row.children[1].textContent.toLowerCase();
+            const typ = row.children[2].textContent.toLowerCase();
+            const status = row.children[3].textContent.trim();
+            const checkoutDate = row.dataset.checkout;
+            const daysDiff = getDaysDifference(checkoutDate);
+
+            const ortMatch = !selectedOrt || ort === selectedOrt;
+            const typMatch = !selectedTyp || typ === selectedTyp;
+            const statusMatch = !selectedStatus || status === selectedStatus;
+            const zeitMatch = !selectedZeit || 
+                            (status === 'Ausgeliehen' && 
+                             (selectedZeit === 90 ? daysDiff >= 90 : daysDiff <= selectedZeit));
+
+            row.style.display = ortMatch && typMatch && statusMatch && zeitMatch ? '' : 'none';
+        });
+
+        // Sortieren
+        rows.sort((a, b) => {
+            let aValue, bValue;
+            switch(selectedSort) {
+                case 'checkout':
+                    aValue = a.dataset.checkout || '9999';
+                    bValue = b.dataset.checkout || '9999';
+                    return bValue.localeCompare(aValue); // Neueste zuerst
+                default:
+                    const columnIndices = {
+                        'gegenstand': 0,  // Werkzeug
+                        'ort': 1,         // Ort
+                        'typ': 2,         // Typ
+                        'status': 3       // Status
+                    };
+                    aValue = a.children[columnIndices[selectedSort]].textContent;
+                    bValue = b.children[columnIndices[selectedSort]].textContent;
+                    return aValue.localeCompare(bValue);
+            }
+        });
+
+        const tbody = document.querySelector('#toolsTable tbody');
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    [filterOrt, filterTyp, filterStatus, filterZeit, sortierung].forEach(filter => {
+        filter.addEventListener('change', filterAndSortTools);
+    });
+});
+</script>
+{% endblock %}
