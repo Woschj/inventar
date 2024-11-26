@@ -17,10 +17,26 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bereich</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiternummer</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-Mail</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('name')">
+                        Name
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-name">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('bereich')">
+                        Bereich
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-bereich">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('barcode')">
+                        Mitarbeiternummer
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-barcode">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('email')">
+                        E-Mail
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-email">↕</span>
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
                 </tr>
             </thead>
@@ -119,5 +135,121 @@ window.onclick = function(event) {
         closeDeleteModal();
     }
 }
+
+let currentSort = {
+    column: null,
+    ascending: true
+};
+
+function sortTable(column, tableId = '') {
+    const tableSelector = tableId ? `#${tableId} table` : 'table';
+    const table = document.querySelector(tableSelector);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Reset alle Sortier-Indikatoren
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '↕');
+    
+    // Sortierrichtung umkehren wenn gleiche Spalte
+    if (currentSort.column === column) {
+        currentSort.ascending = !currentSort.ascending;
+    } else {
+        currentSort.column = column;
+        currentSort.ascending = true;
+    }
+    
+    // Sortier-Indikator aktualisieren
+    const indicator = document.getElementById(`sort-${column}`);
+    if (indicator) {
+        indicator.textContent = currentSort.ascending ? '↑' : '↓';
+    }
+    
+    // Zeilen sortieren
+    rows.sort((a, b) => {
+        const aValue = a.children[getColumnIndex(column)].textContent.trim();
+        const bValue = b.children[getColumnIndex(column)].textContent.trim();
+        
+        // Spezielle Behandlung für numerische Werte
+        if (column === 'amount' || column === 'barcode') {
+            return currentSort.ascending ? 
+                parseInt(aValue) - parseInt(bValue) : 
+                parseInt(bValue) - parseInt(aValue);
+        }
+        
+        // Spezielle Behandlung für Datumsfelder
+        if (column === 'date') {
+            return compareDates(aValue, bValue);
+        }
+        
+        return currentSort.ascending ? 
+            aValue.localeCompare(bValue) : 
+            bValue.localeCompare(aValue);
+    });
+    
+    // Sortierte Zeilen wieder einfügen
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getColumnIndex(column) {
+    // Anpassen je nach Tabelle/Seite
+    const columnMap = {
+        'name': 0,
+        'bereich': 1,
+        'barcode': 2,
+        'email': 3,
+        'date': 0,
+        'worker': 1,
+        'amount': 3,
+        // ... weitere Spalten je nach Bedarf
+    };
+    return columnMap[column] || 0;
+}
+
+function compareDates(a, b) {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return currentSort.ascending ? 
+        dateA - dateB : 
+        dateB - dateA;
+}
+
+// Filter-Funktion
+function filterTable() {
+    const filterInputs = document.querySelectorAll('select[id^="filter"]');
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        filterInputs.forEach(filter => {
+            const filterValue = filter.value.toLowerCase();
+            if (filterValue) {
+                const columnIndex = getFilterColumnIndex(filter.id);
+                const cellValue = row.children[columnIndex].textContent.toLowerCase();
+                if (!cellValue.includes(filterValue)) {
+                    showRow = false;
+                }
+            }
+        });
+        
+        row.style.display = showRow ? '' : 'none';
+    });
+}
+
+function getFilterColumnIndex(filterId) {
+    // Anpassen je nach Tabelle/Seite
+    const filterMap = {
+        'filterBereich': 1,
+        'filterOrt': 2,
+        'filterStatus': 5,
+        // ... weitere Filter je nach Bedarf
+    };
+    return filterMap[filterId] || 0;
+}
+
+// Event-Listener für Filter
+document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+    filter.addEventListener('change', filterTable);
+});
 </script>
 {% endblock %}

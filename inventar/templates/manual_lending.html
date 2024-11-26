@@ -28,7 +28,7 @@
                 <select name="item_type" id="itemTypeSelect" 
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="tool">Werkzeug</option>
-                    <option value="consumable">Material</option>
+                    <option value="consumable">Verbrauchsmaterial</option>
                 </select>
             </div>
 
@@ -39,17 +39,17 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Werkzeug auswählen...</option>
                     {% for tool in tools %}
-                        {% if tool.status == 'Verfügbar' %}
-                            <option value="{{ tool.barcode }}" data-type="tool" class="bg-green-100">
-                                {{ tool.gegenstand }} (Verfügbar)
-                            </option>
-                        {% endif %}
+                        <option value="{{ tool.barcode }}" data-type="tool" 
+                                {% if tool.status != 'Verfügbar' %}disabled{% endif %}
+                                class="{% if tool.status == 'Verfügbar' %}bg-green-100{% else %}bg-red-100{% endif %}">
+                            {{ tool.gegenstand }} ({{ tool.status }})
+                        </option>
                     {% endfor %}
                 </select>
 
-                <select name="consumable_barcode" required id="consumableSelect" 
+                <select name="item_barcode" required id="consumableSelect" 
                         class="mt-1 hidden w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Material auswählen...</option>
+                    <option value="">Verbrauchsmaterial auswählen...</option>
                     {% for item in consumables %}
                         {% if item.aktueller_bestand > 0 %}
                             <option value="{{ item.barcode }}" data-type="consumable">
@@ -78,32 +78,121 @@
 
     <!-- Aktive Ausleihen -->
     <div class="mt-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Aktive Ausleihen</h2>
-        <div class="overflow-x-auto">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Aktive Ausleihen & Ausgaben</h2>
+        
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200 mb-4">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button onclick="switchTab('tools')" 
+                        id="tools-tab"
+                        class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Werkzeuge
+                </button>
+                <button onclick="switchTab('consumables')" 
+                        id="consumables-tab"
+                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Verbrauchsmaterial
+                </button>
+            </nav>
+        </div>
+
+        <!-- Werkzeug-Tabelle -->
+        <div id="tools-table" class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgeliehen am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('tool_name', 'tools')">
+                            Werkzeug
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-tools-tool_name">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('worker_name', 'tools')">
+                            Mitarbeiter
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-tools-worker_name">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('date', 'tools')">
+                            Ausgeliehen am
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-tools-date">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Aktionen
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    {% if active_lendings %}
-                        {% for lending in active_lendings %}
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.tool_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.worker_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
-                        </tr>
-                        {% endfor %}
+                    {% for lending in active_lendings %}
+                        {% if lending.item_type == 'Werkzeug' %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.tool_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.worker_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <button onclick="returnTool('{{ lending.id }}')" 
+                                            class="text-blue-600 hover:text-blue-800">
+                                        Rückgabe
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% else %}
                         <tr>
-                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                Keine aktiven Ausleihen
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Keine aktiven Werkzeugausleihen
                             </td>
                         </tr>
-                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Verbrauchsmaterial-Tabelle -->
+        <div id="consumables-table" class="hidden overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('material', 'consumables')">
+                            Material
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-consumables-material">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('worker', 'consumables')">
+                            Mitarbeiter
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-consumables-worker">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('amount', 'consumables')">
+                            Menge
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-consumables-amount">↕</span>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                            onclick="sortTable('date', 'consumables')">
+                            Ausgegeben am
+                            <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-consumables-date">↕</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for lending in active_lendings %}
+                        {% if lending.item_type == 'Verbrauchsmaterial' %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.tool_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.worker_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ lending.amount }} {{ lending.einheit }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Keine Materialausgaben
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -111,62 +200,246 @@
 </div>
 
 <script>
-document.getElementById('workerSelect').addEventListener('change', function() {
-    const selectedWorker = this.value;
-    const url = new URL(window.location);
-    url.searchParams.set('worker_barcode', selectedWorker);
-    window.location.href = url.toString();
-});
-
-// Aktiviere/Deaktiviere Buttons basierend auf Auswahl
-document.getElementById('toolSelect').addEventListener('change', function() {
-    const selectedTool = this.options[this.selectedIndex];
-    const isAvailable = selectedTool.textContent.includes('(Verfügbar)');
-    
-    document.getElementById('lendButton').disabled = !isAvailable;
-    document.getElementById('returnButton').disabled = isAvailable;
-    
-    // Visuelle Rückmeldung für deaktivierte Buttons
-    if (isAvailable) {
-        document.getElementById('lendButton').classList.remove('opacity-50', 'cursor-not-allowed');
-        document.getElementById('returnButton').classList.add('opacity-50', 'cursor-not-allowed');
-    } else {
-        document.getElementById('lendButton').classList.add('opacity-50', 'cursor-not-allowed');
-        document.getElementById('returnButton').classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-});
-
-document.getElementById('itemTypeSelect').addEventListener('change', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('lendingForm');
+    const itemTypeSelect = document.getElementById('itemTypeSelect');
     const toolSelect = document.getElementById('toolSelect');
     const consumableSelect = document.getElementById('consumableSelect');
     const amountDiv = document.getElementById('amountDiv');
-    
-    if (this.value === 'tool') {
-        toolSelect.classList.remove('hidden');
-        consumableSelect.classList.add('hidden');
-        amountDiv.classList.add('hidden');
-        toolSelect.name = 'item_barcode';  // Wichtig: Name ändern
-        consumableSelect.name = '';
-    } else {
-        toolSelect.classList.add('hidden');
-        consumableSelect.classList.remove('hidden');
-        amountDiv.classList.remove('hidden');
-        consumableSelect.name = 'item_barcode';  // Wichtig: Name ändern
-        toolSelect.name = '';
-    }
+
+    // Debug-Logging für Formular-Submit
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        console.log('Formular wird gesendet:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
+        // Validierung
+        const itemType = formData.get('item_type');
+        const itemBarcode = formData.get('item_barcode');
+        const workerBarcode = formData.get('worker_barcode');
+        
+        if (!itemBarcode || !workerBarcode) {
+            alert('Bitte alle Pflichtfelder ausfüllen');
+            return;
+        }
+
+        // Prüfe ob ein verfügbares Werkzeug ausgewählt wurde
+        if (itemType === 'tool') {
+            const selectedOption = toolSelect.options[toolSelect.selectedIndex];
+            if (selectedOption.disabled) {
+                alert('Dieses Werkzeug ist nicht verfügbar');
+                return;
+            }
+        }
+        
+        console.log(`Sende Ausleihe: ${itemType} ${itemBarcode} an ${workerBarcode}`);
+        this.submit();
+    });
+
+    // Artikel-Typ Wechsel Handler
+    itemTypeSelect.addEventListener('change', function() {
+        console.log('Artikel-Typ geändert zu:', this.value);
+        
+        if (this.value === 'tool') {
+            toolSelect.classList.remove('hidden');
+            consumableSelect.classList.add('hidden');
+            amountDiv.classList.add('hidden');
+            toolSelect.name = 'item_barcode';
+            consumableSelect.name = '';
+            toolSelect.required = true;
+            consumableSelect.required = false;
+        } else {
+            toolSelect.classList.add('hidden');
+            consumableSelect.classList.remove('hidden');
+            amountDiv.classList.remove('hidden');
+            consumableSelect.name = 'item_barcode';
+            toolSelect.name = '';
+            toolSelect.required = false;
+            consumableSelect.required = true;
+        }
+    });
+
+    // Initial den korrekten Zustand setzen
+    itemTypeSelect.dispatchEvent(new Event('change'));
 });
 
-// Debug-Logging für Formular-Submit
-document.getElementById('lendingForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Temporär für Debug
+// Tab-Switching Funktion
+function switchTab(tabName) {
+    // Tabs umschalten
+    document.getElementById('tools-tab').classList.remove('border-blue-500', 'text-blue-600');
+    document.getElementById('consumables-tab').classList.remove('border-blue-500', 'text-blue-600');
+    document.getElementById(`${tabName}-tab`).classList.add('border-blue-500', 'text-blue-600');
     
-    const formData = new FormData(this);
-    console.log('Formular wird gesendet:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
+    // Tabellen umschalten
+    document.getElementById('tools-table').classList.add('hidden');
+    document.getElementById('consumables-table').classList.add('hidden');
+    document.getElementById(`${tabName}-table`).classList.remove('hidden');
+    
+    // Tab-Status im localStorage speichern
+    localStorage.setItem('activeTab', tabName);
+}
+
+// Beim Laden der Seite den letzten aktiven Tab wiederherstellen
+document.addEventListener('DOMContentLoaded', function() {
+    const lastActiveTab = localStorage.getItem('activeTab') || 'tools';
+    switchTab(lastActiveTab);
+});
+
+// Funktion für Werkzeug-Rückgabe
+function returnTool(lendingId) {
+    if (confirm('Möchten Sie dieses Werkzeug wirklich zurücknehmen?')) {
+        // Hier POST-Request für die Rückgabe implementieren
+        fetch(`/return_tool/${lendingId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Fehler bei der Rückgabe: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler bei der Rückgabe');
+        });
+    }
+}
+
+let currentSort = {
+    column: null,
+    ascending: true
+};
+
+function sortTable(column, tableId = '') {
+    const tableSelector = tableId ? `#${tableId} table` : 'table';
+    const table = document.querySelector(tableSelector);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Reset alle Sortier-Indikatoren
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '↕');
+    
+    // Sortierrichtung umkehren wenn gleiche Spalte
+    if (currentSort.column === column) {
+        currentSort.ascending = !currentSort.ascending;
+    } else {
+        currentSort.column = column;
+        currentSort.ascending = true;
     }
     
-    this.submit(); // Formular absenden
+    // Sortier-Indikator aktualisieren
+    const indicator = document.getElementById(`sort-${column}`);
+    if (indicator) {
+        indicator.textContent = currentSort.ascending ? '↑' : '↓';
+    }
+    
+    // Zeilen sortieren
+    rows.sort((a, b) => {
+        const aValue = a.children[getColumnIndex(column)].textContent.trim();
+        const bValue = b.children[getColumnIndex(column)].textContent.trim();
+        
+        // Spezielle Behandlung für numerische Werte
+        if (['bestand', 'mindestbestand', 'amount', 'barcode'].includes(column)) {
+            const aNum = parseFloat(aValue.replace(/[^\d.-]/g, ''));
+            const bNum = parseFloat(bValue.replace(/[^\d.-]/g, ''));
+            return currentSort.ascending ? aNum - bNum : bNum - aNum;
+        }
+        
+        // Spezielle Behandlung für Datumsfelder
+        if (column === 'date') {
+            return compareDates(aValue, bValue);
+        }
+        
+        return currentSort.ascending ? 
+            aValue.localeCompare(bValue) : 
+            bValue.localeCompare(aValue);
+    });
+    
+    // Sortierte Zeilen wieder einfügen
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getColumnIndex(column) {
+    const columnMap = {
+        'bezeichnung': 0,
+        'typ': 1,
+        'ort': 2,
+        'bestand': 3,
+        'mindestbestand': 4,
+        'status': 5,
+        'barcode': 6,
+        
+        'material': 0,
+        'worker': 1,
+        'amount': 2,
+        'date': 3,
+        
+        'name': 0,
+        'bereich': 1,
+        'barcode': 2,
+        'email': 3,
+        'date': 0,
+        'worker': 1,
+        'amount': 3,
+        // ... weitere Spalten je nach Bedarf
+    };
+    return columnMap[column] || 0;
+}
+
+function compareDates(a, b) {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return currentSort.ascending ? 
+        dateA - dateB : 
+        dateB - dateA;
+}
+
+// Filter-Funktion
+function filterTable() {
+    const filterInputs = document.querySelectorAll('select[id^="filter"]');
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        filterInputs.forEach(filter => {
+            const filterValue = filter.value.toLowerCase();
+            if (filterValue) {
+                const columnIndex = getFilterColumnIndex(filter.id);
+                const cellValue = row.children[columnIndex].textContent.toLowerCase();
+                if (!cellValue.includes(filterValue)) {
+                    showRow = false;
+                }
+            }
+        });
+        
+        row.style.display = showRow ? '' : 'none';
+    });
+}
+
+function getFilterColumnIndex(filterId) {
+    // Anpassen je nach Tabelle/Seite
+    const filterMap = {
+        'filterBereich': 1,
+        'filterOrt': 2,
+        'filterStatus': 5,
+        // ... weitere Filter je nach Bedarf
+    };
+    return filterMap[filterId] || 0;
+}
+
+// Event-Listener für Filter
+document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+    filter.addEventListener('change', filterTable);
 });
 </script>
 {% endblock %}

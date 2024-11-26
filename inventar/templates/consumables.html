@@ -66,13 +66,41 @@
         <table class="min-w-full divide-y divide-gray-200" id="consumablesTable">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bezeichnung</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Typ</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ort</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktueller Bestand</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mindestbestand</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('bezeichnung')">
+                        Bezeichnung
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-bezeichnung">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('typ')">
+                        Typ
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-typ">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('ort')">
+                        Ort
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-ort">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('bestand')">
+                        Aktueller Bestand
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-bestand">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('mindestbestand')">
+                        Mindestbestand
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-mindestbestand">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('status')">
+                        Status
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-status">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('barcode')">
+                        Barcode
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-barcode">↕</span>
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
                 </tr>
             </thead>

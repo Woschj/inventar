@@ -763,30 +763,36 @@ def process_quick_scan():
 def process_lending():
     """Verarbeitet Ausleihen/Ausgaben von Werkzeugen und Verbrauchsmaterial"""
     try:
-        print("Received form data:", request.form)  # Debug-Ausgabe
+        print("\n=== Neue Ausleihe/Ausgabe ===")
+        print("Empfangene Formulardaten:", request.form)
         
         worker_barcode = request.form.get('worker_barcode')
         item_type = request.form.get('item_type')
         item_barcode = request.form.get('item_barcode')
         amount = int(request.form.get('amount', 1))
         
-        if not all([worker_barcode, item_type, item_barcode]):
-            flash('Bitte alle Pflichtfelder ausfüllen', 'error')
-            return redirect(url_for('manual_lending'))
-            
-        print(f"Processing: Type={item_type}, Item={item_barcode}, Worker={worker_barcode}, Amount={amount}")
+        print(f"""
+        Verarbeite Anfrage:
+        - Typ: {item_type}
+        - Artikel: {item_barcode}
+        - Mitarbeiter: {worker_barcode}
+        - Menge: {amount}
+        """)
         
-        # Werkzeug-Ausleihe
         if item_type == 'tool':
             with get_db_connection(TOOLS_DB) as conn:
                 tool = conn.execute('SELECT * FROM tools WHERE barcode = ?', 
                                  (item_barcode,)).fetchone()
                 
                 if not tool:
+                    print(f"Werkzeug nicht gefunden: {item_barcode}")
                     flash('Werkzeug nicht gefunden', 'error')
                     return redirect(url_for('manual_lending'))
                 
+                print(f"Gefundenes Werkzeug: {dict(tool)}")
+                
                 if tool['status'] != 'Verfügbar':
+                    print(f"Werkzeug nicht verfügbar: {tool['status']}")
                     flash('Werkzeug ist nicht verfügbar', 'error')
                     return redirect(url_for('manual_lending'))
                 
@@ -797,7 +803,7 @@ def process_lending():
                     WHERE barcode = ?
                 ''', (item_barcode,))
                 conn.commit()
-                print(f"Tool status updated for {item_barcode}")
+                print(f"Werkzeug-Status aktualisiert: {item_barcode}")
             
             # Ausleihe dokumentieren
             with get_db_connection(LENDINGS_DB) as conn:
@@ -807,7 +813,7 @@ def process_lending():
                     VALUES (?, ?, datetime('now', 'localtime'), 1)
                 ''', (item_barcode, worker_barcode))
                 conn.commit()
-                print(f"Lending recorded for tool {item_barcode}")
+                print(f"Ausleihe dokumentiert für Werkzeug {item_barcode}")
             
             flash(f'Werkzeug {tool["gegenstand"]} erfolgreich ausgeliehen', 'success')
             
