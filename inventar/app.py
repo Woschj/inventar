@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, g
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, g, session
 from werkzeug.exceptions import BadRequest
 import sqlite3
 from datetime import datetime
 import os
 import traceback
+from functools import wraps
 
 # Flask-App initialisieren
 app = Flask(__name__)
-app.secret_key = 'deine_secret_key_hier'  # Wichtig für Flash-Messages
+app.secret_key = "j8K#mP9$nQ2@vR5&hL7*wX4!cF6^tY3%bN8(pA4)"  # Komplexer zufälliger String mit Sonderzeichen
 
 # Absolute Pfade zu den Datenbanken
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -15,6 +16,20 @@ WORKERS_DB = os.path.join(BASE_DIR, 'workers.db')
 TOOLS_DB = os.path.join(BASE_DIR, 'lager.db')  # tools-Tabelle
 LENDINGS_DB = os.path.join(BASE_DIR, 'lendings.db')
 CONSUMABLES_DB = os.path.join(BASE_DIR, 'consumables.db')
+
+# Konstante für das Admin-Passwort (besser in einer Konfigurationsdatei oder Umgebungsvariable speichern)
+ADMIN_PASSWORD = "1234"
+SECRET_KEY = "ein-zufaelliger-string-1234"
+
+# Login-Überprüfung Decorator
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_admin'):
+            flash('Bitte melden Sie sich als Administrator an', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Datenbankfunktionen
 def get_db_connection(db_path):
@@ -350,7 +365,8 @@ def save_tool_image(image_file, barcode):
     # Gebe relativen Pfad zurück
     return os.path.join('tool_images', filename)
 
-@app.route('/worker_details/<worker_barcode>')
+@app.route('/worker/<worker_barcode>')
+@admin_required
 def worker_details(worker_barcode):
     try:
         # Hole Mitarbeiterdaten
@@ -1056,6 +1072,7 @@ def lend_tool(barcode):
         return redirect(url_for('index'))
 
 @app.route('/tool/<barcode>')
+@admin_required
 def tool_details(barcode):
     try:
         with get_db_connection(TOOLS_DB) as conn:
@@ -1187,6 +1204,53 @@ def update_consumable(barcode):
         traceback.print_exc()
         flash('Fehler beim Aktualisieren des Materials', 'error')
         return redirect(url_for('consumable_details', barcode=barcode))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form['password'] == ADMIN_PASSWORD:
+            session['is_admin'] = True
+            flash('Erfolgreich als Administrator angemeldet', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Falsches Passwort', 'error')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('is_admin', None)
+    flash('Erfolgreich abgemeldet', 'success')
+    return redirect(url_for('index'))
+
+@app.route('/worker/<worker_barcode>/update', methods=['POST'])
+@admin_required
+def update_worker(worker_barcode):
+    try:
+        with get_db_connection(WORKERS_DB) as conn:
+            conn.execute('''
+                UPDATE workers 
+                SET name = ?,
+                    lastname = ?,
+                    email = ?,
+                    bereich = ?
+                WHERE barcode = ?
+            ''', (
+                request.form['name'],
+                request.form['lastname'],
+                request.form['email'],
+                request.form['bereich'],
+                worker_barcode
+            ))
+            conn.commit()
+            flash('Mitarbeiter erfolgreich aktualisiert', 'success')
+            
+        return redirect(url_for('worker_details', worker_barcode=worker_barcode))
+        
+    except Exception as e:
+        print(f"Fehler beim Aktualisieren: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Aktualisieren des Mitarbeiters', 'error')
+        return redirect(url_for('worker_details', worker_barcode=worker_barcode))
 
 # App starten
 if __name__ == '__main__':
