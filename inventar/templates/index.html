@@ -39,6 +39,7 @@
                 <option value="">Alle Status</option>
                 <option value="verfügbar">Verfügbar</option>
                 <option value="ausgeliehen">Ausgeliehen</option>
+                <option value="defekt">Defekt</option>
             </select>
         </div>
     </div>
@@ -78,13 +79,20 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for tool in tools %}
                 <tr class="tool-row" data-checkout="{{ tool.checkout_time or '' }}">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ tool.gegenstand }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <a href="{{ url_for('tool_details', barcode=tool.barcode) }}" 
+                           class="text-blue-600 hover:text-blue-800">
+                            {{ tool.gegenstand }}
+                        </a>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.ort }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.typ }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                             {% if tool.status == 'Verfügbar' %}bg-green-100 text-green-800
-                            {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            {% elif tool.status == 'Ausgeliehen' %}bg-yellow-100 text-yellow-800
+                            {% elif tool.status == 'Defekt' %}bg-red-100 text-red-800
+                            {% endif %}">
                             {{ tool.status }}
                         </span>
                     </td>

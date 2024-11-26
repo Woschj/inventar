@@ -41,7 +41,9 @@
                     {% for tool in tools %}
                         <option value="{{ tool.barcode }}" data-type="tool" 
                                 {% if tool.status != 'Verfügbar' %}disabled{% endif %}
-                                class="{% if tool.status == 'Verfügbar' %}bg-green-100{% else %}bg-red-100{% endif %}">
+                                class="{% if tool.status == 'Verfügbar' %}bg-green-100
+                                       {% elif tool.status == 'Ausgeliehen' %}bg-yellow-100
+                                       {% elif tool.status == 'Defekt' %}bg-red-100{% endif %}">
                             {{ tool.gegenstand }} ({{ tool.status }})
                         </option>
                     {% endfor %}

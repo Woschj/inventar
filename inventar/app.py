@@ -1055,6 +1055,139 @@ def lend_tool(barcode):
         flash('Fehler beim Ausleihen', 'error')
         return redirect(url_for('index'))
 
+@app.route('/tool/<barcode>')
+def tool_details(barcode):
+    try:
+        with get_db_connection(TOOLS_DB) as conn:
+            # Datenbanken anhängen
+            conn.execute(f"ATTACH DATABASE '{LENDINGS_DB}' AS lendings_db")
+            conn.execute(f"ATTACH DATABASE '{WORKERS_DB}' AS workers_db")
+            
+            # Werkzeug-Details mit aktuellem Ausleiher
+            tool = conn.execute('''
+                SELECT t.*, 
+                       w.name || ' ' || w.lastname as current_worker
+                FROM tools t
+                LEFT JOIN lendings_db.lendings l ON t.barcode = l.tool_barcode 
+                    AND l.return_time IS NULL
+                LEFT JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE t.barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if not tool:
+                flash('Werkzeug nicht gefunden', 'error')
+                return redirect(url_for('index'))
+            
+            # Ausleihverlauf
+            lendings = conn.execute('''
+                SELECT l.*,
+                       w.name || ' ' || w.lastname as worker_name,
+                       strftime('%d.%m.%Y %H:%M', l.checkout_time) as checkout_time,
+                       strftime('%d.%m.%Y %H:%M', l.return_time) as return_time
+                FROM lendings_db.lendings l
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.tool_barcode = ?
+                ORDER BY l.checkout_time DESC
+            ''', (barcode,)).fetchall()
+            
+            return render_template('tool_details.html', tool=tool, lendings=lendings)
+            
+    except Exception as e:
+        print(f"Fehler in tool_details: {str(e)}")
+        traceback.print_exc()
+        flash('Ein Fehler ist aufgetreten', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/tool/<barcode>/update', methods=['POST'])
+def update_tool(barcode):
+    try:
+        with get_db_connection(TOOLS_DB) as conn:
+            # Aktuellen Status prüfen
+            current_tool = conn.execute('SELECT status FROM tools WHERE barcode = ?', 
+                                      (barcode,)).fetchone()
+            
+            if not current_tool:
+                flash('Werkzeug nicht gefunden', 'error')
+                return redirect(url_for('index'))
+            
+            # Wenn ausgeliehen, nur bestimmte Änderungen erlauben
+            if current_tool['status'] == 'Ausgeliehen':
+                conn.execute('''
+                    UPDATE tools 
+                    SET gegenstand = ?,
+                        typ = ?
+                    WHERE barcode = ?
+                ''', (
+                    request.form['gegenstand'],
+                    request.form['typ'],
+                    barcode
+                ))
+            else:
+                # Alle Änderungen erlauben
+                conn.execute('''
+                    UPDATE tools 
+                    SET gegenstand = ?,
+                        typ = ?,
+                        ort = ?,
+                        status = ?
+                    WHERE barcode = ?
+                ''', (
+                    request.form['gegenstand'],
+                    request.form['typ'],
+                    request.form['ort'],
+                    request.form['status'],
+                    barcode
+                ))
+            
+            conn.commit()
+            flash('Werkzeug erfolgreich aktualisiert', 'success')
+            
+        return redirect(url_for('tool_details', barcode=barcode))
+        
+    except Exception as e:
+        print(f"Fehler beim Aktualisieren: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Aktualisieren des Werkzeugs', 'error')
+        return redirect(url_for('tool_details', barcode=barcode))
+
+@app.route('/consumable/<barcode>/update', methods=['POST'])
+def update_consumable(barcode):
+    try:
+        with get_db_connection(CONSUMABLES_DB) as conn:
+            # Aktualisiere die Daten
+            conn.execute('''
+                UPDATE consumables 
+                SET bezeichnung = ?,
+                    typ = ?,
+                    ort = ?,
+                    aktueller_bestand = ?,
+                    mindestbestand = ?,
+                    einheit = ?,
+                    status = ?
+                WHERE barcode = ?
+            ''', (
+                request.form['bezeichnung'],
+                request.form['typ'],
+                request.form['ort'],
+                request.form['aktueller_bestand'],
+                request.form['mindestbestand'],
+                request.form['einheit'],
+                'Verfügbar' if int(request.form['aktueller_bestand']) > int(request.form['mindestbestand'])
+                else 'Kritisch' if int(request.form['aktueller_bestand']) > 0
+                else 'Verbraucht',
+                barcode
+            ))
+            conn.commit()
+            
+            flash('Material erfolgreich aktualisiert', 'success')
+            return redirect(url_for('consumable_details', barcode=barcode))
+            
+    except Exception as e:
+        print(f"Fehler beim Aktualisieren: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Aktualisieren des Materials', 'error')
+        return redirect(url_for('consumable_details', barcode=barcode))
+
 # App starten
 if __name__ == '__main__':
     # Nur Tabellen erstellen falls sie nicht existieren
