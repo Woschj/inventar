@@ -45,15 +45,18 @@ def init_dbs():
             )
         ''',
         CONSUMABLES_DB: '''
-            CREATE TABLE IF NOT EXISTS consumables (
-                barcode TEXT PRIMARY KEY,
-                bezeichnung TEXT NOT NULL,
+            DROP TABLE IF EXISTS consumables;
+            CREATE TABLE consumables (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                barcode TEXT UNIQUE,
+                bezeichnung TEXT NOT NULL,  
                 ort TEXT DEFAULT 'Lager',
                 typ TEXT,
                 status TEXT DEFAULT 'Verfügbar',
                 mindestbestand INTEGER DEFAULT 1,
                 aktueller_bestand INTEGER DEFAULT 0,
-                einheit TEXT DEFAULT 'Stück'
+                einheit TEXT DEFAULT 'Stück',
+                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         '''
     }
@@ -67,6 +70,46 @@ def init_dbs():
             print(f"✓ {db_name} erfolgreich initialisiert")
         except Exception as e:
             print(f"✗ Fehler bei {db_name}: {str(e)}")
+
+    # Consumables separat behandeln
+    try:
+        conn = sqlite3.connect(CONSUMABLES_DB)
+        # Erst die alte Tabelle löschen
+        conn.execute('DROP TABLE IF EXISTS consumables')
+        conn.commit()
+        
+        # Dann die neue Tabelle erstellen
+        conn.execute('''
+            CREATE TABLE consumables (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                barcode TEXT UNIQUE,
+                bezeichnung TEXT NOT NULL,  
+                ort TEXT DEFAULT 'Lager',
+                typ TEXT,
+                status TEXT DEFAULT 'Verfügbar',
+                mindestbestand INTEGER DEFAULT 1,
+                aktueller_bestand INTEGER DEFAULT 0,
+                einheit TEXT DEFAULT 'Stück',
+                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+        conn.close()
+        print(f"✓ {CONSUMABLES_DB} erfolgreich initialisiert")
+    except Exception as e:
+        print(f"✗ Fehler bei {CONSUMABLES_DB}: {str(e)}")
+        
+    # Debug: Tabellenstruktur überprüfen
+    try:
+        conn = sqlite3.connect(CONSUMABLES_DB)
+        cursor = conn.execute("PRAGMA table_info(consumables)")
+        columns = cursor.fetchall()
+        print("\nTabellenstruktur consumables:")
+        for col in columns:
+            print(f"- {col[1]} ({col[2]})")
+        conn.close()
+    except Exception as e:
+        print(f"Fehler beim Prüfen der Tabellenstruktur: {str(e)}")
 
 def clear_existing_data():
     """Löscht alle vorhandenen Daten"""

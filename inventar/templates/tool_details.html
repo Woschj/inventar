@@ -20,7 +20,7 @@
         <div>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ tool.gegenstand }}</h2>
             
-            <form action="{{ url_for('update_tool', barcode=tool.barcode) }}" method="post" class="space-y-4">
+            <form action="{{ url_for('update_tool', barcode=tool.barcode) }}" method="post" class="space-y-6">
                 <!-- Barcode (nicht editierbar) -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Barcode</label>

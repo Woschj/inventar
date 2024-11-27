@@ -19,71 +19,86 @@
     <div class="mb-8">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">{{ consumable.bezeichnung }}</h1>
         
-        <form action="{{ url_for('update_consumable', barcode=consumable.barcode) }}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-gray-50 rounded-lg p-6">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Grundinformationen</h2>
-                <div class="space-y-4">
-                    <!-- Barcode (nicht editierbar) -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Barcode</label>
-                        <input type="text" value="{{ consumable.barcode }}" readonly
-                               class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100">
-                    </div>
-                    
-                    <!-- Bezeichnung -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Bezeichnung</label>
-                        <input type="text" name="bezeichnung" value="{{ consumable.bezeichnung }}" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    
-                    <!-- Typ -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Typ</label>
-                        <input type="text" name="typ" value="{{ consumable.typ }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    
-                    <!-- Lagerort -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Lagerort</label>
-                        <input type="text" name="ort" value="{{ consumable.ort }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 rounded-lg p-6">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Bestandsinformationen</h2>
-                <div class="space-y-4">
-                    <!-- Aktueller Bestand -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Aktueller Bestand</label>
-                        <div class="flex space-x-2">
-                            <input type="number" name="aktueller_bestand" value="{{ consumable.aktueller_bestand }}"
+        <!-- Bearbeitungsformular nur für Admins -->
+        {% if is_admin %}
+            <form action="{{ url_for('update_consumable', barcode=consumable.barcode) }}" method="post" class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Grundinformationen</h2>
+                    <div class="space-y-4">
+                        <!-- Barcode (nicht editierbar) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Barcode</label>
+                            <input type="text" value="{{ consumable.barcode }}" readonly
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100">
+                        </div>
+                        
+                        <!-- Bezeichnung -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Bezeichnung</label>
+                            <input type="text" name="bezeichnung" value="{{ consumable.bezeichnung }}" required
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            <input type="text" name="einheit" value="{{ consumable.einheit }}"
-                                   class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        
+                        <!-- Typ -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Typ</label>
+                            <input type="text" name="typ" value="{{ consumable.typ }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        
+                        <!-- Lagerort -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Lagerort</label>
+                            <input type="text" name="ort" value="{{ consumable.ort }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
                     </div>
-                    
-                    <!-- Mindestbestand -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500">Mindestbestand</label>
-                        <input type="number" name="mindestbestand" value="{{ consumable.mindestbestand }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Bestandsinformationen</h2>
+                    <div class="space-y-4">
+                        <!-- Aktueller Bestand -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Aktueller Bestand</label>
+                            <div class="flex space-x-2">
+                                <input type="number" name="aktueller_bestand" value="{{ consumable.aktueller_bestand }}"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" name="einheit" value="{{ consumable.einheit }}"
+                                       class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        
+                        <!-- Mindestbestand -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Mindestbestand</label>
+                            <input type="number" name="mindestbestand" value="{{ consumable.mindestbestand }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Speichern Button -->
-            <div class="col-span-2 flex justify-end mt-4">
-                <button type="submit" 
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-                    Änderungen speichern
-                </button>
+                <!-- Speichern Button -->
+                <div class="col-span-2 flex justify-end mt-4">
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                        Änderungen speichern
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            <!-- Nur Anzeige für normale Nutzer -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Details</h2>
+                <dl class="grid grid-cols-1 gap-4">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Bezeichnung</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ consumable.bezeichnung }}</dd>
+                    </div>
+                    <!-- ... weitere Details ... -->
+                </dl>
             </div>
-        </form>
+        {% endif %}
     </div>
 
     <!-- Ausgabehistorie -->
@@ -149,5 +164,16 @@
             </table>
         </div>
     </div>
+
+    <!-- Lösch-Button nur für Admins -->
+    {% if is_admin %}
+        <div class="mt-4 flex justify-end">
+            <a href="{{ url_for('delete_consumable', barcode=consumable.barcode) }}"
+               class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+               onclick="return confirm('Wirklich löschen?')">
+                Löschen
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %} 
