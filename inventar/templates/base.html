@@ -42,6 +42,14 @@
                                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 Mitarbeiter
                             </a>
+                            <a href="{{ url_for('quick_scan') }}"
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Quick-Scan
+                            </a>
+                            <a href="{{ url_for('manual_lending') }}"
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Manuelle Ausleihe
+                            </a>
                             {% if session.get('is_admin') %}
                                 <a href="{{ url_for('admin_panel') }}"
                                    class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">

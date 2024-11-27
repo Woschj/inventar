@@ -204,11 +204,18 @@ def admin_panel():
 
 @app.route('/workers')
 def workers():
-    """Mitarbeiterübersicht anzeigen"""
     try:
         with get_db_connection(WORKERS_DB) as conn:
-            workers = conn.execute('SELECT * FROM workers').fetchall()
-        return render_template('workers.html', workers=workers)
+            workers = conn.execute('SELECT * FROM workers ORDER BY name').fetchall()
+            # Hole unique Bereiche für Filter
+            bereiche = conn.execute(
+                'SELECT DISTINCT bereich FROM workers ORDER BY bereich'
+            ).fetchall()
+            bereiche = [b['bereich'] for b in bereiche if b['bereich']]
+            
+        return render_template('workers.html', 
+                             workers=workers,
+                             bereiche=bereiche)
     except Exception as e:
         print(f"Fehler beim Laden der Mitarbeiter: {str(e)}")
         traceback.print_exc()
@@ -220,24 +227,12 @@ def consumables():
     """Verbrauchsmaterialübersicht anzeigen"""
     try:
         with get_db_connection(CONSUMABLES_DB) as conn:
-            # Debug-Ausgabe
-            print("Versuche Daten zu laden...")
-            
-            # Hole alle Verbrauchsmaterialien
             consumables = conn.execute('''
                 SELECT id, barcode, bezeichnung, ort, typ, status,
                        mindestbestand, aktueller_bestand, einheit, last_updated 
                 FROM consumables
             ''').fetchall()
             
-            # Debug: Zeige die ersten Einträge
-            if consumables:
-                print(f"Gefundene Einträge: {len(consumables)}")
-                print(f"Erster Eintrag: {dict(consumables[0])}")
-            else:
-                print("Keine Einträge gefunden")
-            
-            # Hole eindeutige Orte und Typen für die Filter
             orte = conn.execute('SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL').fetchall()
             typen = conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL').fetchall()
             
@@ -368,37 +363,36 @@ def edit_consumable(barcode):
     """Verbrauchsmaterial bearbeiten"""
     try:
         with get_db_connection(CONSUMABLES_DB) as conn:
+            consumable = conn.execute(
+                'SELECT * FROM consumables WHERE barcode = ?', 
+                (barcode,)
+            ).fetchone()
+            
             if request.method == 'POST':
-                name = request.form.get('name')
-                description = request.form.get('description')
-                category = request.form.get('category')
-                min_quantity = request.form.get('min_quantity', 0, type=int)
-                current_quantity = request.form.get('current_quantity', 0, type=int)
-                unit = request.form.get('unit', 'Stück')
-                location = request.form.get('location')
-
+                bezeichnung = request.form.get('bezeichnung')
+                typ = request.form.get('typ')
+                ort = request.form.get('ort')
+                mindestbestand = request.form.get('mindestbestand', type=int)
+                aktueller_bestand = request.form.get('aktueller_bestand', type=int)
+                einheit = request.form.get('einheit')
+                
                 conn.execute('''
                     UPDATE consumables 
-                    SET name=?, description=?, category=?, 
-                        min_quantity=?, current_quantity=?, unit=?, location=?,
-                        last_updated=CURRENT_TIMESTAMP
-                    WHERE barcode=?
-                ''', (name, description, category, min_quantity,
-                      current_quantity, unit, location, barcode))
+                    SET bezeichnung = ?,
+                        typ = ?,
+                        ort = ?,
+                        mindestbestand = ?,
+                        aktueller_bestand = ?,
+                        einheit = ?
+                    WHERE barcode = ?
+                ''', (bezeichnung, typ, ort, mindestbestand, 
+                      aktueller_bestand, einheit, barcode))
                 conn.commit()
                 
                 flash('Verbrauchsmaterial erfolgreich aktualisiert', 'success')
-                return redirect(url_for('consumables'))
+                return redirect(url_for('consumable_details', barcode=barcode))
             
-            consumable = conn.execute(
-                'SELECT * FROM consumables WHERE barcode=?', (barcode,)
-            ).fetchone()
-            
-            if consumable is None:
-                flash('Verbrauchsmaterial nicht gefunden', 'error')
-                return redirect(url_for('consumables'))
-                
-            return render_template('consumable_form.html', consumable=consumable)
+            return render_template('edit_consumable.html', consumable=consumable)
             
     except Exception as e:
         print(f"Fehler beim Bearbeiten: {str(e)}")
@@ -743,9 +737,31 @@ def worker_details(barcode):
             if not worker:
                 flash('Mitarbeiter nicht gefunden', 'error')
                 return redirect(url_for('workers'))
+
+            # Hole aktive Ausleihen des Mitarbeiters
+            with get_db_connection(LENDINGS_DB) as lending_conn:
+                lendings = lending_conn.execute('''
+                    SELECT l.* 
+                    FROM lendings l
+                    WHERE l.worker_barcode = ? AND l.return_time IS NULL
+                ''', (barcode,)).fetchall()
+                
+                # Hole die Werkzeugdetails separat
+                if lendings:
+                    with get_db_connection(TOOLS_DB) as tools_conn:
+                        for lending in lendings:
+                            tool = tools_conn.execute('''
+                                SELECT gegenstand 
+                                FROM tools 
+                                WHERE barcode = ?
+                            ''', (lending['tool_barcode'],)).fetchone()
+                            if tool:
+                                lending = dict(lending)
+                                lending['gegenstand'] = tool['gegenstand']
                 
             return render_template('worker_details.html', 
                                 worker=worker,
+                                lendings=lendings,
                                 is_admin=session.get('is_admin', False))
             
     except Exception as e:
@@ -996,6 +1012,94 @@ def update_worker(barcode):
         flash('Fehler beim Aktualisieren', 'error')
         
     return redirect(url_for('worker_details', barcode=barcode))
+
+@app.route('/quick-scan')
+def quick_scan():
+    """Quick-Scan Seite"""
+    return render_template('quick_scan.html')
+
+@app.route('/api/recent_lendings')
+def get_recent_lendings():
+    """Letzte 10 Ausleihen"""
+    try:
+        with get_db_connection(LENDINGS_DB) as conn:
+            lendings = conn.execute('''
+                SELECT l.*, w.name || ' ' || w.lastname as worker_name,
+                       CASE 
+                           WHEN l.item_type = 'tool' THEN t.gegenstand
+                           ELSE c.bezeichnung
+                       END as item_name,
+                       CASE
+                           WHEN l.return_time IS NULL THEN 'Ausgeliehen'
+                           ELSE 'Zurückgegeben'
+                       END as status
+                FROM lendings l
+                LEFT JOIN workers w ON l.worker_barcode = w.barcode
+                LEFT JOIN tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                ORDER BY l.lending_time DESC
+                LIMIT 10
+            ''').fetchall()
+            
+            return jsonify({
+                'success': True,
+                'lendings': [dict(lending) for lending in lendings]
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/manual-lending')
+def manual_lending():
+    """Manuelle Ausleihe Seite"""
+    try:
+        # Hole alle aktiven Mitarbeiter
+        with get_db_connection(WORKERS_DB) as conn:
+            workers = conn.execute('SELECT * FROM workers ORDER BY name').fetchall()
+            
+        # Hole alle verfügbaren Werkzeuge
+        with get_db_connection(TOOLS_DB) as conn:
+            tools = conn.execute(
+                'SELECT * FROM tools WHERE status = "Verfügbar" ORDER BY gegenstand'
+            ).fetchall()
+            
+        # Hole Verbrauchsmaterial mit Bestand > 0
+        with get_db_connection(CONSUMABLES_DB) as conn:
+            consumables = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE aktueller_bestand > 0 
+                ORDER BY bezeichnung
+            ''').fetchall()
+            
+        # Hole aktive Ausleihen
+        with get_db_connection(LENDINGS_DB) as conn:
+            active_lendings = conn.execute('''
+                SELECT l.*, w.name || ' ' || w.lastname as worker_name,
+                       CASE 
+                           WHEN l.item_type = 'tool' THEN t.gegenstand
+                           ELSE c.bezeichnung
+                       END as item_name
+                FROM lendings l
+                LEFT JOIN workers w ON l.worker_barcode = w.barcode
+                LEFT JOIN tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                WHERE l.return_time IS NULL
+                ORDER BY l.lending_time DESC
+            ''').fetchall()
+            
+        return render_template('manual_lending.html',
+                             workers=workers,
+                             tools=tools,
+                             consumables=consumables,
+                             active_lendings=active_lendings)
+                             
+    except Exception as e:
+        print(f"Fehler beim Laden der Ausleihe-Seite: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Laden der Seite', 'error')
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
