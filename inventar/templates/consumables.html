@@ -14,6 +14,13 @@
 
     <!-- Filter-Bereich -->
     <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+        <!-- Suchfeld -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
+            <input type="text" id="searchInput"
+                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                   placeholder="Material, Barcode...">
+        </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
             <select id="filterOrt" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
@@ -50,30 +57,9 @@
                 <option value="Leer">Leer</option>
             </select>
         </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Sortierung</label>
-            <select id="sortierung" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="bezeichnung">Bezeichnung</option>
-                <option value="typ">Typ</option>
-                <option value="aktueller_bestand">Bestand</option>
-                <option value="status">Status</option>
-            </select>
-        </div>
     </div>
 
-    <!-- Debug-Ausgabe -->
-    {% if consumables %}
-        <div class="bg-yellow-100 p-4 mb-4">
-            <p>Debug: {{ consumables|length }} Einträge gefunden</p>
-            <p>Erster Eintrag: {{ consumables[0] }}</p>
-        </div>
-    {% else %}
-        <div class="bg-red-100 p-4 mb-4">
-            <p>Debug: Keine Einträge gefunden</p>
-        </div>
-    {% endif %}
-
-    <!-- Tabelle -->
+    <!-- Tabelle anpassen -->
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200" id="consumablesTable">
             <thead class="bg-gray-50">
@@ -94,44 +80,60 @@
                         <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-ort">↕</span>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
-                        onclick="sortTable('aktueller_bestand')">
-                        Aktueller Bestand
-                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-aktueller_bestand">↕</span>
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
-                        onclick="sortTable('mindestbestand')">
-                        Mindestbestand
-                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-mindestbestand">↕</span>
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
                         onclick="sortTable('status')">
                         Status
                         <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-status">↕</span>
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
-                        onclick="sortTable('barcode')">
-                        Barcode
-                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-barcode">↕</span>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Bestand
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    {% if session.get('is_admin') %}
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Aktionen
+                    </th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for item in consumables %}
                 <tr class="consumable-row">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.bezeichnung }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {% if session.get('is_admin') %}
+                            <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}" 
+                               class="text-blue-600 hover:text-blue-800">
+                                {{ item.bezeichnung }}
+                            </a>
+                        {% else %}
+                            {{ item.bezeichnung }}
+                        {% endif %}
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.aktueller_bestand }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.mindestbestand }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.status }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.barcode }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if item.status == 'Verfügbar' %}bg-green-100 text-green-800
+                            {% elif item.status == 'Nachbestellen' %}bg-yellow-100 text-yellow-800
+                            {% elif item.status == 'Leer' %}bg-red-100 text-red-800
+                            {% endif %}">
+                            {{ item.status }}
+                        </span>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}" class="text-blue-600 hover:text-blue-800">Bearbeiten</a>
-                        <button onclick="confirmDelete('consumable', '{{ item.barcode }}')" class="text-red-600 hover:text-red-800 ml-2">
-                            Löschen
+                        {{ item.aktueller_bestand }} {{ item.einheit }}
+                        {% if item.mindestbestand %}
+                        <span class="text-xs text-gray-400">(Min: {{ item.mindestbestand }})</span>
+                        {% endif %}
+                    </td>
+                    {% if session.get('is_admin') %}
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button onclick="confirmDelete('consumable', '{{ item.barcode }}')" 
+                                class="text-red-600 hover:text-red-800">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
                         </button>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -139,79 +141,96 @@
     </div>
 </div>
 
+<!-- JavaScript für Sortierung anpassen -->
 <script>
-// Filterlogik ähnlich wie bei index.html
-document.addEventListener('DOMContentLoaded', function() {
-    const filterOrt = document.getElementById('filterOrt');
-    const filterTyp = document.getElementById('filterTyp');
-    const filterStatus = document.getElementById('filterStatus');
-    const filterBestand = document.getElementById('filterBestand');
-    const sortierung = document.getElementById('sortierung');
-    const rows = document.querySelectorAll('.consumable-row');
+let currentSort = {
+    column: null,
+    ascending: true
+};
 
-    function filterAndSortItems() {
-        const selectedOrt = filterOrt.value.toLowerCase();
-        const selectedTyp = filterTyp.value.toLowerCase();
-        const selectedStatus = filterStatus.value;
-        const selectedBestand = filterBestand.value;
-        const selectedSort = sortierung.value;
+function sortTable(column) {
+    const table = document.querySelector('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Reset alle Sortier-Indikatoren
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '↕');
+    
+    // Sortierrichtung umkehren wenn gleiche Spalte
+    if (currentSort.column === column) {
+        currentSort.ascending = !currentSort.ascending;
+    } else {
+        currentSort.column = column;
+        currentSort.ascending = true;
+    }
+    
+    // Sortier-Indikator aktualisieren
+    const indicator = document.getElementById(`sort-${column}`);
+    indicator.textContent = currentSort.ascending ? '↑' : '↓';
+    
+    // Zeilen sortieren
+    rows.sort((a, b) => {
+        const aValue = a.children[getColumnIndex(column)].textContent.trim();
+        const bValue = b.children[getColumnIndex(column)].textContent.trim();
+        
+        return currentSort.ascending ? 
+            aValue.localeCompare(bValue) : 
+            bValue.localeCompare(aValue);
+    });
+    
+    // Sortierte Zeilen wieder einfügen
+    rows.forEach(row => tbody.appendChild(row));
+}
 
-        let visibleRows = Array.from(rows);
+function getColumnIndex(column) {
+    const columnMap = {
+        'bezeichnung': 0,
+        'typ': 1,
+        'ort': 2,
+        'status': 3
+    };
+    return columnMap[column];
+}
 
-        // Filtern
-        visibleRows.forEach(row => {
-            const ort = row.children[2].textContent.toLowerCase();
-            const typ = row.children[1].textContent.toLowerCase();
-            const status = row.children[5].textContent.trim();
-            const bestand = row.children[3].textContent;
+// Bestehende Filter-Logik beibehalten...
 
-            const ortMatch = !selectedOrt || ort === selectedOrt;
-            const typMatch = !selectedTyp || typ === selectedTyp;
-            const statusMatch = !selectedStatus || status === selectedStatus;
-            
-            let bestandMatch = true;
-            if (selectedBestand) {
-                const currentBestand = parseInt(bestand);
-                const minBestand = parseInt(row.children[4].textContent);
-                
-                if (selectedBestand === 'normal') {
-                    bestandMatch = currentBestand > minBestand;
-                } else if (selectedBestand === 'low') {
-                    bestandMatch = currentBestand <= minBestand && currentBestand > 0;
-                } else if (selectedBestand === 'critical') {
-                    bestandMatch = currentBestand === 0;
+function filterAndSearch() {
+    const searchValue = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        // Suchfilter
+        if (searchValue) {
+            let rowText = Array.from(row.children)
+                .map(cell => cell.textContent.toLowerCase())
+                .join(' ');
+            if (!rowText.includes(searchValue)) {
+                showRow = false;
+            }
+        }
+        
+        // Dropdown-Filter
+        document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+            const filterValue = filter.value.toLowerCase();
+            if (filterValue) {
+                const columnIndex = getFilterColumnIndex(filter.id);
+                const cellValue = row.children[columnIndex].textContent.toLowerCase();
+                if (!cellValue.includes(filterValue)) {
+                    showRow = false;
                 }
             }
-
-            row.style.display = ortMatch && typMatch && statusMatch && bestandMatch ? '' : 'none';
         });
-
-        // Sortieren
-        visibleRows.sort((a, b) => {
-            const columnIndices = {
-                'bezeichnung': 0,
-                'typ': 1,
-                'aktueller_bestand': 3,
-                'status': 5
-            };
-            
-            const aValue = a.children[columnIndices[selectedSort]].textContent;
-            const bValue = b.children[columnIndices[selectedSort]].textContent;
-            
-            if (selectedSort === 'aktueller_bestand') {
-                return parseInt(bValue) - parseInt(aValue);
-            }
-            return aValue.localeCompare(bValue);
-        });
-
-        const tbody = document.querySelector('#consumablesTable tbody');
-        visibleRows.forEach(row => tbody.appendChild(row));
-    }
-
-    // Event Listener für Filter
-    [filterOrt, filterTyp, filterStatus, filterBestand, sortierung].forEach(filter => {
-        filter.addEventListener('change', filterAndSortItems);
+        
+        row.style.display = showRow ? '' : 'none';
     });
+}
+
+// Event-Listener für Suche und Filter
+document.getElementById('searchInput')?.addEventListener('input', filterAndSearch);
+document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+    filter.addEventListener('change', filterAndSearch);
 });
 </script>
 {% endblock %} 
