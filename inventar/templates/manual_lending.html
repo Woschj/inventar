@@ -6,7 +6,7 @@
 <div class="bg-white shadow rounded-lg p-6">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">Werkzeug Ausleihe/Rückgabe</h1>
 
-    <form action="{{ url_for('process_lending') }}" method="post" class="space-y-4" id="lendingForm">
+    <form id="lendingForm" onsubmit="event.preventDefault(); handleLending(this);" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Mitarbeiter-Auswahl -->
             <div>
@@ -94,14 +94,14 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <form action="{{ url_for('process_lending') }}" method="post" class="inline">
-                                        <input type="hidden" name="worker_barcode" value="{{ lending.worker_barcode }}">
-                                        <input type="hidden" name="item_barcode" value="{{ lending.tool_barcode }}">
-                                        <input type="hidden" name="action" value="return">
-                                        <button type="submit" class="text-blue-600 hover:text-blue-900">Rückgabe</button>
-                                    </form>
+                                    {{ lending.formatted_time }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <button onclick="returnTool('{{ lending.tool_barcode }}', '{{ lending.id }}')"
+                                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                        Zurückgeben
+                                    </button>
                                 </td>
                             </tr>
                         {% endif %}
@@ -132,7 +132,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.amount }} {{ lending.einheit }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ lending.formatted_time }}
+                                </td>
                             </tr>
                         {% endif %}
                     {% else %}
@@ -218,29 +220,51 @@ document.addEventListener('DOMContentLoaded', function() {
     switchTab(lastActiveTab);
 });
 
-// Funktion für Werkzeug-Rückgabe
-function returnTool(lendingId) {
-    if (confirm('Möchten Sie dieses Werkzeug wirklich zurücknehmen?')) {
-        // Hier POST-Request für die Rückgabe implementieren
-        fetch(`/return_tool/${lendingId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Fehler bei der Rückgabe: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Fehler bei der Rückgabe');
-        });
-    }
+// Funktion für die Rückgabe anpassen
+function returnTool(toolBarcode, lendingId) {
+    const formData = {
+        action: 'return',
+        tool_barcode: toolBarcode,
+        lending_id: lendingId,
+        worker_barcode: null
+    };
+
+    console.log('Sending data:', formData);
+
+    fetch('/api/process_lending', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            showAlert(data.error, 'error');
+        } else {
+            showAlert('Werkzeug erfolgreich zurückgegeben', 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Fehler bei der Rückgabe', 'error');
+    });
+}
+
+// Hilfsfunktion für Alerts
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `fixed top-4 right-4 p-4 rounded ${
+        type === 'error' ? 'bg-red-500' : 'bg-green-500'
+    } text-white z-50`;
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => alertDiv.remove(), 3000);
 }
 
 let currentSort = {
@@ -383,6 +407,74 @@ document.getElementById('item_barcode').addEventListener('change', function() {
         amountField.value = '1';
         amountField.setAttribute('disabled', 'disabled');
         amountField.removeAttribute('required');
+    }
+});
+
+function handleLending(form) {
+    const itemType = document.getElementById('itemTypeSelect').value;
+    const workerBarcode = document.getElementById('workerSelect').value;
+    const itemBarcode = document.getElementById('itemBarcodeSelect').value;
+    
+    if (!workerBarcode || !itemBarcode) {
+        showAlert('Bitte alle Pflichtfelder ausfüllen', 'error');
+        return;
+    }
+
+    const formData = {
+        action: 'lend',
+        type: itemType,
+        tool_barcode: itemBarcode,
+        worker_barcode: workerBarcode
+    };
+
+    // Bei Verbrauchsmaterial Menge hinzufügen
+    if (itemType === 'consumable') {
+        const amount = parseInt(document.getElementById('amountInput').value);
+        if (!amount || amount < 1) {
+            showAlert('Bitte gültige Menge eingeben', 'error');
+            return;
+        }
+        formData.amount = amount;
+    }
+
+    console.log('Sending data:', formData); // Debugging
+
+    fetch('/api/process_lending', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            showAlert(data.error, 'error');
+        } else {
+            showAlert(data.message, 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Fehler bei der Ausgabe/Ausleihe', 'error');
+    });
+}
+
+// Optional: Autocomplete für Mitarbeiter
+document.getElementById('workerBarcode').addEventListener('input', function(e) {
+    const query = e.target.value;
+    if (query.length > 2) {
+        fetch(`/api/search_worker/${query}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error && !data.multiple) {
+                    this.value = data.worker.barcode;
+                }
+            });
     }
 });
 </script>

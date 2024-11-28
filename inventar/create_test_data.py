@@ -11,105 +11,128 @@ CONSUMABLES_DB = os.path.join(BASE_DIR, 'consumables.db')
 
 def init_dbs():
     """Erstellt alle notwendigen Datenbanktabellen"""
-    databases = {
-        WORKERS_DB: '''
-            CREATE TABLE IF NOT EXISTS workers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                lastname TEXT NOT NULL,
-                barcode TEXT NOT NULL UNIQUE,
-                bereich TEXT,
-                email TEXT
-            )
-        ''',
-        TOOLS_DB: '''
-            CREATE TABLE IF NOT EXISTS tools (
-                barcode TEXT PRIMARY KEY,
-                gegenstand TEXT NOT NULL,
-                ort TEXT DEFAULT 'Lager',
-                typ TEXT,
-                status TEXT DEFAULT 'Verfügbar',
-                image_path TEXT
-            )
-        ''',
-        LENDINGS_DB: '''
-            CREATE TABLE IF NOT EXISTS lendings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tool_barcode TEXT NOT NULL,
-                worker_barcode TEXT NOT NULL,
-                checkout_time DATETIME NOT NULL,
-                return_time DATETIME,
-                amount INTEGER DEFAULT 1,
-                FOREIGN KEY (tool_barcode) REFERENCES tools (barcode),
-                FOREIGN KEY (worker_barcode) REFERENCES workers (barcode)
-            )
-        ''',
-        CONSUMABLES_DB: '''
-            DROP TABLE IF EXISTS consumables;
-            CREATE TABLE consumables (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                barcode TEXT UNIQUE,
-                bezeichnung TEXT NOT NULL,  
-                ort TEXT DEFAULT 'Lager',
-                typ TEXT,
-                status TEXT DEFAULT 'Verfügbar',
-                mindestbestand INTEGER DEFAULT 1,
-                aktueller_bestand INTEGER DEFAULT 0,
-                einheit TEXT DEFAULT 'Stück',
-                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        '''
-    }
-    
-    for db_name, query in databases.items():
-        try:
-            conn = sqlite3.connect(db_name)
-            conn.execute(query)
-            conn.commit()
-            conn.close()
-            print(f"✓ {db_name} erfolgreich initialisiert")
-        except Exception as e:
-            print(f"✗ Fehler bei {db_name}: {str(e)}")
-
-    # Consumables separat behandeln
     try:
-        conn = sqlite3.connect(CONSUMABLES_DB)
-        # Erst die alte Tabelle löschen
-        conn.execute('DROP TABLE IF EXISTS consumables')
-        conn.commit()
+        # Workers Database
+        with sqlite3.connect(DBConfig.WORKERS_DB) as conn:
+            conn.executescript('''
+                CREATE TABLE IF NOT EXISTS workers (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    lastname TEXT NOT NULL,
+                    barcode TEXT NOT NULL UNIQUE,
+                    bereich TEXT,
+                    email TEXT
+                );
+                
+                CREATE TABLE IF NOT EXISTS workers_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    worker_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    changed_fields TEXT,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (worker_barcode) REFERENCES workers(barcode)
+                );
+                
+                CREATE TABLE IF NOT EXISTS deleted_workers (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    original_id INTEGER,
+                    name TEXT NOT NULL,
+                    lastname TEXT NOT NULL,
+                    barcode TEXT NOT NULL,
+                    bereich TEXT,
+                    email TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            ''')
+            
+        # Tools Database
+        with sqlite3.connect(DBConfig.TOOLS_DB) as conn:
+            conn.executescript('''
+                CREATE TABLE IF NOT EXISTS tools (
+                    barcode TEXT PRIMARY KEY,
+                    gegenstand TEXT NOT NULL,
+                    ort TEXT DEFAULT 'Lager',
+                    typ TEXT,
+                    status TEXT DEFAULT 'Verfügbar',
+                    image_path TEXT
+                );
+                
+                CREATE TABLE IF NOT EXISTS tools_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tool_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    old_status TEXT,
+                    new_status TEXT,
+                    changed_fields TEXT,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
+                );
+                
+                CREATE TABLE IF NOT EXISTS deleted_tools (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    barcode TEXT NOT NULL,
+                    gegenstand TEXT NOT NULL,
+                    ort TEXT,
+                    typ TEXT,
+                    status TEXT,
+                    image_path TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            ''')
+            
+        # Consumables Database
+        with sqlite3.connect(DBConfig.CONSUMABLES_DB) as conn:
+            conn.executescript('''
+                CREATE TABLE IF NOT EXISTS consumables (
+                    barcode TEXT PRIMARY KEY,
+                    bezeichnung TEXT NOT NULL,
+                    ort TEXT DEFAULT 'Lager',
+                    typ TEXT,
+                    status TEXT DEFAULT 'Verfügbar',
+                    mindestbestand INTEGER DEFAULT 0,
+                    aktueller_bestand INTEGER DEFAULT 0,
+                    einheit TEXT DEFAULT 'Stück',
+                    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+                
+                CREATE TABLE IF NOT EXISTS consumables_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    consumable_barcode TEXT NOT NULL,
+                    worker_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    amount INTEGER NOT NULL,
+                    old_stock INTEGER NOT NULL,
+                    new_stock INTEGER NOT NULL,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (consumable_barcode) REFERENCES consumables(barcode)
+                );
+                
+                CREATE TABLE IF NOT EXISTS deleted_consumables (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    original_id INTEGER,
+                    barcode TEXT NOT NULL,
+                    bezeichnung TEXT NOT NULL,
+                    ort TEXT,
+                    typ TEXT,
+                    mindestbestand INTEGER,
+                    letzter_bestand INTEGER,
+                    einheit TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            ''')
+            
+        print("✓ Alle Datenbanken erfolgreich initialisiert")
+        return True
         
-        # Dann die neue Tabelle erstellen
-        conn.execute('''
-            CREATE TABLE consumables (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                barcode TEXT UNIQUE,
-                bezeichnung TEXT NOT NULL,  
-                ort TEXT DEFAULT 'Lager',
-                typ TEXT,
-                status TEXT DEFAULT 'Verfügbar',
-                mindestbestand INTEGER DEFAULT 1,
-                aktueller_bestand INTEGER DEFAULT 0,
-                einheit TEXT DEFAULT 'Stück',
-                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        conn.commit()
-        conn.close()
-        print(f"✓ {CONSUMABLES_DB} erfolgreich initialisiert")
     except Exception as e:
-        print(f"✗ Fehler bei {CONSUMABLES_DB}: {str(e)}")
-        
-    # Debug: Tabellenstruktur überprüfen
-    try:
-        conn = sqlite3.connect(CONSUMABLES_DB)
-        cursor = conn.execute("PRAGMA table_info(consumables)")
-        columns = cursor.fetchall()
-        print("\nTabellenstruktur consumables:")
-        for col in columns:
-            print(f"- {col[1]} ({col[2]})")
-        conn.close()
-    except Exception as e:
-        print(f"Fehler beim Prüfen der Tabellenstruktur: {str(e)}")
+        print(f"✗ Fehler bei der Datenbankinitialisierung: {str(e)}")
+        return False
 
 def clear_existing_data():
     """Löscht alle vorhandenen Daten"""
