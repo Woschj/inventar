@@ -1,0 +1,928 @@
+2024-11-28 18:20:39,828 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:20:39,835 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:20:39,839 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:20:39,846 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:20:39,851 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:20:39,868 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:20:39,870 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:20:39,872 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:20:39,873 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:20:39,873 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:20:39,908 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-28 18:20:39,909 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-28 18:20:39,913 - INFO -  * Restarting with stat
+2024-11-28 18:20:40,192 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:20:40,193 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:20:40,193 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:20:40,194 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:20:40,196 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:20:40,212 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:20:40,213 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:20:40,214 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:20:40,214 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:20:40,214 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:20:40,224 - WARNING -  * Debugger is active!
+2024-11-28 18:20:40,229 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:21:38,017 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:38] "GET / HTTP/1.1" 200 -
+2024-11-28 18:21:38,181 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:38] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 18:21:38,364 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:38] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-11-28 18:21:39,936 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:39] "GET / HTTP/1.1" 200 -
+2024-11-28 18:21:40,202 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:40] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:21:40,984 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:40] "[32mGET /consumables HTTP/1.1[0m" 302 -
+2024-11-28 18:21:41,006 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:41] "GET / HTTP/1.1" 200 -
+2024-11-28 18:21:41,240 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:41] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:21:41,857 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:41] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:21:42,085 - INFO - 127.0.0.1 - - [28/Nov/2024 18:21:42] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:01,721 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 18:23:01,747 - INFO -  * Restarting with stat
+2024-11-28 18:23:02,010 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:23:02,011 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:23:02,012 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:23:02,012 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:23:02,013 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:23:02,026 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:23:02,026 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:23:02,027 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:23:02,027 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:23:02,028 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:23:02,036 - WARNING -  * Debugger is active!
+2024-11-28 18:23:02,040 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:23:04,091 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:04] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:23:04,410 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:04] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:08,430 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:08] "GET / HTTP/1.1" 200 -
+2024-11-28 18:23:08,711 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:08] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:09,185 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:09] "GET /login HTTP/1.1" 200 -
+2024-11-28 18:23:09,473 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:09] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:11,740 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:11] "[32mPOST /login HTTP/1.1[0m" 302 -
+2024-11-28 18:23:11,786 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:11] "GET / HTTP/1.1" 200 -
+2024-11-28 18:23:12,157 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:12] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:18,958 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:18] "[32mGET /consumables HTTP/1.1[0m" 302 -
+2024-11-28 18:23:19,091 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:19] "GET / HTTP/1.1" 200 -
+2024-11-28 18:23:19,454 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:19] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:21,438 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:21] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:23:21,768 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:22,482 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:22] "GET / HTTP/1.1" 200 -
+2024-11-28 18:23:22,772 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:22] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:23:23,295 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:23] "[32mGET /consumables HTTP/1.1[0m" 302 -
+2024-11-28 18:23:23,379 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:23] "GET / HTTP/1.1" 200 -
+2024-11-28 18:23:23,666 - INFO - 127.0.0.1 - - [28/Nov/2024 18:23:23] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:13,303 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 18:24:13,330 - INFO -  * Restarting with stat
+2024-11-28 18:24:13,617 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:24:13,618 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:24:13,619 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:24:13,619 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:24:13,620 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:24:13,633 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:24:13,634 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:24:13,634 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:24:13,635 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:24:13,635 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:24:13,645 - WARNING -  * Debugger is active!
+2024-11-28 18:24:13,650 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:24:15,345 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:15] "GET / HTTP/1.1" 200 -
+2024-11-28 18:24:15,719 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:15] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:16,537 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:16] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 18:24:16,814 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:16] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:17,859 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:17] "GET / HTTP/1.1" 200 -
+2024-11-28 18:24:18,263 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:18] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:18,826 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:18] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:24:19,104 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:19] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:20,188 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:20] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:24:20,527 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:20] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:21,127 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:21] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:24:21,404 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:23,086 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:23] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:24:23,405 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:23] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:24:23,967 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:23] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:24:39,547 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:39] "GET / HTTP/1.1" 200 -
+2024-11-28 18:24:39,993 - INFO - 127.0.0.1 - - [28/Nov/2024 18:24:39] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:00,696 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:00] "GET /tool/add HTTP/1.1" 200 -
+2024-11-28 18:25:00,988 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:05,479 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:05] "GET / HTTP/1.1" 200 -
+2024-11-28 18:25:17,685 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:17] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 18:25:17,971 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:24,287 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:24] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:25:24,596 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:24] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:38,072 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:38] "GET / HTTP/1.1" 200 -
+2024-11-28 18:25:38,457 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:47,872 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:47] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:25:48,256 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:48] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:25:54,444 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:54] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 18:25:56,042 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:56] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:25:56,352 - INFO - 127.0.0.1 - - [28/Nov/2024 18:25:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:02,038 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:02] "GET / HTTP/1.1" 200 -
+2024-11-28 18:26:02,338 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:09,871 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:09] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:26:10,245 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:10] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:15,563 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:15] "GET /worker/M0006 HTTP/1.1" 200 -
+2024-11-28 18:26:15,933 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:15] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:30,425 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:30] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:26:30,763 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:32,751 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:32] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:26:32,971 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:35,562 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:35] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:26:35,849 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:35] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:37,873 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:37] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 18:26:39,523 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:39] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 18:26:40,407 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:40] "GET / HTTP/1.1" 200 -
+2024-11-28 18:26:40,763 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:40] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:43,081 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:43] "[32mGET /tool/delete/W0098 HTTP/1.1[0m" 302 -
+2024-11-28 18:26:43,158 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:43] "GET / HTTP/1.1" 200 -
+2024-11-28 18:26:43,498 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:45,377 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:45] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:26:45,675 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:45] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:46,474 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:46] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:26:46,784 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:26:57,999 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:57] "[32mGET /admin/restore/tool/1 HTTP/1.1[0m" 302 -
+2024-11-28 18:26:58,089 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:58] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:26:58,437 - INFO - 127.0.0.1 - - [28/Nov/2024 18:26:58] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:01,828 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:01] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:27:02,084 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:03,209 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:03] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:27:03,488 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:03] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:09,047 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:09] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:27:20,761 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:20] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 18:27:21,159 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:22,103 - INFO - Geladene Historie für V0001: []
+2024-11-28 18:27:22,108 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:22] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 18:27:22,473 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:22] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:27,311 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:27] "[32mPOST /consumables/V0001/update HTTP/1.1[0m" 302 -
+2024-11-28 18:27:27,402 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:27] "GET /consumables/V0001 HTTP/1.1" 200 -
+2024-11-28 18:27:27,690 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:29,764 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:29] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 18:27:30,134 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:40,168 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:40] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:27:40,474 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:40] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:49,306 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:49] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:27:49,583 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:49] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:27:50,684 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:50] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:27:51,502 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:51] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:27:51,900 - INFO - 127.0.0.1 - - [28/Nov/2024 18:27:51] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:36,129 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:36] "GET /workers HTTP/1.1" 200 -
+2024-11-28 18:41:36,531 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:36] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 18:41:37,553 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:37] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:41:37,920 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:37] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:42,385 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:42] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:41:42,647 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:42] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 18:41:43,620 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:43] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:41:43,914 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:44,838 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:44] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:41:45,473 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:45] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:41:45,750 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:45] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:47,049 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:47] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:41:49,010 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:49] "GET / HTTP/1.1" 200 -
+2024-11-28 18:41:49,277 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:49] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:49,747 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:49] "GET /tool/add HTTP/1.1" 200 -
+2024-11-28 18:41:50,031 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:50] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:56,111 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:56] "[32mPOST /tool/add HTTP/1.1[0m" 302 -
+2024-11-28 18:41:56,206 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:56] "GET / HTTP/1.1" 200 -
+2024-11-28 18:41:56,475 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:58,119 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:58] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:41:58,380 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:58] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:41:59,122 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:59] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:41:59,498 - INFO - 127.0.0.1 - - [28/Nov/2024 18:41:59] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:42:14,475 - INFO - 127.0.0.1 - - [28/Nov/2024 18:42:14] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:42:14,717 - INFO - 127.0.0.1 - - [28/Nov/2024 18:42:14] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:42:17,702 - INFO - 127.0.0.1 - - [28/Nov/2024 18:42:17] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 18:43:55,718 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 18:43:55,743 - INFO -  * Restarting with stat
+2024-11-28 18:43:55,993 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:43:55,994 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:43:55,994 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:43:55,995 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:43:55,996 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:43:56,008 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:43:56,008 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:43:56,009 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:43:56,009 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:43:56,010 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:43:56,018 - WARNING -  * Debugger is active!
+2024-11-28 18:43:56,023 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:44:01,769 - INFO - Verarbeite return für Barcode None
+2024-11-28 18:44:01,770 - INFO - Gefundenes Werkzeug: None
+2024-11-28 18:44:01,770 - INFO - Gefundene Ausleihe: None
+2024-11-28 18:44:01,773 - INFO - 127.0.0.1 - - [28/Nov/2024 18:44:01] "[35m[1mPOST /api/process_lending HTTP/1.1[0m" 500 -
+2024-11-28 18:44:02,663 - INFO - 127.0.0.1 - - [28/Nov/2024 18:44:02] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:44:02,905 - INFO - 127.0.0.1 - - [28/Nov/2024 18:44:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:44:05,600 - INFO - Verarbeite return für Barcode None
+2024-11-28 18:44:05,601 - INFO - Gefundenes Werkzeug: None
+2024-11-28 18:44:05,601 - INFO - Gefundene Ausleihe: None
+2024-11-28 18:44:05,603 - INFO - 127.0.0.1 - - [28/Nov/2024 18:44:05] "[35m[1mPOST /api/process_lending HTTP/1.1[0m" 500 -
+2024-11-28 18:49:48,211 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 18:49:48,235 - INFO -  * Restarting with stat
+2024-11-28 18:49:48,483 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:49:48,484 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:49:48,484 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:49:48,485 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:49:48,485 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:49:48,501 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:49:48,501 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:49:48,502 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:49:48,503 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:49:48,503 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:49:48,511 - WARNING -  * Debugger is active!
+2024-11-28 18:49:48,515 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:49:51,634 - INFO - 127.0.0.1 - - [28/Nov/2024 18:49:51] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:49:52,006 - INFO - 127.0.0.1 - - [28/Nov/2024 18:49:52] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 18:49:54,101 - INFO - 127.0.0.1 - - [28/Nov/2024 18:49:54] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 18:49:56,883 - INFO - 127.0.0.1 - - [28/Nov/2024 18:49:56] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 18:49:57,153 - INFO - 127.0.0.1 - - [28/Nov/2024 18:49:57] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:50:01,331 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:01] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:50:01,673 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:01] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:50:02,141 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:02] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 18:50:02,592 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:50:03,442 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:03] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:50:04,188 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:04] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:50:04,480 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:04] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:50:05,718 - INFO - 127.0.0.1 - - [28/Nov/2024 18:50:05] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:51:31,221 - INFO - 127.0.0.1 - - [28/Nov/2024 18:51:31] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:51:31,509 - INFO - 127.0.0.1 - - [28/Nov/2024 18:51:31] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:51:32,827 - INFO - 127.0.0.1 - - [28/Nov/2024 18:51:32] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 18:51:33,094 - INFO - 127.0.0.1 - - [28/Nov/2024 18:51:33] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:51:33,661 - INFO - 127.0.0.1 - - [28/Nov/2024 18:51:33] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:56:17,863 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 18:56:17,890 - INFO -  * Restarting with stat
+2024-11-28 18:56:18,169 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 18:56:18,170 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 18:56:18,170 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 18:56:18,171 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 18:56:18,171 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 18:56:18,183 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 18:56:18,184 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 18:56:18,185 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 18:56:18,185 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 18:56:18,185 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 18:56:18,195 - WARNING -  * Debugger is active!
+2024-11-28 18:56:18,199 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 18:56:26,446 - INFO - 127.0.0.1 - - [28/Nov/2024 18:56:26] "GET /admin HTTP/1.1" 200 -
+2024-11-28 18:56:26,712 - INFO - 127.0.0.1 - - [28/Nov/2024 18:56:26] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 18:56:29,781 - INFO - 127.0.0.1 - - [28/Nov/2024 18:56:29] "GET /?filter=ausgeliehen HTTP/1.1" 200 -
+2024-11-28 18:56:30,095 - INFO - 127.0.0.1 - - [28/Nov/2024 18:56:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 18:56:31,984 - INFO - 127.0.0.1 - - [28/Nov/2024 18:56:31] "GET /admin HTTP/1.1" 200 -
+2024-11-28 19:01:15,730 - INFO - 127.0.0.1 - - [28/Nov/2024 19:01:15] "GET /admin HTTP/1.1" 200 -
+2024-11-28 19:01:15,977 - INFO - 127.0.0.1 - - [28/Nov/2024 19:01:15] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:01:16,052 - INFO - 127.0.0.1 - - [28/Nov/2024 19:01:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-11-28 19:02:49,621 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:49] "GET /admin HTTP/1.1" 200 -
+2024-11-28 19:02:49,944 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:49] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:02:54,144 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:54] "GET / HTTP/1.1" 200 -
+2024-11-28 19:02:54,491 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:54] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:02:55,378 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:55] "GET /admin HTTP/1.1" 200 -
+2024-11-28 19:02:56,309 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:56] "GET /?filter=ausgeliehen HTTP/1.1" 200 -
+2024-11-28 19:02:56,605 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:02:57,266 - INFO - 127.0.0.1 - - [28/Nov/2024 19:02:57] "GET /admin HTTP/1.1" 200 -
+2024-11-28 19:06:04,141 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:04] "GET /workers?filter_bereich=Qualitätssicherung HTTP/1.1" 200 -
+2024-11-28 19:06:04,404 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:04] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:06:09,235 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:09] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:06:09,494 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:09] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:06:15,883 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:15] "[35m[1mPOST /api/process_lending HTTP/1.1[0m" 500 -
+2024-11-28 19:06:18,259 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:18] "[35m[1mPOST /api/process_lending HTTP/1.1[0m" 500 -
+2024-11-28 19:06:22,144 - INFO - 127.0.0.1 - - [28/Nov/2024 19:06:22] "[35m[1mPOST /api/process_lending HTTP/1.1[0m" 500 -
+2024-11-28 19:09:35,912 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:09:35,936 - INFO -  * Restarting with stat
+2024-11-28 19:09:36,189 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:09:36,190 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:09:36,190 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:09:36,191 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:09:36,191 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:09:36,203 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:09:36,204 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:09:36,204 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:09:36,205 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:09:36,205 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:09:36,214 - WARNING -  * Debugger is active!
+2024-11-28 19:09:36,217 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:09:39,722 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:39] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:09:40,153 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:40] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:09:45,250 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:45] "GET / HTTP/1.1" 200 -
+2024-11-28 19:09:45,594 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:45] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:09:46,862 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:46] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:09:47,159 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:09:49,962 - INFO - Process lending: action=lend, barcode=None
+2024-11-28 19:09:49,963 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:49] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:09:52,981 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:52] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:09:53,261 - INFO - 127.0.0.1 - - [28/Nov/2024 19:09:53] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:11:07,464 - INFO - 127.0.0.1 - - [28/Nov/2024 19:11:07] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:11:07,717 - INFO - 127.0.0.1 - - [28/Nov/2024 19:11:07] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:11:10,319 - INFO - Process lending: action=lend, barcode=W0098
+2024-11-28 19:11:10,320 - INFO - 127.0.0.1 - - [28/Nov/2024 19:11:10] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:11:15,816 - INFO - Process lending: action=lend, barcode=W0098
+2024-11-28 19:11:15,817 - INFO - 127.0.0.1 - - [28/Nov/2024 19:11:15] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:12:16,787 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:12:16,811 - INFO -  * Restarting with stat
+2024-11-28 19:12:17,093 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:12:17,093 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:12:17,094 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:12:17,095 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:12:17,096 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:12:17,109 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:12:17,110 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:12:17,110 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:12:17,111 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:12:17,111 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:12:17,120 - WARNING -  * Debugger is active!
+2024-11-28 19:12:17,125 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:12:18,060 - INFO - 127.0.0.1 - - [28/Nov/2024 19:12:18] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:12:18,349 - INFO - 127.0.0.1 - - [28/Nov/2024 19:12:18] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:12:23,334 - INFO - Process lending: action=lend, barcode=W0036, worker=M0001
+2024-11-28 19:12:23,335 - INFO - Found tool: {'barcode': 'W0036', 'gegenstand': 'Akku-Bohrschrauber 18V', 'ort': 'Lager', 'typ': 'Elektrowerkzeug', 'status': 'Verfügbar', 'image_path': None}
+2024-11-28 19:12:23,335 - INFO - Existing lending: None
+2024-11-28 19:12:23,342 - INFO - 127.0.0.1 - - [28/Nov/2024 19:12:23] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:12:30,083 - INFO - Process lending: action=lend, barcode=V0008, worker=M0001
+2024-11-28 19:12:30,085 - INFO - Found tool: None
+2024-11-28 19:12:30,086 - INFO - 127.0.0.1 - - [28/Nov/2024 19:12:30] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:13:27,012 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:27] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:13:27,378 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:13:36,911 - INFO - Process lending: action=lend, barcode=W0094, worker=M0002
+2024-11-28 19:13:36,911 - INFO - Found tool: {'barcode': 'W0094', 'gegenstand': 'Blechrundbiegemaschine', 'ort': 'Lager', 'typ': 'Spezialwerkzeug', 'status': 'Verfügbar', 'image_path': None}
+2024-11-28 19:13:36,912 - INFO - Existing lending: None
+2024-11-28 19:13:36,920 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:36] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:13:39,310 - INFO - Process lending: action=lend, barcode=W0094, worker=M0002
+2024-11-28 19:13:39,312 - INFO - Found tool: {'barcode': 'W0094', 'gegenstand': 'Blechrundbiegemaschine', 'ort': 'Lager', 'typ': 'Spezialwerkzeug', 'status': 'Ausgeliehen', 'image_path': None}
+2024-11-28 19:13:39,312 - INFO - Existing lending: {'id': 3, 'tool_barcode': 'W0094', 'worker_barcode': 'M0002', 'checkout_time': '2024-11-28 18:13:36', 'return_time': None, 'amount': 1}
+2024-11-28 19:13:39,312 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:39] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:13:45,457 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:13:45,482 - INFO -  * Restarting with stat
+2024-11-28 19:13:45,742 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:13:45,743 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:13:45,743 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:13:45,744 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:13:45,745 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:13:45,757 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:13:45,757 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:13:45,758 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:13:45,758 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:13:45,759 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:13:45,768 - WARNING -  * Debugger is active!
+2024-11-28 19:13:45,772 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:13:47,099 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:47] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:13:47,350 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:13:53,066 - INFO - Process lending: action=lend, barcode=V0008, worker=M0005, amount=1
+2024-11-28 19:13:53,067 - INFO - Found consumable: {'barcode': 'V0008', 'bezeichnung': 'Arbeitshandschuhe Gr. 9', 'ort': 'Lager', 'typ': 'Schutzausrüstung', 'status': 'Verfügbar', 'mindestbestand': 20, 'aktueller_bestand': 100, 'einheit': 'Paar'}
+2024-11-28 19:13:53,075 - INFO - 127.0.0.1 - - [28/Nov/2024 19:13:53] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:14:33,033 - INFO - 127.0.0.1 - - [28/Nov/2024 19:14:33] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:14:33,357 - INFO - 127.0.0.1 - - [28/Nov/2024 19:14:33] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:14:38,330 - INFO - Process lending: action=lend, barcode=V0008, worker=M0002, amount=1
+2024-11-28 19:14:38,332 - INFO - Found consumable: {'barcode': 'V0008', 'bezeichnung': 'Arbeitshandschuhe Gr. 9', 'ort': 'Lager', 'typ': 'Schutzausrüstung', 'status': 'Verfügbar', 'mindestbestand': 20, 'aktueller_bestand': 99, 'einheit': 'Paar'}
+2024-11-28 19:14:38,339 - INFO - 127.0.0.1 - - [28/Nov/2024 19:14:38] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:14:39,920 - INFO - 127.0.0.1 - - [28/Nov/2024 19:14:39] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:14:40,265 - INFO - 127.0.0.1 - - [28/Nov/2024 19:14:40] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:18:20,118 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:20] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:18:20,546 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:20] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:18:27,606 - INFO - Process lending: action=lend, barcode=V0008, worker=M0001, amount=1
+2024-11-28 19:18:27,607 - INFO - Found consumable: {'barcode': 'V0008', 'bezeichnung': 'Arbeitshandschuhe Gr. 9', 'ort': 'Lager', 'typ': 'Schutzausrüstung', 'status': 'Verfügbar', 'mindestbestand': 20, 'aktueller_bestand': 98, 'einheit': 'Paar'}
+2024-11-28 19:18:27,614 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:27] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:18:29,220 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:29] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:18:29,510 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:29] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:18:31,795 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:31] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:18:32,028 - INFO - 127.0.0.1 - - [28/Nov/2024 19:18:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:20:42,207 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:20:42,232 - INFO -  * Restarting with stat
+2024-11-28 19:20:42,490 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:20:42,491 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:20:42,492 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:20:42,492 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:20:42,493 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:20:42,505 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:20:42,506 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:20:42,507 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:20:42,507 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:20:42,508 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:20:42,516 - WARNING -  * Debugger is active!
+2024-11-28 19:20:42,520 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:21:14,107 - ERROR - Fehler beim Laden der Ausleihseite: no such table: workers_db.workers
+2024-11-28 19:21:14,107 - INFO - 127.0.0.1 - - [28/Nov/2024 19:21:14] "[32mGET /manual_lending HTTP/1.1[0m" 302 -
+2024-11-28 19:21:14,153 - INFO - 127.0.0.1 - - [28/Nov/2024 19:21:14] "GET / HTTP/1.1" 200 -
+2024-11-28 19:21:14,467 - INFO - 127.0.0.1 - - [28/Nov/2024 19:21:14] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:24:02,205 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:24:02,230 - INFO -  * Restarting with stat
+2024-11-28 19:24:02,512 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:24:02,513 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:24:02,513 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:24:02,514 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:24:02,515 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:24:02,526 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:24:02,527 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:24:02,528 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:24:02,528 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:24:02,528 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:24:02,536 - WARNING -  * Debugger is active!
+2024-11-28 19:24:02,540 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:24:04,179 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:04] "GET / HTTP/1.1" 200 -
+2024-11-28 19:24:04,503 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:04] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:24:05,669 - ERROR - Fehler beim Laden der Ausleihseite: no such table: workers_db.workers
+2024-11-28 19:24:05,670 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:05] "[32mGET /manual_lending HTTP/1.1[0m" 302 -
+2024-11-28 19:24:05,693 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:05] "GET / HTTP/1.1" 200 -
+2024-11-28 19:24:05,973 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:05] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:24:07,243 - ERROR - Fehler beim Laden der Ausleihseite: no such table: workers_db.workers
+2024-11-28 19:24:07,244 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:07] "[32mGET /manual_lending HTTP/1.1[0m" 302 -
+2024-11-28 19:24:07,329 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:07] "GET / HTTP/1.1" 200 -
+2024-11-28 19:24:07,603 - INFO - 127.0.0.1 - - [28/Nov/2024 19:24:07] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:26:40,080 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:26:40,102 - INFO -  * Restarting with stat
+2024-11-28 19:26:40,364 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:26:40,364 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:26:40,365 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:26:40,365 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:26:40,366 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:26:40,378 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:26:40,378 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:26:40,379 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:26:40,379 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:26:40,380 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:26:40,388 - WARNING -  * Debugger is active!
+2024-11-28 19:26:40,392 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:26:41,637 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:41] "GET / HTTP/1.1" 200 -
+2024-11-28 19:26:41,943 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:41] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:26:43,467 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:26:43,468 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x000001F8F83BFF70>]
+2024-11-28 19:26:43,468 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:26:43,468 - INFO - Verbinde Datenbanken...
+2024-11-28 19:26:43,469 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:26:43,470 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:26:43,472 - INFO - Rendering Template...
+2024-11-28 19:26:43,483 - ERROR - Fehler beim Laden der Ausleihseite: Object of type Undefined is not JSON serializable
+2024-11-28 19:26:43,526 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1744, in manual_lending
+    return render_template('manual_lending.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "C:\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\manual_lending.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\base.html", line 113, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\manual_lending.html", line 154, in block 'content'
+    const tools = {{ tools|tojson|safe }};
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\filters.py", line 1714, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "C:\Python312\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Undefined is not JSON serializable
+
+2024-11-28 19:26:43,529 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:43] "[32mGET /manual_lending HTTP/1.1[0m" 302 -
+2024-11-28 19:26:43,565 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:43] "GET / HTTP/1.1" 200 -
+2024-11-28 19:26:43,815 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:26:56,171 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:56] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 19:26:56,395 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:26:57,419 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:57] "GET / HTTP/1.1" 200 -
+2024-11-28 19:26:57,748 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:57] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:26:59,160 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:59] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 19:26:59,480 - INFO - 127.0.0.1 - - [28/Nov/2024 19:26:59] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:27:00,445 - INFO - 127.0.0.1 - - [28/Nov/2024 19:27:00] "GET /workers HTTP/1.1" 200 -
+2024-11-28 19:27:00,785 - INFO - 127.0.0.1 - - [28/Nov/2024 19:27:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:28:18,734 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:28:18,758 - INFO -  * Restarting with stat
+2024-11-28 19:28:19,010 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:28:19,011 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:28:19,012 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:28:19,012 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:28:19,013 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:28:19,025 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:28:19,025 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:28:19,026 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:28:19,027 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:28:19,027 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:28:19,035 - WARNING -  * Debugger is active!
+2024-11-28 19:28:19,039 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:28:19,389 - INFO - 127.0.0.1 - - [28/Nov/2024 19:28:19] "GET /workers HTTP/1.1" 200 -
+2024-11-28 19:28:19,689 - INFO - 127.0.0.1 - - [28/Nov/2024 19:28:19] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:28:20,459 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:28:20,459 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x0000014F6DAE0070>]
+2024-11-28 19:28:20,460 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:28:20,460 - INFO - Verbinde Datenbanken...
+2024-11-28 19:28:20,461 - INFO - Lade Werkzeuge und Verbrauchsmaterial...
+2024-11-28 19:28:20,462 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:28:20,462 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:28:20,463 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:28:20,464 - INFO - Rendering Template...
+2024-11-28 19:28:20,471 - ERROR - Fehler beim Laden der Ausleihseite: Object of type Row is not JSON serializable
+2024-11-28 19:28:20,475 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1756, in manual_lending
+    return render_template('manual_lending.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "C:\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\manual_lending.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\base.html", line 113, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\templates\manual_lending.html", line 154, in block 'content'
+    const tools = {{ tools|tojson|safe }};
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\filters.py", line 1714, in do_tojson
+    return htmlsafe_json_dumps(value, dumps=dumps, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\jinja2\utils.py", line 658, in htmlsafe_json_dumps
+    dumps(obj, **kwargs)
+  File "C:\Python312\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Row is not JSON serializable
+
+2024-11-28 19:28:20,478 - INFO - 127.0.0.1 - - [28/Nov/2024 19:28:20] "[32mGET /manual_lending HTTP/1.1[0m" 302 -
+2024-11-28 19:28:20,559 - INFO - 127.0.0.1 - - [28/Nov/2024 19:28:20] "GET / HTTP/1.1" 200 -
+2024-11-28 19:28:20,873 - INFO - 127.0.0.1 - - [28/Nov/2024 19:28:20] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:30:40,541 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:30:40,566 - INFO -  * Restarting with stat
+2024-11-28 19:30:40,822 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:30:40,823 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:30:40,824 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:30:40,824 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:30:40,825 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:30:40,837 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:30:40,838 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:30:40,839 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:30:40,839 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:30:40,839 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:30:40,848 - WARNING -  * Debugger is active!
+2024-11-28 19:30:40,853 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:30:41,861 - INFO - 127.0.0.1 - - [28/Nov/2024 19:30:41] "GET / HTTP/1.1" 200 -
+2024-11-28 19:30:42,161 - INFO - 127.0.0.1 - - [28/Nov/2024 19:30:42] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:30:43,534 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:30:43,535 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x00000179985EC4F0>]
+2024-11-28 19:30:43,535 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:30:43,536 - INFO - Verbinde Datenbanken...
+2024-11-28 19:30:43,537 - INFO - Lade Werkzeuge...
+2024-11-28 19:30:43,538 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 19:30:43,538 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:30:43,539 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:30:43,539 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:30:43,541 - INFO - Rendering Template...
+2024-11-28 19:30:43,551 - INFO - 127.0.0.1 - - [28/Nov/2024 19:30:43] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:30:43,883 - INFO - 127.0.0.1 - - [28/Nov/2024 19:30:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:33:26,424 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:33:26,446 - INFO -  * Restarting with stat
+2024-11-28 19:33:26,706 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:33:26,707 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:33:26,707 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:33:26,708 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:33:26,708 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:33:26,721 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:33:26,722 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:33:26,723 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:33:26,723 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:33:26,723 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:33:26,731 - WARNING -  * Debugger is active!
+2024-11-28 19:33:26,736 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:33:27,935 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:33:27,935 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x000002518E0A9900>]
+2024-11-28 19:33:27,936 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:33:27,936 - INFO - Verbinde Datenbanken...
+2024-11-28 19:33:27,937 - INFO - Lade Werkzeuge...
+2024-11-28 19:33:27,938 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 19:33:27,938 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:33:27,938 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:33:27,939 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:33:27,941 - INFO - Rendering Template...
+2024-11-28 19:33:27,960 - INFO - 127.0.0.1 - - [28/Nov/2024 19:33:27] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:33:28,341 - INFO - 127.0.0.1 - - [28/Nov/2024 19:33:28] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:33:53,451 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:33:53,452 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x000002518E10D330>]
+2024-11-28 19:33:53,452 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:33:53,453 - INFO - Verbinde Datenbanken...
+2024-11-28 19:33:53,454 - INFO - Lade Werkzeuge...
+2024-11-28 19:33:53,454 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 19:33:53,455 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:33:53,455 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:33:53,455 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:33:53,456 - INFO - Rendering Template...
+2024-11-28 19:33:53,457 - INFO - 127.0.0.1 - - [28/Nov/2024 19:33:53] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:33:53,766 - INFO - 127.0.0.1 - - [28/Nov/2024 19:33:53] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:35:47,243 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:35:47,266 - INFO -  * Restarting with stat
+2024-11-28 19:35:47,527 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:35:47,528 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:35:47,529 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:35:47,529 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:35:47,530 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:35:47,546 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:35:47,547 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:35:47,548 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:35:47,548 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:35:47,548 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:35:47,557 - WARNING -  * Debugger is active!
+2024-11-28 19:35:47,561 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:35:49,269 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:35:49,270 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x00000272D287EEF0>]
+2024-11-28 19:35:49,270 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:35:49,271 - INFO - Verbinde Datenbanken...
+2024-11-28 19:35:49,272 - INFO - Lade Werkzeuge...
+2024-11-28 19:35:49,272 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 19:35:49,273 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:35:49,273 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:35:49,273 - INFO - Anzahl aktiver Ausleihen: 6
+2024-11-28 19:35:49,276 - INFO - Rendering Template...
+2024-11-28 19:35:49,294 - INFO - 127.0.0.1 - - [28/Nov/2024 19:35:49] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:35:49,725 - INFO - 127.0.0.1 - - [28/Nov/2024 19:35:49] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:35:54,536 - INFO - Process lending: action=lend, barcode=V0007, worker=M0001, amount=1
+2024-11-28 19:35:54,536 - INFO - Process lending: action=lend, barcode=V0007, worker=M0001, amount=1
+2024-11-28 19:35:54,538 - INFO - Found consumable: {'barcode': 'V0007', 'bezeichnung': 'Malerkrepp 50mm', 'ort': 'Lager', 'typ': 'Klebeband', 'status': 'Verfügbar', 'mindestbestand': 8, 'aktueller_bestand': 40, 'einheit': 'Rolle'}
+2024-11-28 19:35:54,545 - INFO - 127.0.0.1 - - [28/Nov/2024 19:35:54] "POST /api/process_lending HTTP/1.1" 200 -
+2024-11-28 19:35:56,166 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 19:35:56,167 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x00000272D290D6F0>]
+2024-11-28 19:35:56,167 - INFO - Anzahl geladener Mitarbeiter: 25
+2024-11-28 19:35:56,167 - INFO - Verbinde Datenbanken...
+2024-11-28 19:35:56,170 - INFO - Lade Werkzeuge...
+2024-11-28 19:35:56,170 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 19:35:56,171 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 19:35:56,171 - INFO - Lade aktive Ausleihen...
+2024-11-28 19:35:56,171 - INFO - Anzahl aktiver Ausleihen: 7
+2024-11-28 19:35:56,172 - INFO - Rendering Template...
+2024-11-28 19:35:56,173 - INFO - 127.0.0.1 - - [28/Nov/2024 19:35:56] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 19:35:56,413 - INFO - 127.0.0.1 - - [28/Nov/2024 19:35:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:36:40,297 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:40] "GET /workers HTTP/1.1" 200 -
+2024-11-28 19:36:40,720 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:40] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:36:44,684 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:44] "GET /workers?filter_bereich=Werkstatt HTTP/1.1" 200 -
+2024-11-28 19:36:44,981 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:44] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:36:45,643 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:45] "GET /workers HTTP/1.1" 200 -
+2024-11-28 19:36:46,013 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:36:47,466 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:47] "GET /worker/add HTTP/1.1" 200 -
+2024-11-28 19:36:47,749 - INFO - 127.0.0.1 - - [28/Nov/2024 19:36:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:37:02,297 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:02] "[32mPOST /worker/add HTTP/1.1[0m" 302 -
+2024-11-28 19:37:02,321 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:02] "GET /workers HTTP/1.1" 200 -
+2024-11-28 19:37:02,578 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:37:15,919 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:15] "GET / HTTP/1.1" 200 -
+2024-11-28 19:37:16,253 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:16] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:37:18,711 - ERROR - Datenbankfehler in tool_details: no such column: t.defect_date
+2024-11-28 19:37:18,712 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:18] "[32mGET /tool/W0041 HTTP/1.1[0m" 302 -
+2024-11-28 19:37:18,742 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:18] "GET / HTTP/1.1" 200 -
+2024-11-28 19:37:18,981 - INFO - 127.0.0.1 - - [28/Nov/2024 19:37:18] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:43:41,173 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:43:41,197 - INFO -  * Restarting with stat
+2024-11-28 19:43:41,465 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:43:41,466 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:43:41,467 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:43:41,467 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:43:41,468 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:43:41,480 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:43:41,481 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:43:41,481 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:43:41,482 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:43:41,482 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:43:41,489 - WARNING -  * Debugger is active!
+2024-11-28 19:43:41,494 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:43:44,181 - INFO - 127.0.0.1 - - [28/Nov/2024 19:43:44] "GET / HTTP/1.1" 200 -
+2024-11-28 19:43:44,586 - INFO - 127.0.0.1 - - [28/Nov/2024 19:43:44] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:44:20,700 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:44:20,702 - ERROR - Datenbankfehler in tool_details: no such column: comment
+2024-11-28 19:44:20,703 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1108, in tool_details
+    status_history = conn.execute('''
+                     ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: comment
+
+2024-11-28 19:44:20,704 - INFO - 127.0.0.1 - - [28/Nov/2024 19:44:20] "[32mGET /tool/W0098 HTTP/1.1[0m" 302 -
+2024-11-28 19:44:20,735 - INFO - 127.0.0.1 - - [28/Nov/2024 19:44:20] "GET / HTTP/1.1" 200 -
+2024-11-28 19:44:21,019 - INFO - 127.0.0.1 - - [28/Nov/2024 19:44:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:47:50,412 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:47:50,436 - INFO -  * Restarting with stat
+2024-11-28 19:47:50,689 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:47:50,690 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:47:50,690 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:47:50,691 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:47:50,691 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:47:50,703 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:47:50,704 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:47:50,705 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:47:50,706 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:47:50,706 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:47:50,714 - WARNING -  * Debugger is active!
+2024-11-28 19:47:50,719 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:47:52,843 - INFO - 127.0.0.1 - - [28/Nov/2024 19:47:52] "GET / HTTP/1.1" 200 -
+2024-11-28 19:47:53,193 - INFO - 127.0.0.1 - - [28/Nov/2024 19:47:53] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:47:54,776 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:47:54,778 - ERROR - Datenbankfehler in tool_details: no such column: timestamp
+2024-11-28 19:47:54,778 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1073, in tool_details
+    status_history = conn.execute('''
+                     ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: timestamp
+
+2024-11-28 19:47:54,779 - INFO - 127.0.0.1 - - [28/Nov/2024 19:47:54] "[32mGET /tool/W0098 HTTP/1.1[0m" 302 -
+2024-11-28 19:47:54,866 - INFO - 127.0.0.1 - - [28/Nov/2024 19:47:54] "GET / HTTP/1.1" 200 -
+2024-11-28 19:47:55,193 - INFO - 127.0.0.1 - - [28/Nov/2024 19:47:55] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:49:01,982 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:49:02,005 - INFO -  * Restarting with stat
+2024-11-28 19:49:02,266 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:49:02,267 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:49:02,267 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:49:02,268 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:49:02,268 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:49:02,281 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:49:02,282 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:49:02,282 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:49:02,283 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:49:02,283 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:49:02,290 - WARNING -  * Debugger is active!
+2024-11-28 19:49:02,295 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:49:04,538 - INFO - 127.0.0.1 - - [28/Nov/2024 19:49:04] "GET / HTTP/1.1" 200 -
+2024-11-28 19:49:04,845 - INFO - 127.0.0.1 - - [28/Nov/2024 19:49:04] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:49:06,018 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:49:06,020 - ERROR - Datenbankfehler in tool_details: no such column: old_status
+2024-11-28 19:49:06,021 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1073, in tool_details
+    status_history = conn.execute('''
+                     ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: old_status
+
+2024-11-28 19:49:06,022 - INFO - 127.0.0.1 - - [28/Nov/2024 19:49:06] "[32mGET /tool/W0098 HTTP/1.1[0m" 302 -
+2024-11-28 19:49:06,103 - INFO - 127.0.0.1 - - [28/Nov/2024 19:49:06] "GET / HTTP/1.1" 200 -
+2024-11-28 19:49:06,374 - INFO - 127.0.0.1 - - [28/Nov/2024 19:49:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:56:17,769 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:56:17,794 - INFO -  * Restarting with stat
+2024-11-28 19:56:18,055 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:56:18,056 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:56:18,056 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:56:18,057 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:56:18,057 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:56:18,070 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:56:18,070 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:56:18,071 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:56:18,072 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:56:18,072 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:56:18,080 - WARNING -  * Debugger is active!
+2024-11-28 19:56:18,085 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:56:24,560 - INFO - 127.0.0.1 - - [28/Nov/2024 19:56:24] "GET / HTTP/1.1" 200 -
+2024-11-28 19:56:24,870 - INFO - 127.0.0.1 - - [28/Nov/2024 19:56:24] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 19:56:26,045 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:56:26,046 - ERROR - Datenbankfehler in tool_details: no such table: tools_history
+2024-11-28 19:56:26,047 - ERROR - Traceback (most recent call last):
+  File "c:\Users\wosch\Documents\GitHub\inventar\inventar\app.py", line 1069, in tool_details
+    tool = conn.execute('''
+           ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: tools_history
+
+2024-11-28 19:56:26,048 - INFO - 127.0.0.1 - - [28/Nov/2024 19:56:26] "[32mGET /tool/W0098 HTTP/1.1[0m" 302 -
+2024-11-28 19:56:26,128 - INFO - 127.0.0.1 - - [28/Nov/2024 19:56:26] "GET / HTTP/1.1" 200 -
+2024-11-28 19:56:26,393 - INFO - 127.0.0.1 - - [28/Nov/2024 19:56:26] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:57:57,449 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:57:57,477 - INFO -  * Restarting with stat
+2024-11-28 19:57:57,737 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:57:57,739 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:57:57,739 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:57:57,740 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:57:57,740 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:57:57,752 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:57:57,752 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:57:57,753 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:57:57,753 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:57:57,754 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:57:57,763 - WARNING -  * Debugger is active!
+2024-11-28 19:57:57,767 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:57:58,605 - INFO - 127.0.0.1 - - [28/Nov/2024 19:57:58] "GET / HTTP/1.1" 200 -
+2024-11-28 19:57:58,981 - INFO - 127.0.0.1 - - [28/Nov/2024 19:57:58] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:00,204 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:58:00,206 - INFO - Details für W0098 erfolgreich geladen
+2024-11-28 19:58:00,216 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:00] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 19:58:00,568 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:04,965 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:04] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 19:58:05,050 - INFO - Lade Details für Werkzeug W0098
+2024-11-28 19:58:05,052 - INFO - Details für W0098 erfolgreich geladen
+2024-11-28 19:58:05,053 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:05] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 19:58:05,340 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:05] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:06,592 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:06] "GET / HTTP/1.1" 200 -
+2024-11-28 19:58:06,846 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:15,784 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:15] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 19:58:16,061 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:16] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:17,317 - INFO - Bearbeite Verbrauchsmaterial V0008, Methode: GET
+2024-11-28 19:58:17,318 - INFO - Geladene Historie für V0008: [<sqlite3.Row object at 0x000002DB3A9BB8E0>, <sqlite3.Row object at 0x000002DB3A9BB7F0>, <sqlite3.Row object at 0x000002DB3A9BB5B0>]
+2024-11-28 19:58:17,326 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:17] "GET /consumables/V0008/edit HTTP/1.1" 200 -
+2024-11-28 19:58:17,689 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:58:23,027 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:23] "[32mPOST /consumables/V0008/update HTTP/1.1[0m" 302 -
+2024-11-28 19:58:23,102 - INFO - Lade Details für Verbrauchsmaterial V0008
+2024-11-28 19:58:23,104 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:23] "GET /consumables/V0008 HTTP/1.1" 200 -
+2024-11-28 19:58:23,405 - INFO - 127.0.0.1 - - [28/Nov/2024 19:58:23] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:59:53,179 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 19:59:53,203 - INFO -  * Restarting with stat
+2024-11-28 19:59:53,463 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 19:59:53,463 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 19:59:53,464 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 19:59:53,465 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 19:59:53,465 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 19:59:53,477 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 19:59:53,477 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 19:59:53,478 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 19:59:53,478 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 19:59:53,478 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 19:59:53,487 - WARNING -  * Debugger is active!
+2024-11-28 19:59:53,491 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 19:59:55,147 - INFO - Lade Details für Verbrauchsmaterial V0008
+2024-11-28 19:59:55,160 - INFO - 127.0.0.1 - - [28/Nov/2024 19:59:55] "GET /consumables/V0008 HTTP/1.1" 200 -
+2024-11-28 19:59:55,407 - INFO - 127.0.0.1 - - [28/Nov/2024 19:59:55] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 19:59:58,000 - INFO - 127.0.0.1 - - [28/Nov/2024 19:59:58] "[32mPOST /consumables/V0008/update HTTP/1.1[0m" 302 -
+2024-11-28 19:59:58,071 - INFO - Lade Details für Verbrauchsmaterial V0008
+2024-11-28 19:59:58,073 - INFO - 127.0.0.1 - - [28/Nov/2024 19:59:58] "GET /consumables/V0008 HTTP/1.1" 200 -
+2024-11-28 19:59:58,324 - INFO - 127.0.0.1 - - [28/Nov/2024 19:59:58] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:00:00,518 - INFO - 127.0.0.1 - - [28/Nov/2024 20:00:00] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:00:00,735 - INFO - 127.0.0.1 - - [28/Nov/2024 20:00:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:01:35,852 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 20:01:35,874 - INFO -  * Restarting with stat
+2024-11-28 20:01:36,143 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 20:01:36,143 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 20:01:36,144 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 20:01:36,145 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 20:01:36,145 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 20:01:36,161 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 20:01:36,161 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 20:01:36,162 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 20:01:36,163 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 20:01:36,163 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 20:01:36,172 - WARNING -  * Debugger is active!
+2024-11-28 20:01:36,177 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 20:01:38,792 - INFO - 127.0.0.1 - - [28/Nov/2024 20:01:38] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:01:39,172 - INFO - 127.0.0.1 - - [28/Nov/2024 20:01:39] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:22,553 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 20:03:22,579 - INFO -  * Restarting with stat
+2024-11-28 20:03:22,839 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 20:03:22,840 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 20:03:22,841 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 20:03:22,842 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 20:03:22,842 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 20:03:22,855 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 20:03:22,856 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 20:03:22,857 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 20:03:22,857 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 20:03:22,858 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 20:03:22,866 - WARNING -  * Debugger is active!
+2024-11-28 20:03:22,871 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 20:03:24,454 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:24] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:03:24,787 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:24] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:30,121 - INFO - Bearbeite Verbrauchsmaterial V0008, Methode: GET
+2024-11-28 20:03:30,123 - INFO - Geladene Historie für V0008: [<sqlite3.Row object at 0x000001D146F4F880>, <sqlite3.Row object at 0x000001D146F4F940>, <sqlite3.Row object at 0x000001D146F4CD30>]
+2024-11-28 20:03:30,128 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:30] "GET /consumables/V0008/edit HTTP/1.1" 200 -
+2024-11-28 20:03:30,337 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:32,390 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:32] "[32mPOST /consumables/V0008/update HTTP/1.1[0m" 302 -
+2024-11-28 20:03:32,467 - INFO - Lade Details für Verbrauchsmaterial V0008
+2024-11-28 20:03:32,470 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:32] "GET /consumables/V0008 HTTP/1.1" 200 -
+2024-11-28 20:03:32,761 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:35,610 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:35] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:03:35,873 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:35] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:38,418 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:38] "GET /workers HTTP/1.1" 200 -
+2024-11-28 20:03:38,643 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:40,691 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 20:03:40,692 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x000001D146F8FBE0>]
+2024-11-28 20:03:40,693 - INFO - Anzahl geladener Mitarbeiter: 26
+2024-11-28 20:03:40,693 - INFO - Verbinde Datenbanken...
+2024-11-28 20:03:40,694 - INFO - Lade Werkzeuge...
+2024-11-28 20:03:40,695 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 20:03:40,696 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 20:03:40,696 - INFO - Lade aktive Ausleihen...
+2024-11-28 20:03:40,697 - INFO - Anzahl aktiver Ausleihen: 7
+2024-11-28 20:03:40,699 - INFO - Rendering Template...
+2024-11-28 20:03:40,710 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:40] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 20:03:41,038 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:41] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:42,168 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:42] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:03:42,390 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:42] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:43,542 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:43] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-11-28 20:03:43,864 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:45,642 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:45] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:03:46,553 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:46] "GET /admin/trash HTTP/1.1" 200 -
+2024-11-28 20:03:46,788 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:03:47,891 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:47] "GET /admin HTTP/1.1" 200 -

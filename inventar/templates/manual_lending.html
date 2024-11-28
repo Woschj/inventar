@@ -137,10 +137,6 @@
                                 </td>
                             </tr>
                         {% endif %}
-                    {% else %}
-                        <tr>
-                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Keine aktiven Materialausgaben</td>
-                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -222,14 +218,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Funktion für die Rückgabe anpassen
 function returnTool(toolBarcode, lendingId) {
+    if (!toolBarcode) {
+        showAlert('Ungültiger Barcode', 'error');
+        return;
+    }
+
     const formData = {
         action: 'return',
-        tool_barcode: toolBarcode,
-        lending_id: lendingId,
-        worker_barcode: null
+        barcode: toolBarcode,
+        lending_id: lendingId
     };
 
-    console.log('Sending data:', formData);
+    console.log('Sending return data:', formData); // Debugging
 
     fetch('/api/process_lending', {
         method: 'POST',
@@ -241,13 +241,13 @@ function returnTool(toolBarcode, lendingId) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.error) {
-            showAlert(data.error, 'error');
-        } else {
+        if (data.success) {
             showAlert('Werkzeug erfolgreich zurückgegeben', 'success');
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
+        } else {
+            showAlert(data.message || 'Fehler bei der Rückgabe', 'error');
         }
     })
     .catch(error => {
@@ -257,14 +257,25 @@ function returnTool(toolBarcode, lendingId) {
 }
 
 // Hilfsfunktion für Alerts
-function showAlert(message, type) {
+function showAlert(message, type = 'info') {
     const alertDiv = document.createElement('div');
-    alertDiv.className = `fixed top-4 right-4 p-4 rounded ${
-        type === 'error' ? 'bg-red-500' : 'bg-green-500'
-    } text-white z-50`;
+    alertDiv.className = `alert alert-${type} fixed top-4 right-4 p-4 rounded-lg shadow-lg`;
+    
+    // Farben basierend auf dem Typ
+    if (type === 'success') {
+        alertDiv.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+    } else if (type === 'error') {
+        alertDiv.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+    } else {
+        alertDiv.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+    }
+    
     alertDiv.textContent = message;
     document.body.appendChild(alertDiv);
-    setTimeout(() => alertDiv.remove(), 3000);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
 }
 
 let currentSort = {
@@ -411,33 +422,15 @@ document.getElementById('item_barcode').addEventListener('change', function() {
 });
 
 function handleLending(form) {
-    const itemType = document.getElementById('itemTypeSelect').value;
-    const workerBarcode = document.getElementById('workerSelect').value;
-    const itemBarcode = document.getElementById('itemBarcodeSelect').value;
-    
-    if (!workerBarcode || !itemBarcode) {
-        showAlert('Bitte alle Pflichtfelder ausfüllen', 'error');
-        return;
-    }
-
     const formData = {
         action: 'lend',
-        type: itemType,
-        tool_barcode: itemBarcode,
-        worker_barcode: workerBarcode
+        worker_barcode: form.worker_barcode.value,
+        barcode: form.item_barcode.value,
+        amount: form.amount ? parseInt(form.amount.value) || 1 : 1
     };
 
-    // Bei Verbrauchsmaterial Menge hinzufügen
-    if (itemType === 'consumable') {
-        const amount = parseInt(document.getElementById('amountInput').value);
-        if (!amount || amount < 1) {
-            showAlert('Bitte gültige Menge eingeben', 'error');
-            return;
-        }
-        formData.amount = amount;
-    }
-
-    console.log('Sending data:', formData); // Debugging
+    // Debug-Logging
+    console.log('Sending lending data:', formData);
 
     fetch('/api/process_lending', {
         method: 'POST',
@@ -449,18 +442,19 @@ function handleLending(form) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.error) {
-            showAlert(data.error, 'error');
-        } else {
+        if (data.success) {
             showAlert(data.message, 'success');
+            // Warte kurz und lade dann die Seite neu
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
+        } else {
+            showAlert(data.message || 'Fehler bei der Ausleihe', 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        showAlert('Fehler bei der Ausgabe/Ausleihe', 'error');
+        showAlert('Fehler bei der Ausleihe', 'error');
     });
 }
 

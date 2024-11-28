@@ -13,13 +13,13 @@
     </div>
 
     <!-- Filter-Bereich -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Suchfeld -->
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
             <input type="text" id="searchInput"
                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Material, Barcode...">
+                   placeholder="Bezeichnung, Barcode...">
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
@@ -40,21 +40,12 @@
             </select>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Bestand</label>
-            <select id="filterBestand" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle</option>
-                <option value="normal">Normal</option>
-                <option value="low">Niedrig</option>
-                <option value="critical">Kritisch</option>
-            </select>
-        </div>
-        <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select id="filterStatus" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 <option value="">Alle Status</option>
-                <option value="Verfügbar">Verfügbar</option>
-                <option value="Nachbestellen">Nachbestellen</option>
-                <option value="Leer">Leer</option>
+                <option value="verfügbar" {% if active_filter == 'verfügbar' %}selected{% endif %}>Verfügbar</option>
+                <option value="nachbestellen" {% if active_filter == 'nachbestellen' %}selected{% endif %}>Nachzubestellen</option>
+                <option value="leer" {% if active_filter == 'leer' %}selected{% endif %}>Leer</option>
             </select>
         </div>
     </div>
@@ -106,10 +97,13 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {% if item.status == 'Verfügbar' %}bg-green-100 text-green-800
-                            {% elif item.status == 'Nachbestellen' %}bg-yellow-100 text-yellow-800
-                            {% elif item.status == 'Leer' %}bg-red-100 text-red-800
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            {% if item.status == 'Leer' %}
+                                bg-red-100 text-red-800
+                            {% elif item.status == 'Nachbestellen' %}
+                                bg-yellow-100 text-yellow-800
+                            {% else %}
+                                bg-green-100 text-green-800
                             {% endif %}">
                             {{ item.status }}
                         </span>
@@ -300,5 +294,17 @@ function deleteConsumable(barcode) {
         });
     }
 }
+</script>
+
+<!-- JavaScript für Filter-Logik -->
+<script>
+document.getElementById('filterStatus').addEventListener('change', function() {
+    const status = this.value;
+    if (status) {
+        window.location.href = `{{ url_for('consumables') }}?filter=${status}`;
+    } else {
+        window.location.href = "{{ url_for('consumables') }}";
+    }
+});
 </script>
 {% endblock %} 

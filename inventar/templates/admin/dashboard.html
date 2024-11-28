@@ -7,81 +7,68 @@
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
 
     <!-- Statistik-Karten -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Werkzeug-Statistiken -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-white rounded-lg shadow p-6 h-fit">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Werkzeuge</h3>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
+            <ul class="space-y-3">
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Gesamt:</span>
-                    <span class="font-semibold">{{ stats.total_tools }}</span>
-                </div>
-                <div class="flex justify-between items-center">
+                    <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_tools }}</a>
+                </li>
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Ausgeliehen:</span>
-                    <span class="font-semibold text-yellow-600">{{ stats.borrowed_tools }}</span>
-                </div>
-                <div class="flex justify-between items-center">
+                    <a href="{{ url_for('index', filter='ausgeliehen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.borrowed_tools }}</a>
+                </li>
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Defekt:</span>
-                    <span class="font-semibold text-red-600">{{ stats.defect_tools }}</span>
-                </div>
-                <div class="flex justify-between items-center">
+                    <a href="{{ url_for('index', filter='defekt') }}" class="text-red-600 hover:text-red-800">{{ stats.defect_tools }}</a>
+                </li>
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Im Papierkorb:</span>
-                    <span class="font-semibold text-gray-500">{{ stats.deleted_tools }}</span>
-                </div>
-            </div>
+                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_tools }}</a>
+                </li>
+            </ul>
         </div>
 
         <!-- Verbrauchsmaterial-Statistiken -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-white rounded-lg shadow p-6 h-fit">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Verbrauchsmaterial</h3>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
+            <ul class="space-y-3">
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Gesamt:</span>
-                    <span class="font-semibold">{{ stats.total_consumables }}</span>
-                </div>
-                <div class="flex justify-between items-center">
+                    <a href="{{ url_for('consumables') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_consumables }}</a>
+                </li>
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Nachzubestellen:</span>
-                    <span class="font-semibold text-orange-600">{{ stats.reorder_consumables }}</span>
-                </div>
-                <div class="flex justify-between items-center">
+                    <a href="{{ url_for('consumables', filter='nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.reorder_consumables }}</a>
+                </li>
+                <li class="flex justify-between items-center">
                     <span class="text-gray-600">Im Papierkorb:</span>
-                    <span class="font-semibold text-gray-500">{{ stats.deleted_consumables }}</span>
-                </div>
-            </div>
+                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_consumables }}</a>
+                </li>
+            </ul>
         </div>
 
-        <!-- Ausleihen Heute -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Heute</h3>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Neue Ausleihen:</span>
-                    <span class="font-semibold text-blue-600">{{ stats.todays_lendings }}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Rückgaben:</span>
-                    <span class="font-semibold text-green-600">{{ stats.todays_returns }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mitarbeiter nach Bereich -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <!-- Mitarbeiter-Statistiken -->
+        <div class="bg-white rounded-lg shadow p-6 h-fit">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Mitarbeiter</h3>
-            <div class="space-y-3">
+            <ul class="space-y-3">
+                <li class="flex justify-between items-center">
+                    <span class="text-gray-600">Gesamt:</span>
+                    <a href="{{ url_for('workers') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_workers }}</a>
+                </li>
                 {% for area in stats.workers_by_area %}
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-600">{{ area.bereich or 'Ohne Bereich' }}:</span>
-                    <span class="font-semibold">{{ area.count }}</span>
-                </div>
+                <li class="flex justify-between items-center">
+                    <span class="text-gray-600">{{ area[0] }}:</span>
+                    <a href="{{ url_for('workers', filter_bereich=area[0]) }}" class="text-blue-600 hover:text-blue-800">{{ area[1] }}</a>
+                </li>
                 {% endfor %}
-                <div class="border-t pt-2 mt-2">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Gesamt:</span>
-                        <span class="font-semibold">{{ stats.total_workers }}</span>
-                    </div>
-                </div>
-            </div>
+                <li class="flex justify-between items-center">
+                    <span class="text-gray-600">Im Papierkorb:</span>
+                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_workers }}</a>
+                </li>
+            </ul>
         </div>
     </div>
 

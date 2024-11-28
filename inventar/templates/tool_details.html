@@ -109,6 +109,33 @@
                 </table>
             </div>
         </div>
+
+        <!-- Statusverlauf Tabelle -->
+        <div class="mt-6">
+            <h3 class="text-lg font-medium text-gray-900">Statusverlauf</h3>
+            <div class="mt-4 overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Datum</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alter Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Neuer Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Geändert von</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for entry in status_history %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ entry.formatted_time }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ entry.old_status }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ entry.new_status }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ entry.changed_by }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %} 

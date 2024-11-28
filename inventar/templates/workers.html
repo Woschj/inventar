@@ -14,22 +14,29 @@
     </div>
     
     <!-- Filter und Suchbereich -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Suchfeld -->
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
             <input type="text" id="searchInput"
                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Name, Email oder Nummer...">
+                   placeholder="Name, Barcode...">
         </div>
-        <!-- Bereichs-Filter -->
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Bereich</label>
             <select id="filterBereich" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 <option value="">Alle Bereiche</option>
                 {% for bereich in bereiche %}
-                    <option value="{{ bereich }}">{{ bereich }}</option>
+                    <option value="{{ bereich }}" {% if active_filter == bereich %}selected{% endif %}>{{ bereich }}</option>
                 {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="filterStatus" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Status</option>
+                <option value="aktiv" {% if active_filter == 'aktiv' %}selected{% endif %}>Aktiv</option>
+                <option value="mit_ausleihen" {% if active_filter == 'mit_ausleihen' %}selected{% endif %}>Mit Ausleihen</option>
             </select>
         </div>
     </div>
@@ -284,6 +291,24 @@ function filterAndSearch() {
 document.getElementById('searchInput')?.addEventListener('input', filterAndSearch);
 document.querySelectorAll('select[id^="filter"]').forEach(filter => {
     filter.addEventListener('change', filterAndSearch);
+});
+
+document.getElementById('filterBereich').addEventListener('change', function() {
+    const bereich = this.value;
+    if (bereich) {
+        window.location.href = `{{ url_for('workers') }}?filter_bereich=${encodeURIComponent(bereich)}`;
+    } else {
+        window.location.href = "{{ url_for('workers') }}";
+    }
+});
+
+document.getElementById('filterStatus').addEventListener('change', function() {
+    const status = this.value;
+    if (status) {
+        window.location.href = `{{ url_for('workers') }}?filter_status=${status}`;
+    } else {
+        window.location.href = "{{ url_for('workers') }}";
+    }
 });
 </script>
 {% endblock %}
