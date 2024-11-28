@@ -1359,60 +1359,47 @@ def get_recent_lendings():
             'error': str(e)
         })
 
-@app.route('/process-lending', methods=['POST'])
+@app.route('/api/process_lending', methods=['POST'])
 def process_lending():
-    """Verarbeitet Ausleihe/Rückgabe von Werkzeugen und Material"""
+    """Verarbeitet Ausleihe/Rückgabe von Werkzeugen"""
     try:
-        worker_barcode = request.form.get('worker_barcode')
-        item_barcode = request.form.get('item_barcode')
-        item_type = request.form.get('item_type')
-        amount = request.form.get('amount', 1, type=int)
-        action = request.form.get('action')
+        data = request.get_json()
+        worker_barcode = data.get('worker_barcode')
+        item_barcode = data.get('item_barcode')
+        action = data.get('action')
 
         if not all([worker_barcode, item_barcode, action]):
-            flash('Bitte alle Pflichtfelder ausfüllen', 'error')
-            return redirect(url_for('manual_lending'))
+            return jsonify({'error': 'Unvollständige Daten'})
 
         with get_db_connection(DBConfig.LENDINGS_DB) as lending_conn:
             if action == 'lend':
-                # Prüfe ob es sich um ein Werkzeug handelt
-                if item_type == 'tool':
-                    with get_db_connection(DBConfig.TOOLS_DB) as tool_conn:
-                        tool = tool_conn.execute(
-                            'SELECT status FROM tools WHERE barcode = ?', 
-                            (item_barcode,)
-                        ).fetchone()
-                        
-                        if not tool or tool['status'] != 'Verfügbar':
-                            flash('Werkzeug ist nicht verfügbar', 'error')
-                            return redirect(url_for('manual_lending'))
-                            
-                        # Werkzeug als ausgeliehen markieren
-                        tool_conn.execute('''
-                            UPDATE tools 
-                            SET status = 'Ausgeliehen'
-                            WHERE barcode = ?
-                        ''', (item_barcode,))
-                        tool_conn.commit()
-                else:
-                    # Verbrauchsmaterial Bestand reduzieren
-                    with get_db_connection(DBConfig.CONSUMABLES_DB) as cons_conn:
-                        cons_conn.execute('''
-                            UPDATE consumables 
-                            SET aktueller_bestand = aktueller_bestand - ?
-                            WHERE barcode = ? AND aktueller_bestand >= ?
-                        ''', (amount, item_barcode, amount))
-                        cons_conn.commit()
+                # Prüfe ob das Werkzeug verfügbar ist
+                with get_db_connection(DBConfig.TOOLS_DB) as tool_conn:
+                    tool = tool_conn.execute(
+                        'SELECT status FROM tools WHERE barcode = ?', 
+                        (item_barcode,)
+                    ).fetchone()
+                    
+                    if not tool or tool['status'] != 'Verfügbar':
+                        return jsonify({'error': 'Werkzeug ist nicht verfügbar'})
+                    
+                    # Werkzeug als ausgeliehen markieren
+                    tool_conn.execute('''
+                        UPDATE tools 
+                        SET status = 'Ausgeliehen'
+                        WHERE barcode = ?
+                    ''', (item_barcode,))
+                    tool_conn.commit()
 
                 # Ausleihe eintragen
                 lending_conn.execute('''
                     INSERT INTO lendings 
                     (worker_barcode, tool_barcode, checkout_time, amount)
-                    VALUES (?, ?, CURRENT_TIMESTAMP, ?)
-                ''', (worker_barcode, item_barcode, amount))
+                    VALUES (?, ?, CURRENT_TIMESTAMP, 1)
+                ''', (worker_barcode, item_barcode))
                 
                 lending_conn.commit()
-                flash('Ausleihe erfolgreich verarbeitet', 'success')
+                return jsonify({'success': True, 'message': 'Ausleihe erfolgreich verarbeitet'})
 
             elif action == 'return':
                 # Rückgabe verarbeiten
@@ -1424,29 +1411,23 @@ def process_lending():
                     AND return_time IS NULL
                 ''', (worker_barcode, item_barcode))
                 
-                # Wenn es ein Werkzeug ist, Status aktualisieren
+                # Werkzeug als verfügbar markieren
                 with get_db_connection(DBConfig.TOOLS_DB) as tool_conn:
-                    tool = tool_conn.execute(
-                        'SELECT 1 FROM tools WHERE barcode = ?', 
-                        (item_barcode,)
-                    ).fetchone()
-                    if tool:
-                        tool_conn.execute('''
-                            UPDATE tools 
-                            SET status = 'Verfügbar'
-                            WHERE barcode = ?
-                        ''', (item_barcode,))
-                        tool_conn.commit()
+                    tool_conn.execute('''
+                        UPDATE tools 
+                        SET status = 'Verfügbar'
+                        WHERE barcode = ?
+                    ''', (item_barcode,))
+                    tool_conn.commit()
                 
                 lending_conn.commit()
-                flash('Rückgabe erfolgreich verarbeitet', 'success')
+                return jsonify({'success': True, 'message': 'Rückgabe erfolgreich verarbeitet'})
 
-        return redirect(url_for('manual_lending'))
+            return jsonify({'error': 'Ungültige Aktion'})
 
-    except sqlite3.Error as e:
-        logging.error(f"Datenbankfehler in process_lending: {str(e)}")
-        flash('Datenbankfehler bei der Verarbeitung', 'error')
-        return redirect(url_for('manual_lending'))
+    except Exception as e:
+        logging.error(f"Fehler bei Ausleihe/Rückgabe: {str(e)}")
+        return jsonify({'error': 'Datenbankfehler'})
 
 @app.route('/manual_lending')
 def manual_lending():
@@ -1605,6 +1586,116 @@ def checkout_consumable(barcode):
         flash('Fehler bei der Ausgabe', 'error')
         
     return redirect(url_for('consumable_details', barcode=barcode))
+
+@app.route('/api/get_item/<barcode>')
+def get_item(barcode):
+    try:
+        # Erst in Werkzeugen suchen
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            tool = conn.execute('SELECT * FROM tools WHERE barcode = ?', 
+                              (barcode,)).fetchone()
+            if tool:
+                return jsonify({
+                    'type': 'tool',
+                    'barcode': tool['barcode'],
+                    'gegenstand': tool['gegenstand'],
+                    'status': tool['status']
+                })
+        
+        # Dann in Verbrauchsmaterial
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            item = conn.execute('SELECT * FROM consumables WHERE barcode = ?', 
+                              (barcode,)).fetchone()
+            if item:
+                return jsonify({
+                    'type': 'consumable',
+                    'barcode': item['barcode'],
+                    'gegenstand': item['bezeichnung'],
+                    'bestand': item['aktueller_bestand']
+                })
+                
+        return jsonify({'error': 'Artikel nicht gefunden'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/get_worker/<barcode>')
+def get_worker(barcode):
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            worker = conn.execute('''
+                SELECT barcode, name, lastname, bereich 
+                FROM workers 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if worker:
+                return jsonify(dict(worker))
+            return jsonify({'error': 'Mitarbeiter nicht gefunden'})
+            
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/process_scan', methods=['POST'])
+def process_scan():
+    try:
+        data = request.json
+        tool_barcode = data['tool_barcode']
+        worker_barcode = data['worker_barcode']
+        action = data['action']
+        
+        if action == 'checkout':
+            return process_checkout(tool_barcode, worker_barcode)
+        elif action == 'return':
+            return process_return(tool_barcode)
+        else:
+            return jsonify({'error': 'Ungültige Aktion'})
+            
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/search_worker/<query>')
+def search_worker(query):
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            # Suche nach Barcode
+            if query.isdigit():
+                worker = conn.execute('''
+                    SELECT * FROM workers 
+                    WHERE barcode = ?
+                ''', (query,)).fetchone()
+                
+                if worker:
+                    return jsonify({
+                        'multiple': False,
+                        'worker': dict(worker)
+                    })
+            
+            # Suche nach Name
+            workers = conn.execute('''
+                SELECT * FROM workers 
+                WHERE name || ' ' || lastname LIKE ? 
+                OR lastname || ' ' || name LIKE ?
+                OR name LIKE ? 
+                OR lastname LIKE ?
+            ''', (f'%{query}%', f'%{query}%', f'%{query}%', f'%{query}%')).fetchall()
+            
+            if len(workers) == 0:
+                return jsonify({'error': 'Kein Mitarbeiter gefunden'})
+            elif len(workers) == 1:
+                return jsonify({
+                    'multiple': False,
+                    'worker': dict(workers[0])
+                })
+            else:
+                return jsonify({
+                    'multiple': True,
+                    'workers': [dict(w) for w in workers]
+                })
+                
+    except Exception as e:
+        logging.error(f"Fehler bei Mitarbeitersuche: {str(e)}")
+        return jsonify({'error': 'Datenbankfehler'})
 
 # Diese Funktion beim Startup aufrufen
 if __name__ == '__main__':
