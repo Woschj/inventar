@@ -97,15 +97,11 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for item in consumables %}
                 <tr class="consumable-row">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {% if session.get('is_admin') %}
-                            <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}" 
-                               class="text-blue-600 hover:text-blue-800">
-                                {{ item.bezeichnung }}
-                            </a>
-                        {% else %}
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}"
+                           class="text-blue-600 hover:text-blue-900">
                             {{ item.bezeichnung }}
-                        {% endif %}
+                        </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
