@@ -926,3 +926,75 @@ sqlite3.OperationalError: no such table: tools_history
 2024-11-28 20:03:46,553 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:46] "GET /admin/trash HTTP/1.1" 200 -
 2024-11-28 20:03:46,788 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
 2024-11-28 20:03:47,891 - INFO - 127.0.0.1 - - [28/Nov/2024 20:03:47] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:06:17,064 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:17] "GET /consumables?filter=nachbestellen HTTP/1.1" 200 -
+2024-11-28 20:06:17,353 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:17] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 20:06:21,996 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:21] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:06:22,344 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:22] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 20:06:30,898 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:30] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:06:31,276 - INFO - 127.0.0.1 - - [28/Nov/2024 20:06:31] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:08:57,104 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\inventar\\app.py', reloading
+2024-11-28 20:08:57,129 - INFO -  * Restarting with stat
+2024-11-28 20:08:57,415 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db erfolgreich initialisiert
+2024-11-28 20:08:57,416 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db erfolgreich initialisiert
+2024-11-28 20:08:57,416 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db erfolgreich initialisiert
+2024-11-28 20:08:57,417 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db erfolgreich initialisiert
+2024-11-28 20:08:57,418 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\inventar\system_logs.db erfolgreich initialisiert
+2024-11-28 20:08:57,431 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\workers.db
+2024-11-28 20:08:57,432 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lager.db
+2024-11-28 20:08:57,433 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\lendings.db
+2024-11-28 20:08:57,433 - INFO - Erstellt: c:\Users\wosch\Documents\GitHub\inventar\inventar\consumables.db
+2024-11-28 20:08:57,433 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 20:08:57,441 - WARNING -  * Debugger is active!
+2024-11-28 20:08:57,447 - INFO -  * Debugger PIN: 136-413-624
+2024-11-28 20:08:58,002 - INFO - 127.0.0.1 - - [28/Nov/2024 20:08:58] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:08:58,307 - INFO - 127.0.0.1 - - [28/Nov/2024 20:08:58] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-28 20:09:00,048 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:00] "GET /consumables?filter=Leer HTTP/1.1" 200 -
+2024-11-28 20:09:00,336 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:01,264 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:01] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:09:03,458 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:03] "GET /?filter=defekt HTTP/1.1" 200 -
+2024-11-28 20:09:03,838 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:03] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:04,416 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:04] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:09:05,581 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:05] "GET /workers HTTP/1.1" 200 -
+2024-11-28 20:09:05,937 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:05] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:07,759 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 20:09:07,760 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x0000022D174D0A60>]
+2024-11-28 20:09:07,760 - INFO - Anzahl geladener Mitarbeiter: 26
+2024-11-28 20:09:07,760 - INFO - Verbinde Datenbanken...
+2024-11-28 20:09:07,761 - INFO - Lade Werkzeuge...
+2024-11-28 20:09:07,762 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 20:09:07,762 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 20:09:07,762 - INFO - Lade aktive Ausleihen...
+2024-11-28 20:09:07,763 - INFO - Anzahl aktiver Ausleihen: 7
+2024-11-28 20:09:07,764 - INFO - Rendering Template...
+2024-11-28 20:09:07,771 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:07] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 20:09:08,089 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:08] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:09,217 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:09] "GET / HTTP/1.1" 200 -
+2024-11-28 20:09:09,506 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:09] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:10,429 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:10] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:09:10,778 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:10] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:11,867 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:11] "GET /workers HTTP/1.1" 200 -
+2024-11-28 20:09:12,121 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:12] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:13,402 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:13] "GET /admin HTTP/1.1" 200 -
+2024-11-28 20:09:13,684 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:13] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:14,828 - INFO - Benutzer wird abgemeldet
+2024-11-28 20:09:14,829 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:14] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-28 20:09:14,862 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:14] "GET / HTTP/1.1" 200 -
+2024-11-28 20:09:15,130 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:15] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:16,329 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:16] "GET / HTTP/1.1" 200 -
+2024-11-28 20:09:16,599 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:16] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:17,189 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:17] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 20:09:17,459 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:17,978 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:17] "GET /workers HTTP/1.1" 200 -
+2024-11-28 20:09:18,270 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:18] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-28 20:09:19,133 - INFO - Starte Laden der Ausleihseite...
+2024-11-28 20:09:19,134 - INFO - Gefundene Tabellen in workers_db: [<sqlite3.Row object at 0x0000022D19EBE500>]
+2024-11-28 20:09:19,135 - INFO - Anzahl geladener Mitarbeiter: 26
+2024-11-28 20:09:19,135 - INFO - Verbinde Datenbanken...
+2024-11-28 20:09:19,136 - INFO - Lade Werkzeuge...
+2024-11-28 20:09:19,137 - INFO - Lade Verbrauchsmaterial...
+2024-11-28 20:09:19,137 - INFO - Anzahl Werkzeuge: 101, Verbrauchsmaterial: 20
+2024-11-28 20:09:19,137 - INFO - Lade aktive Ausleihen...
+2024-11-28 20:09:19,138 - INFO - Anzahl aktiver Ausleihen: 7
+2024-11-28 20:09:19,138 - INFO - Rendering Template...
+2024-11-28 20:09:19,140 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:19] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 20:09:19,478 - INFO - 127.0.0.1 - - [28/Nov/2024 20:09:19] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -

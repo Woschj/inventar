@@ -513,7 +513,15 @@ def admin_panel():
             stats['reorder_consumables'] = conn.execute('''
                 SELECT COUNT(*) 
                 FROM consumables 
-                WHERE aktueller_bestand <= mindestbestand
+                WHERE aktueller_bestand <= mindestbestand 
+                AND aktueller_bestand > 0
+            ''').fetchone()[0]
+            
+            # Leer
+            stats['empty_consumables'] = conn.execute('''
+                SELECT COUNT(*) 
+                FROM consumables 
+                WHERE aktueller_bestand = 0
             ''').fetchone()[0]
             
             # Im Papierkorb

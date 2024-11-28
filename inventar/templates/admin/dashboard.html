@@ -41,7 +41,11 @@
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-gray-600">Nachzubestellen:</span>
-                    <a href="{{ url_for('consumables', filter='nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.reorder_consumables }}</a>
+                    <a href="{{ url_for('consumables', filter='Nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.reorder_consumables }}</a>
+                </li>
+                <li class="flex justify-between items-center">
+                    <span class="text-gray-600">Leer:</span>
+                    <a href="{{ url_for('consumables', filter='Leer') }}" class="text-red-600 hover:text-red-800">{{ stats.empty_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-gray-600">Im Papierkorb:</span>
