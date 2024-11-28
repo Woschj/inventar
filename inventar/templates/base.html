@@ -585,7 +585,29 @@
         setTimeout(() => successDiv.remove(), 3000);
     }
 
-    // ... Rest des Codes wie vorher ...
+    function confirmDelete(type, id) {
+        const modal = document.getElementById('deleteModal');
+        const modalText = document.getElementById('deleteModalText');
+        
+        // URLs anpassen
+        const urlMap = {
+            'worker': `/worker/delete/${id}`,
+            'tool': `/tool/delete/${id}`,
+            'consumable': `/consumables/${id}/delete`  // URL-Format angepasst
+        };
+        
+        currentDeleteUrl = urlMap[type];
+        
+        // Texte anpassen
+        const textMap = {
+            'worker': 'Möchten Sie diesen Mitarbeiter wirklich in den Papierkorb verschieben?',
+            'tool': 'Möchten Sie dieses Werkzeug wirklich in den Papierkorb verschieben?',
+            'consumable': 'Möchten Sie dieses Verbrauchsmaterial wirklich in den Papierkorb verschieben?'
+        };
+        
+        modalText.textContent = textMap[type];
+        modal.classList.remove('hidden');
+    }
     </script>
 </body>
 </html>

@@ -388,10 +388,95 @@ def index():
 def admin_panel():
     try:
         stats = {}
-        # ... Rest der admin_panel Funktion ...
+        
+        # Werkzeug-Statistiken
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            # Gesamt
+            stats['total_tools'] = conn.execute(
+                'SELECT COUNT(*) FROM tools'
+            ).fetchone()[0]
+            
+            # Ausgeliehen
+            stats['borrowed_tools'] = conn.execute(
+                "SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'"
+            ).fetchone()[0]
+            
+            # Defekt
+            stats['defect_tools'] = conn.execute(
+                "SELECT COUNT(*) FROM tools WHERE status = 'Defekt'"
+            ).fetchone()[0]
+            
+            # Im Papierkorb
+            stats['deleted_tools'] = conn.execute(
+                'SELECT COUNT(*) FROM deleted_tools'
+            ).fetchone()[0]
+        
+        # Mitarbeiter-Statistiken
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            # Gesamt
+            stats['total_workers'] = conn.execute(
+                'SELECT COUNT(*) FROM workers'
+            ).fetchone()[0]
+            
+            # Im Papierkorb
+            stats['deleted_workers'] = conn.execute(
+                'SELECT COUNT(*) FROM deleted_workers'
+            ).fetchone()[0]
+            
+            # Nach Bereich
+            stats['workers_by_area'] = conn.execute('''
+                SELECT bereich, COUNT(*) as count 
+                FROM workers 
+                WHERE bereich IS NOT NULL 
+                GROUP BY bereich
+            ''').fetchall()
+        
+        # Ausleih-Statistiken
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            # Aktive Ausleihen
+            stats['active_lendings'] = conn.execute('''
+                SELECT COUNT(*) 
+                FROM lendings 
+                WHERE return_time IS NULL
+            ''').fetchone()[0]
+            
+            # Ausleihen heute
+            stats['todays_lendings'] = conn.execute('''
+                SELECT COUNT(*) 
+                FROM lendings 
+                WHERE date(checkout_time) = date('now', 'localtime')
+            ''').fetchone()[0]
+            
+            # Rückgaben heute
+            stats['todays_returns'] = conn.execute('''
+                SELECT COUNT(*) 
+                FROM lendings 
+                WHERE date(return_time) = date('now', 'localtime')
+            ''').fetchone()[0]
+        
+        # Verbrauchsmaterial-Statistiken
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Gesamt
+            stats['total_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables'
+            ).fetchone()[0]
+            
+            # Nachzubestellen
+            stats['reorder_consumables'] = conn.execute('''
+                SELECT COUNT(*) 
+                FROM consumables 
+                WHERE aktueller_bestand <= mindestbestand
+            ''').fetchone()[0]
+            
+            # Im Papierkorb
+            stats['deleted_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM deleted_consumables'
+            ).fetchone()[0]
+        
         return render_template('admin/dashboard.html', stats=stats)
+        
     except Exception as e:
-        print(f"Fehler beim Laden des Dashboards: {str(e)}")
+        logging.error(f"Fehler beim Laden des Dashboards: {str(e)}")
         traceback.print_exc()
         flash('Fehler beim Laden des Dashboards', 'error')
         return redirect(url_for('index'))
@@ -650,40 +735,46 @@ def add_consumable():
     return render_template('add_consumable.html')
 
 
-@app.route('/consumables/<barcode>/delete')
+@app.route('/consumable/delete/<string:barcode>')
 @admin_required
 def delete_consumable(barcode):
     """Verbrauchsmaterial in den Papierkorb verschieben"""
     try:
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            # Daten für Papierkorb speichern
             consumable = conn.execute(
                 'SELECT * FROM consumables WHERE barcode=?', (barcode,)
             ).fetchone()
             
-            if consumable:
-                conn.execute('''
-                    INSERT INTO deleted_consumables 
-                    (original_id, barcode, name, description, category,
-                     min_quantity, current_quantity, unit, location, deleted_by)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (consumable['id'], consumable['barcode'], consumable['name'],
-                      consumable['description'], consumable['category'],
-                      consumable['min_quantity'], consumable['current_quantity'],
-                      consumable['unit'], consumable['location'],
-                      session.get('username', 'admin')))
-                
-                # Aus Haupttabelle löschen
-                conn.execute('DELETE FROM consumables WHERE barcode=?', (barcode,))
-                conn.commit()
-                
-                flash('Verbrauchsmaterial in den Papierkorb verschoben', 'success')
-            else:
+            if not consumable:
                 flash('Verbrauchsmaterial nicht gefunden', 'error')
+                return redirect(url_for('consumables'))
                 
+            # Prüfen ob bereits im Papierkorb
+            existing = conn.execute(
+                'SELECT 1 FROM deleted_consumables WHERE barcode=?', (barcode,)
+            ).fetchone()
+            
+            if existing:
+                flash('Material bereits im Papierkorb', 'error')
+                return redirect(url_for('consumables'))
+            
+            conn.execute('''
+                INSERT INTO deleted_consumables 
+                (barcode, bezeichnung, ort, typ, mindestbestand, aktueller_bestand, 
+                 einheit, deleted_by, deleted_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (consumable['barcode'], consumable['bezeichnung'], 
+                  consumable['ort'], consumable['typ'],
+                  consumable['mindestbestand'], consumable['aktueller_bestand'],
+                  consumable['einheit'], session.get('username', 'admin')))
+            
+            conn.execute('DELETE FROM consumables WHERE barcode=?', (barcode,))
+            conn.commit()
+            
+            flash('Verbrauchsmaterial in den Papierkorb verschoben', 'success')
+            
     except Exception as e:
-        print(f"Fehler beim Löschen: {str(e)}")
-        traceback.print_exc()
+        logging.error(f"Fehler beim Löschen: {str(e)}")
         flash('Fehler beim Löschen des Verbrauchsmaterials', 'error')
         
     return redirect(url_for('consumables'))
@@ -711,36 +802,45 @@ def adjust_quantity(barcode):
         traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 400
 
-@app.route('/admin/restore/consumable/<barcode>')
+@app.route('/admin/restore/consumable/<int:id>')
 @admin_required
-def restore_consumable(barcode):
+def restore_consumable(id):
     """Verbrauchsmaterial aus dem Papierkorb wiederherstellen"""
     try:
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
             item = conn.execute(
-                'SELECT * FROM deleted_consumables WHERE barcode=?', (barcode,)
+                'SELECT * FROM deleted_consumables WHERE id=?', (id,)
             ).fetchone()
             
-            if item:
-                conn.execute('''
-                    INSERT INTO consumables 
-                    (barcode, name, description, category,
-                     min_quantity, current_quantity, unit, location)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (item['barcode'], item['name'], item['description'],
-                      item['category'], item['min_quantity'],
-                      item['current_quantity'], item['unit'], item['location']))
-                
-                conn.execute('DELETE FROM deleted_consumables WHERE barcode=?', (barcode,))
-                conn.commit()
-                
-                flash('Verbrauchsmaterial wiederhergestellt', 'success')
-            else:
-                flash('Gelöschtes Verbrauchsmaterial nicht gefunden', 'error')
-                
+            if not item:
+                flash('Verbrauchsmaterial nicht im Papierkorb gefunden', 'error')
+                return redirect(url_for('trash'))
+            
+            # Prüfen ob Barcode bereits wieder existiert
+            existing = conn.execute(
+                'SELECT 1 FROM consumables WHERE barcode=?', (item['barcode'],)
+            ).fetchone()
+            
+            if existing:
+                flash('Barcode bereits vergeben', 'error')
+                return redirect(url_for('trash'))
+            
+            conn.execute('''
+                INSERT INTO consumables 
+                (barcode, bezeichnung, ort, typ, status,
+                 mindestbestand, aktueller_bestand, einheit)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (item['barcode'], item['bezeichnung'], item['ort'],
+                  item['typ'], 'Verfügbar', item['mindestbestand'],
+                  item['aktueller_bestand'], item['einheit']))
+            
+            conn.execute('DELETE FROM deleted_consumables WHERE id=?', (id,))
+            conn.commit()
+            
+            flash('Verbrauchsmaterial wiederhergestellt', 'success')
+            
     except Exception as e:
-        print(f"Fehler bei Wiederherstellung: {str(e)}")
-        traceback.print_exc()
+        logging.error(f"Fehler bei Wiederherstellung: {str(e)}")
         flash('Fehler bei der Wiederherstellung', 'error')
         
     return redirect(url_for('trash'))
@@ -972,17 +1072,26 @@ def edit_worker(id):
         flash('Fehler beim Bearbeiten des Mitarbeiters', 'error')
         return redirect(url_for('workers'))
 
-@app.route('/worker/delete/<int:id>')
+@app.route('/worker/delete/<string:barcode>')
 @admin_required
-def delete_worker(id):
+def delete_worker(barcode):
     """Mitarbeiter in den Papierkorb verschieben"""
     try:
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
             worker = conn.execute(
-                'SELECT * FROM workers WHERE id=?', (id,)
+                'SELECT * FROM workers WHERE barcode=?', (barcode,)
             ).fetchone()
             
             if worker:
+                # Prüfen ob bereits im Papierkorb
+                existing = conn.execute(
+                    'SELECT 1 FROM deleted_workers WHERE barcode=?', (barcode,)
+                ).fetchone()
+                
+                if existing:
+                    flash('Mitarbeiter bereits im Papierkorb', 'error')
+                    return redirect(url_for('workers'))
+                
                 conn.execute('''
                     INSERT INTO deleted_workers 
                     (original_id, name, lastname, barcode, bereich, email, deleted_by)
@@ -991,7 +1100,7 @@ def delete_worker(id):
                       worker['barcode'], worker['bereich'], worker['email'],
                       session.get('username', 'admin')))
                 
-                conn.execute('DELETE FROM workers WHERE id=?', (id,))
+                conn.execute('DELETE FROM workers WHERE barcode=?', (barcode,))
                 conn.commit()
                 
                 flash('Mitarbeiter in den Papierkorb verschoben', 'success')
@@ -999,7 +1108,7 @@ def delete_worker(id):
                 flash('Mitarbeiter nicht gefunden', 'error')
                 
     except Exception as e:
-        print(f"Fehler beim Löschen: {str(e)}")
+        logging.error(f"Fehler beim Löschen: {str(e)}")
         traceback.print_exc()
         flash('Fehler beim Löschen des Mitarbeiters', 'error')
         
@@ -1066,43 +1175,50 @@ def worker_details(barcode):
         flash('Fehler beim Laden der Mitarbeiterdetails', 'error')
         return redirect(url_for('workers'))
 
-@app.route('/admin/restore/tool/<string:barcode>')
+@app.route('/admin/restore/tool/<int:id>')
 @admin_required
-def restore_tool(barcode):
+def restore_tool(id):
     """Werkzeug aus dem Papierkorb wiederherstellen"""
     try:
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            item = conn.execute(
-                'SELECT * FROM deleted_tools WHERE barcode=?', (barcode,)
+            # Prüfen ob das Werkzeug im Papierkorb ist
+            deleted_tool = conn.execute(
+                'SELECT * FROM deleted_tools WHERE id=?', (id,)
             ).fetchone()
             
-            if item:
-                # Prüfen ob Barcode bereits wieder existiert
-                existing = conn.execute(
-                    'SELECT 1 FROM tools WHERE barcode=?', (barcode,)
-                ).fetchone()
-                
-                if existing:
-                    flash('Ein Werkzeug mit diesem Barcode existiert bereits', 'error')
-                    return redirect(url_for('trash'))
-                
-                conn.execute('''
-                    INSERT INTO tools 
-                    (barcode, gegenstand, ort, typ, status, image_path)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ''', (item['barcode'], item['gegenstand'], item['ort'],
-                      item['typ'], 'Verfügbar', item['image_path']))
-                
-                conn.execute('DELETE FROM deleted_tools WHERE barcode=?', (barcode,))
-                conn.commit()
-                
-                flash('Werkzeug wiederhergestellt', 'success')
-            else:
-                flash('Gelöschtes Werkzeug nicht gefunden', 'error')
-                
+            if not deleted_tool:
+                flash('Werkzeug nicht im Papierkorb gefunden', 'error')
+                return redirect(url_for('trash'))
+            
+            # Prüfen ob die Barcode-Nummer bereits wieder vergeben ist
+            existing = conn.execute(
+                'SELECT 1 FROM tools WHERE barcode=?', (deleted_tool['barcode'],)
+            ).fetchone()
+            
+            if existing:
+                flash('Barcode bereits vergeben. Wiederherstellung nicht möglich.', 'error')
+                return redirect(url_for('trash'))
+            
+            # Werkzeug wiederherstellen
+            conn.execute('''
+                INSERT INTO tools 
+                (barcode, gegenstand, ort, typ, status, image_path)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (deleted_tool['barcode'], deleted_tool['gegenstand'], 
+                  deleted_tool['ort'], deleted_tool['typ'], 
+                  'Verfügbar', deleted_tool['image_path']))
+            
+            # Aus dem Papierkorb löschen
+            conn.execute('DELETE FROM deleted_tools WHERE id=?', (id,))
+            conn.commit()
+            
+            flash('Werkzeug erfolgreich wiederhergestellt', 'success')
+            
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler bei Werkzeug-Wiederherstellung: {str(e)}")
+        flash('Datenbankfehler bei der Wiederherstellung', 'error')
     except Exception as e:
-        print(f"Fehler bei Wiederherstellung: {str(e)}")
-        traceback.print_exc()
+        logging.error(f"Fehler bei Werkzeug-Wiederherstellung: {str(e)}")
         flash('Fehler bei der Wiederherstellung', 'error')
         
     return redirect(url_for('trash'))
@@ -1176,42 +1292,37 @@ def empty_trash():
 @app.route('/admin/trash')
 @admin_required
 def trash():
-    """Papierkorb anzeigen"""
+    """Papierkorb mit gelöschten Items anzeigen"""
+    deleted_items = {
+        'workers': [],
+        'tools': [],
+        'consumables': []  # Neu hinzugefügt
+    }
+    
     try:
-        deleted_items = {
-            'tools': [],
-            'workers': [],
-            'consumables': []
-        }
-        
-        with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            deleted_items['tools'] = conn.execute('''
-                SELECT *, datetime(deleted_at, 'localtime') as deleted_at_local
-                FROM deleted_tools 
-                ORDER BY deleted_at DESC
-            ''').fetchall()
-            
+        # Gelöschte Mitarbeiter laden
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            deleted_items['workers'] = conn.execute('''
-                SELECT *, datetime(deleted_at, 'localtime') as deleted_at_local
-                FROM deleted_workers 
-                ORDER BY deleted_at DESC
-            ''').fetchall()
-            
-        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            deleted_items['consumables'] = conn.execute('''
-                SELECT *, datetime(deleted_at, 'localtime') as deleted_at_local
-                FROM deleted_consumables 
-                ORDER BY deleted_at DESC
-            ''').fetchall()
-            
-        return render_template('admin/trash.html', deleted_items=deleted_items)
+            deleted_items['workers'] = conn.execute(
+                'SELECT *, datetime(deleted_at, "localtime") as deleted_at_local FROM deleted_workers'
+            ).fetchall()
         
+        # Gelöschte Werkzeuge laden
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            deleted_items['tools'] = conn.execute(
+                'SELECT *, datetime(deleted_at, "localtime") as deleted_at_local FROM deleted_tools'
+            ).fetchall()
+            
+        # Gelöschte Verbrauchsgegenstände laden
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            deleted_items['consumables'] = conn.execute(
+                'SELECT *, datetime(deleted_at, "localtime") as deleted_at_local FROM deleted_consumables'
+            ).fetchall()
+            
     except Exception as e:
-        print(f"Fehler beim Laden des Papierkorbs: {str(e)}")
-        traceback.print_exc()
+        logging.error(f"Fehler beim Laden des Papierkorbs: {str(e)}")
         flash('Fehler beim Laden des Papierkorbs', 'error')
-        return redirect(url_for('index'))
+        
+    return render_template('admin/trash.html', deleted_items=deleted_items)
 
 @app.route('/consumables/<barcode>/update', methods=['POST'])
 @admin_required
@@ -1528,7 +1639,7 @@ def mark_tool_defect(barcode):
 def add_defect_date_column():
     try:
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            # Prüfen ob die Spalte bereits existiert
+            # Prfen ob die Spalte bereits existiert
             cursor = conn.execute("PRAGMA table_info(tools)")
             columns = [info[1] for info in cursor.fetchall()]
             
@@ -1696,6 +1807,26 @@ def search_worker(query):
     except Exception as e:
         logging.error(f"Fehler bei Mitarbeitersuche: {str(e)}")
         return jsonify({'error': 'Datenbankfehler'})
+
+@app.route('/admin/permanent_delete/tool/<int:id>')
+@admin_required
+def permanent_delete_tool(id):
+    """Werkzeug endgültig aus dem Papierkorb löschen"""
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            result = conn.execute('DELETE FROM deleted_tools WHERE id=?', (id,))
+            conn.commit()
+            
+            if result.rowcount > 0:
+                flash('Werkzeug endgültig gelöscht', 'success')
+            else:
+                flash('Werkzeug nicht gefunden', 'error')
+            
+    except Exception as e:
+        logging.error(f"Fehler beim endgültigen Löschen: {str(e)}")
+        flash('Fehler beim Löschen', 'error')
+        
+    return redirect(url_for('trash'))
 
 # Diese Funktion beim Startup aufrufen
 if __name__ == '__main__':
