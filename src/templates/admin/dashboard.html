@@ -129,5 +129,89 @@
             </div>
         </a>
     </div>
+
+    <div class="mt-8 bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Datenbank Export/Import</h2>
+        
+        <!-- Export Section -->
+        <div class="mb-6">
+            <h3 class="text-lg font-medium mb-3">Daten exportieren</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="exportDB('workers')" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Mitarbeiter exportieren
+                </button>
+                <button onclick="exportDB('tools')" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Werkzeuge exportieren
+                </button>
+                <button onclick="exportDB('consumables')" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Verbrauchsmaterial exportieren
+                </button>
+                <button onclick="exportDB('lendings')" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Ausleihen exportieren
+                </button>
+            </div>
+        </div>
+        
+        <!-- Import Section -->
+        <div>
+            <h3 class="text-lg font-medium mb-3">Daten importieren</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex flex-col">
+                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
+                        Mitarbeiter importieren
+                        <input type="file" class="hidden" onchange="importDB(this, 'workers')" accept=".xlsx">
+                    </label>
+                </div>
+                <div class="flex flex-col">
+                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
+                        Werkzeuge importieren
+                        <input type="file" class="hidden" onchange="importDB(this, 'tools')" accept=".xlsx">
+                    </label>
+                </div>
+                <div class="flex flex-col">
+                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
+                        Verbrauchsmaterial importieren
+                        <input type="file" class="hidden" onchange="importDB(this, 'consumables')" accept=".xlsx">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function exportDB(dbName) {
+        window.location.href = `/export/export_db/${dbName}`;
+    }
+
+    function importDB(input, dbName) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        fetch(`/export/import_db/${dbName}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Import erfolgreich');
+                location.reload();
+            } else {
+                alert('Fehler beim Import: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler beim Import');
+        });
+    }
+    </script>
 </div>
 {% endblock %} 

@@ -90,7 +90,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for lending in active_lendings %}
-                        {% if lending.item_type == 'Werkzeug' %}
+                        {% if lending.item_type == 'tool' %}
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
@@ -98,7 +98,7 @@
                                     {{ lending.formatted_time }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <button onclick="returnTool('{{ lending.tool_barcode }}', '{{ lending.id }}')"
+                                    <button onclick="returnTool('{{ lending.item_barcode }}')"
                                             class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
                                         Zurückgeben
                                     </button>
@@ -123,20 +123,29 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menge</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgegeben am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for lending in active_lendings %}
-                        {% if lending.item_type == 'Verbrauchsmaterial' %}
+                        {% if lending.item_type == 'consumable' %}
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.amount }} {{ lending.einheit }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ lending.formatted_time }}
+                                    <button onclick="returnTool('{{ lending.item_barcode }}')"
+                                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                        Zurückgeben
+                                    </button>
                                 </td>
                             </tr>
                         {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Keine aktiven Materialausgaben</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -217,42 +226,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Funktion für die Rückgabe anpassen
-function returnTool(toolBarcode, lendingId) {
-    if (!toolBarcode) {
-        showAlert('Ungültiger Barcode', 'error');
-        return;
-    }
-
-    const formData = {
-        action: 'return',
-        barcode: toolBarcode,
-        lending_id: lendingId
-    };
-
-    console.log('Sending return data:', formData); // Debugging
-
-    fetch('/api/process_lending', {
+function returnTool(barcode) {
+    const formData = new FormData();
+    formData.append('barcode', barcode);
+    
+    fetch('/return_tool', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify(formData)
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showAlert('Werkzeug erfolgreich zurückgegeben', 'success');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            location.reload();
         } else {
-            showAlert(data.message || 'Fehler bei der Rückgabe', 'error');
+            alert(data.message || 'Fehler bei der Rückgabe');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        showAlert('Fehler bei der Rückgabe', 'error');
+        alert('Fehler bei der Rückgabe');
     });
 }
 
@@ -422,39 +414,38 @@ document.getElementById('item_barcode').addEventListener('change', function() {
 });
 
 function handleLending(form) {
-    const formData = {
-        action: 'lend',
-        worker_barcode: form.worker_barcode.value,
-        barcode: form.item_barcode.value,
-        amount: form.amount ? parseInt(form.amount.value) || 1 : 1
-    };
+    // Debug-Ausgabe der Formularwerte
+    console.log('Worker:', form.worker_barcode.value);
+    console.log('Item Type:', form.item_type.value);
+    console.log('Item Barcode:', form.item_barcode.value);
+    console.log('Amount:', form.amount?.value || '1');
 
-    // Debug-Logging
-    console.log('Sending lending data:', formData);
+    const formData = {
+        worker_barcode: form.worker_barcode.value,
+        item_type: form.item_type.value,
+        item_barcode: form.item_barcode.value,
+        amount: parseInt(form.amount?.value || '1'),
+        action: 'lend'
+    };
 
     fetch('/api/process_lending', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify(formData)
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showAlert(data.message, 'success');
-            // Warte kurz und lade dann die Seite neu
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            location.reload();
         } else {
-            showAlert(data.message || 'Fehler bei der Ausleihe', 'error');
+            alert(data.message || 'Fehler bei der Ausleihe');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        showAlert('Fehler bei der Ausleihe', 'error');
+        alert('Fehler bei der Ausleihe');
     });
 }
 

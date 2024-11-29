@@ -608,6 +608,32 @@
         modalText.textContent = textMap[type];
         modal.classList.remove('hidden');
     }
+
+    function importDB(input, dbName) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        fetch(`/import_db/${dbName}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Import erfolgreich');
+                location.reload();
+            } else {
+                alert('Fehler beim Import: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler beim Import');
+        });
+    }
     </script>
 </body>
 </html>
