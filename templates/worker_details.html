@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mitarbeiter Details</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ worker.name }} {{ worker.lastname }}</h5>
+            <p class="card-text">
+                <strong>Barcode:</strong> {{ worker.barcode }}<br>
+                <strong>Bereich:</strong> {{ worker.bereich }}<br>
+                <strong>Email:</strong> {{ worker.email }}
+            </p>
+        </div>
+    </div>
+
+    <h3>Aktuelle Ausleihen</h3>
+    {% if current_lendings %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th>Typ</th>
+                    <th>Menge</th>
+                    <th>Ausgeliehen am</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lending in current_lendings %}
+                <tr>
+                    <td>{{ lending.item_name }}</td>
+                    <td>{{ lending.item_type }}</td>
+                    <td>{{ lending.amount_display }}</td>
+                    <td>{{ lending.formatted_checkout }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Keine aktuellen Ausleihen</p>
+    {% endif %}
+
+    <h3>Ausleihhistorie</h3>
+    {% if lending_history %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Artikel</th>
+                    <th>Typ</th>
+                    <th>Menge</th>
+                    <th>Ausgeliehen am</th>
+                    <th>Zurückgegeben am</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lending in lending_history %}
+                <tr>
+                    <td>{{ lending.item_name }}</td>
+                    <td>{{ lending.item_type }}</td>
+                    <td>{{ lending.amount_display }}</td>
+                    <td>{{ lending.formatted_checkout }}</td>
+                    <td>{{ lending.formatted_return }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Keine Ausleihhistorie vorhanden</p>
+    {% endif %}
+</div>
+{% endblock %}

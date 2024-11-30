@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Werkzeugverwaltung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        .animate-scan {
+            animation: scan 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <div class="flex items-center">
+                    <!-- Logo mit neuem SVG -->
+                    <a href="{{ url_for('index') }}" class="flex-shrink-0">
+                        <img class="h-12 w-auto" 
+                             src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
+                             alt="BTZ Logo"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                        <span class="hidden text-white text-lg font-bold">Inventar</span>
+                    </a>
+                    
+                    <!-- Navigation Links -->
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="{{ url_for('index') }}" 
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Werkzeuge
+                            </a>
+                            <a href="{{ url_for('consumables') }}" 
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Verbrauchsmaterial
+                            </a>
+                            <a href="{{ url_for('workers') }}"
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Mitarbeiter
+                            </a>
+                            <div class="flex items-center">
+                                <div class="relative group">
+                                    <button onclick="openQuickScan(event)"
+                                            class="relative -bottom-8 flex items-center justify-center w-28 h-28 rounded-full 
+                                                   bg-blue-500 hover:bg-blue-600 text-white shadow-xl 
+                                                   transition-all duration-300 hover:scale-105 
+                                                   border-4 border-white hover:border-blue-200">
+                                        <i class="fas fa-qrcode text-4xl"></i>
+                                    </button>
+                                    <span class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 
+                                                 text-black font-medium text-sm whitespace-nowrap
+                                                 opacity-0 group-hover:opacity-100 
+                                                 transition-all duration-300 translate-y-0 group-hover:translate-y-2">
+                                        Quick-Scan
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('manual_lending') }}"
+                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                Manuelle Ausleihe
+                            </a>
+                            {% if session.get('is_admin') %}
+                                <a href="{{ url_for('admin_panel') }}"
+                                   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                    Admin Dashboard
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login/Logout Button -->
+                <div class="flex items-center">
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('logout') }}" 
+                           class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}"
+                           class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                    <div class="rounded-md p-4 {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Quick-Scan Modal -->
+    <div id="quickScanModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-10 mx-auto p-6 border w-full max-w-xl shadow-2xl rounded-xl bg-white">
+            <div class="flex flex-col">
+                <!-- Header mit Kamera-Reset-Button -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold" id="scan-title">Werkzeug scannen</h3>
+                        <p class="text-gray-500 text-sm mt-1" id="scan-subtitle">
+                            Scannen Sie den Barcode des Werkzeugs
+                        </p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="resetCamera()" 
+                                class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                title="Kamera neu starten">
+                            <i class="fas fa-camera-rotate text-gray-500 text-xl"></i>
+                        </button>
+                        <button onclick="closeQuickScan()" 
+                                class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                            <i class="fas fa-times text-gray-500 text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Scan-Bereich -->
+                <div class="space-y-6">
+                    <!-- Video Preview mit verbessertem Overlay -->
+                    <div class="relative aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
+                        <video id="video" 
+                               class="w-full h-full object-cover hidden"
+                               autoplay playsinline></video>
+                        <div id="scanner-overlay" 
+                             class="absolute inset-0 flex items-center justify-center transition-colors duration-300">
+                            <div class="relative w-64 h-64">
+                                <!-- Scan-Bereich mit deutlicherem Rahmen -->
+                                <div class="absolute inset-0 border-2 border-blue-500 rounded-lg"></div>
+                                
+                                <!-- Scanning-Linie -->
+                                <div class="absolute inset-x-0 h-0.5 bg-blue-500 opacity-75 animate-scan"></div>
+                                
+                                <!-- Eckmarkierungen -->
+                                <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-blue-500"></div>
+                                <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-blue-500"></div>
+                                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-blue-500"></div>
+                                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-blue-500"></div>
+                            </div>
+                        </div>
+                        <!-- Status-Anzeige -->
+                        <div id="camera-status" 
+                             class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-lg text-sm text-center">
+                            Kamera wird initialisiert...
+                        </div>
+                    </div>
+
+                    <!-- Barcode Input mit Submit-Button -->
+                    <div class="flex space-x-3 mt-4">
+                        <div class="flex-1 relative">
+                            <input type="text" 
+                                   id="barcode-input" 
+                                   class="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                   placeholder="Barcode manuell eingeben"
+                                   autocomplete="off">
+                            <i class="fas fa-barcode absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <button onclick="submitManualBarcode()" 
+                                class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors flex items-center space-x-2">
+                            <i class="fas fa-check"></i>
+                            <span class="hidden sm:inline">Bestätigen</span>
+                        </button>
+                    </div>
+
+                    <!-- Kamera-Auswahl mit verbessertem Design -->
+                    <select id="camera-select" 
+                            class="w-full p-3 border rounded-xl hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </select>
+
+                    <!-- Preview-Bereich mit verbessertem Design -->
+                    <div id="scan-preview" class="space-y-4 mt-4">
+                        <!-- Werkzeug Preview -->
+                        <div id="tool-preview" class="hidden">
+                            <div class="bg-gray-50 p-4 rounded-xl border">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-tools text-2xl text-gray-400"></i>
+                                    </div>
+                                    <div class="flex-1" id="tool-details">
+                                        <!-- Wird dynamisch gefüllt -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mitarbeiter Preview -->
+                        <div id="worker-preview" class="hidden">
+                            <div class="bg-gray-50 p-4 rounded-xl border">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-user text-2xl text-gray-400"></i>
+                                    </div>
+                                    <div class="flex-1" id="worker-details">
+                                        <!-- Wird dynamisch gefüllt -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick-Scan JavaScript -->
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <script>
+    let currentStep = 'tool';
+    let scannedTool = null;
+    let scannedWorker = null;
+    let codeReader = new ZXing.BrowserMultiFormatReader();
+    let isVideoActive = false;
+    let isScanning = false;
+
+    async function openQuickScan(event) {
+        event.preventDefault();
+        document.getElementById('quickScanModal').classList.remove('hidden');
+        resetScan();
+        // Direkt Kamera starten ohne auf Button zu warten
+        await startCamera();
+    }
+
+    async function resetCamera() {
+        stopScanning();
+        isScanning = false; // Reset scanning state
+        await startCamera();
+    }
+
+    async function startCamera() {
+        if (isVideoActive) return;
+        
+        try {
+            const video = document.getElementById('video');
+            const cameraStatus = document.getElementById('camera-status');
+            
+            cameraStatus.textContent = 'Kamera wird initialisiert...';
+            cameraStatus.classList.remove('hidden');
+            
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            
+            if (videoDevices.length === 0) {
+                showError('Keine Kamera gefunden');
+                return;
+            }
+
+            // Bevorzuge die rückseitige Kamera
+            const preferredDevice = videoDevices.find(device => 
+                device.label.toLowerCase().includes('back') || 
+                device.label.toLowerCase().includes('rück')
+            ) || videoDevices[0];
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    deviceId: preferredDevice.deviceId,
+                    facingMode: "environment",
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+
+            video.srcObject = stream;
+            video.classList.remove('hidden');
+            await video.play();
+
+            isVideoActive = true;
+            await startScanning();
+            
+            cameraStatus.textContent = 'Kamera aktiv - Barcode in den Rahmen halten';
+            setTimeout(() => cameraStatus.classList.add('hidden'), 2000);
+
+        } catch (err) {
+            console.error('Kamera-Fehler:', err);
+            showError('Kamera konnte nicht aktiviert werden: ' + err.message);
+        }
+    }
+
+    async function startScanning() {
+        if (isScanning) return;
+        
+        try {
+            isScanning = true;
+            let lastScanTime = 0;
+            const SCAN_DELAY = 2000; // 2 Sekunden Delay
+            
+            await codeReader.decodeFromVideoDevice(
+                null, // Use default device
+                'video',
+                async (result, err) => {
+                    const currentTime = Date.now();
+                    if (result && isScanning && (currentTime - lastScanTime > SCAN_DELAY)) {
+                        lastScanTime = currentTime;
+                        
+                        // Visuelles Feedback während des Delays
+                        const overlay = document.querySelector('#scanner-overlay');
+                        overlay.classList.add('bg-yellow-200', 'bg-opacity-30');
+                        
+                        // Countdown im Status anzeigen
+                        const cameraStatus = document.getElementById('camera-status');
+                        cameraStatus.textContent = 'Barcode erkannt - halte still...';
+                        cameraStatus.classList.remove('hidden');
+                        
+                        // Nach Delay verarbeiten
+                        setTimeout(async () => {
+                            if (isScanning) { // Prüfen ob noch aktiv
+                                isScanning = false;
+                                overlay.classList.remove('bg-yellow-200', 'bg-opacity-30');
+                                showScanEffect();
+                                await processBarcode(result.text);
+                                stopScanning();
+                            }
+                        }, 1500); // 1.5 Sekunden Verarbeitungs-Delay
+                    }
+                }
+            );
+        } catch (err) {
+            console.error('Scanning-Fehler:', err);
+            showError('Scanning konnte nicht gestartet werden');
+        }
+    }
+
+    function stopScanning() {
+        if (isVideoActive) {
+            const video = document.getElementById('video');
+            const stream = video.srcObject;
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            video.srcObject = null;
+            codeReader.reset();
+            video.classList.add('hidden');
+            isVideoActive = false;
+            isScanning = false;
+        }
+    }
+
+    async function submitManualBarcode() {
+        const barcodeInput = document.getElementById('barcode-input');
+        const barcode = barcodeInput.value.trim();
+        
+        if (barcode) {
+            stopScanning(); // Kamera stoppen
+            await processBarcode(barcode);
+            barcodeInput.value = ''; // Input leeren
+        } else {
+            showError('Bitte geben Sie einen Barcode ein');
+        }
+    }
+
+    async function processBarcode(barcode) {
+        try {
+            if (currentStep === 'tool') {
+                // Werkzeug-API aufrufen
+                const response = await fetch(`/api/get_item/${barcode}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                // Werkzeug-Details anzeigen
+                const toolPreview = document.getElementById('tool-preview');
+                const toolDetails = document.getElementById('tool-details');
+                
+                toolPreview.classList.remove('hidden');
+                toolDetails.innerHTML = `
+                    <div class="space-y-2">
+                        <p class="font-bold">${data.gegenstand}</p>
+                        <p class="text-sm">Barcode: ${data.barcode}</p>
+                        <p class="text-sm">Status: ${data.status}</p>
+                    </div>
+                    <button onclick="confirmToolAndProceed()" 
+                            class="mt-3 w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                        Bestätigen und Mitarbeiter scannen
+                    </button>
+                `;
+                
+                scannedTool = data;
+                
+            } else if (currentStep === 'worker') {
+                // Mitarbeiter-API aufrufen - jetzt mit Unterstützung für Namen
+                const response = await fetch(`/api/search_worker/${encodeURIComponent(barcode)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                if (data.multiple) {
+                    // Mehrere Mitarbeiter gefunden - zeige Auswahlliste
+                    showWorkerSelection(data.workers);
+                } else {
+                    // Einzelner Mitarbeiter - direkt anzeigen
+                    displayWorkerDetails(data.worker);
+                }
+            }
+        } catch (err) {
+            console.error('Verarbeitungsfehler:', err);
+            showError('Fehler bei der Verarbeitung');
+        }
+    }
+
+    function showWorkerSelection(workers) {
+        const workerPreview = document.getElementById('worker-preview');
+        const workerDetails = document.getElementById('worker-details');
+        
+        workerPreview.classList.remove('hidden');
+        workerDetails.innerHTML = `
+            <div class="space-y-2">
+                <p class="font-bold">Bitte Mitarbeiter auswählen:</p>
+                <div class="space-y-2">
+                    ${workers.map(worker => `
+                        <button onclick="selectWorker('${worker.barcode}')" 
+                                class="w-full p-2 text-left hover:bg-gray-100 rounded-lg transition-colors">
+                            <p class="font-medium">${worker.name} ${worker.lastname}</p>
+                            <p class="text-sm text-gray-500">${worker.bereich || '-'}</p>
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function displayWorkerDetails(worker) {
+        const workerPreview = document.getElementById('worker-preview');
+        const workerDetails = document.getElementById('worker-details');
+        
+        workerPreview.classList.remove('hidden');
+        workerDetails.innerHTML = `
+            <div class="space-y-2">
+                <p class="font-bold">${worker.name} ${worker.lastname}</p>
+                <p class="text-sm">Barcode: ${worker.barcode}</p>
+                <p class="text-sm">Bereich: ${worker.bereich || '-'}</p>
+            </div>
+            <button onclick="confirmAndFinish()" 
+                    class="mt-3 w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+                Vorgang abschließen
+            </button>
+        `;
+        
+        scannedWorker = worker;
+    }
+
+    async function selectWorker(barcode) {
+        const response = await fetch(`/api/get_worker/${barcode}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            showError(data.error);
+            return;
+        }
+        
+        displayWorkerDetails(data);
+    }
+
+    function confirmToolAndProceed() {
+        if (!scannedTool) {
+            showError('Kein Werkzeug gescannt');
+            return;
+        }
+        
+        currentStep = 'worker';
+        document.getElementById('scan-title').textContent = 'Mitarbeiter scannen';
+        document.getElementById('scan-subtitle').textContent = 'Scannen Sie den Mitarbeiter-Barcode oder geben Sie den Namen ein';
+        document.getElementById('barcode-input').value = '';
+        document.getElementById('barcode-input').placeholder = 'Barcode oder Name eingeben';
+        
+        startCamera();
+    }
+
+    async function confirmAndFinish() {
+        if (!scannedTool || !scannedWorker) {
+            showError('Unvollständige Scan-Daten');
+            return;
+        }
+        
+        try {
+            // API-Aufruf zum Speichern der Ausleihe
+            const response = await fetch('/api/process_lending', {  // URL geändert
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    worker_barcode: scannedWorker.barcode,
+                    item_barcode: scannedTool.barcode,
+                    item_type: 'tool',
+                    action: 'lend'
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.error) {
+                showError(result.error);
+                return;
+            }
+            
+            showSuccess('Vorgang erfolgreich abgeschlossen');
+            setTimeout(() => {
+                closeQuickScan();
+                // Optional: Seite neu laden um die aktualisierten Daten zu sehen
+                window.location.reload();
+            }, 1500);
+            
+        } catch (err) {
+            console.error('Fehler beim Abschließen:', err);
+            showError('Fehler beim Speichern des Vorgangs');
+        }
+    }
+
+    function resetScan() {
+        currentStep = 'tool';
+        scannedTool = null;
+        scannedWorker = null;
+        document.getElementById('tool-preview').classList.add('hidden');
+        document.getElementById('worker-preview').classList.add('hidden');
+        document.getElementById('scan-title').textContent = 'Werkzeug scannen';
+        document.getElementById('scan-subtitle').textContent = 'Scannen Sie den Werkzeug-Barcode';
+        document.getElementById('barcode-input').value = '';
+        document.getElementById('barcode-input').placeholder = 'Werkzeug-Barcode eingeben';
+    }
+
+    // Verbesserte Scan-Effekte
+    function showScanEffect() {
+        const overlay = document.querySelector('#scanner-overlay');
+        overlay.classList.add('bg-green-200', 'bg-opacity-30');
+        setTimeout(() => {
+            overlay.classList.remove('bg-green-200', 'bg-opacity-30');
+        }, 300);
+    }
+
+    function closeQuickScan() {
+        document.getElementById('quickScanModal').classList.add('hidden');
+        stopScanning();
+        resetScan();
+    }
+
+    // Rest des JavaScript-Codes wie vorher, aber mit verbesserter UI-Feedback
+
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4';
+        errorDiv.textContent = message;
+        
+        const container = document.querySelector('#scan-preview');
+        container.insertBefore(errorDiv, container.firstChild);
+        
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+
+    function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4';
+        successDiv.textContent = message;
+        
+        const container = document.querySelector('#scan-preview');
+        container.insertBefore(successDiv, container.firstChild);
+        
+        setTimeout(() => successDiv.remove(), 3000);
+    }
+
+    function confirmDelete(type, id) {
+        const modal = document.getElementById('deleteModal');
+        const modalText = document.getElementById('deleteModalText');
+        
+        // URLs anpassen
+        const urlMap = {
+            'worker': `/worker/delete/${id}`,
+            'tool': `/tool/delete/${id}`,
+            'consumable': `/consumables/${id}/delete`  // URL-Format angepasst
+        };
+        
+        currentDeleteUrl = urlMap[type];
+        
+        // Texte anpassen
+        const textMap = {
+            'worker': 'Möchten Sie diesen Mitarbeiter wirklich in den Papierkorb verschieben?',
+            'tool': 'Möchten Sie dieses Werkzeug wirklich in den Papierkorb verschieben?',
+            'consumable': 'Möchten Sie dieses Verbrauchsmaterial wirklich in den Papierkorb verschieben?'
+        };
+        
+        modalText.textContent = textMap[type];
+        modal.classList.remove('hidden');
+    }
+
+    function importDB(input, dbName) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        fetch(`/import_db/${dbName}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Import erfolgreich');
+                location.reload();
+            } else {
+                alert('Fehler beim Import: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler beim Import');
+        });
+    }
+    </script>
+</body>
+</html>

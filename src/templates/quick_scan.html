@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Quick-Scan{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-4" id="scan-title">Werkzeug scannen</h2>
+        
+        <!-- Scan-Bereich -->
+        <div class="mb-6">
+            <div class="relative">
+                <!-- Video-Element für Webcam -->
+                <video id="video" class="w-full max-w-lg mx-auto border rounded-lg hidden"></video>
+                
+                <!-- Barcode Input für USB-Scanner -->
+                <input type="text" 
+                       id="barcode-input" 
+                       class="w-full p-2 border rounded-lg" 
+                       placeholder="Barcode scannen oder eingeben"
+                       autocomplete="off">
+            </div>
+            
+            <!-- Kamera-Steuerung -->
+            <div class="mt-4 flex gap-4">
+                <button id="toggle-camera" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Kamera aktivieren
+                </button>
+                <select id="camera-select" 
+                        class="border rounded px-2 py-2 hidden">
+                </select>
+            </div>
+        </div>
+
+        <!-- Scan-Status und Preview -->
+        <div id="scan-status" class="mt-4">
+            <div id="tool-preview" class="hidden bg-gray-50 p-4 rounded-lg mb-4">
+                <h3 class="font-bold mb-2">Gescanntes Werkzeug:</h3>
+                <div id="tool-details"></div>
+            </div>
+            <div id="worker-preview" class="hidden bg-gray-50 p-4 rounded-lg">
+                <h3 class="font-bold mb-2">Gescannter Mitarbeiter:</h3>
+                <div id="worker-details"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript für Barcode-Scanning -->
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+<script>
+let currentStep = 'tool';  // 'tool' oder 'worker'
+let scannedTool = null;
+let codeReader = new ZXing.BrowserMultiFormatReader();
+let videoElement = document.getElementById('video');
+let barcodeInput = document.getElementById('barcode-input');
+let toggleButton = document.getElementById('toggle-camera');
+let cameraSelect = document.getElementById('camera-select');
+let isVideoActive = false;
+
+// Kamera-Handling
+toggleButton.addEventListener('click', async () => {
+    if (!isVideoActive) {
+        try {
+            const devices = await codeReader.listVideoInputDevices();
+            cameraSelect.innerHTML = devices
+                .map(device => `<option value="${device.deviceId}">${device.label}</option>`)
+                .join('');
+            cameraSelect.classList.remove('hidden');
+            
+            await startScanning();
+            videoElement.classList.remove('hidden');
+            toggleButton.textContent = 'Kamera deaktivieren';
+            isVideoActive = true;
+        } catch (err) {
+            console.error('Kamera-Fehler:', err);
+            alert('Kamera konnte nicht aktiviert werden');
+        }
+    } else {
+        stopScanning();
+        videoElement.classList.add('hidden');
+        cameraSelect.classList.add('hidden');
+        toggleButton.textContent = 'Kamera aktivieren';
+        isVideoActive = false;
+    }
+});
+
+// Barcode-Scanner und manuelle Eingabe
+barcodeInput.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const barcode = barcodeInput.value.trim();
+        if (barcode) {
+            await processBarcode(barcode);
+            barcodeInput.value = '';
+        }
+    }
+});
+
+async function startScanning() {
+    try {
+        await codeReader.decodeFromVideoDevice(
+            cameraSelect.value, 
+            videoElement, 
+            async (result, err) => {
+                if (result) {
+                    await processBarcode(result.text);
+                }
+            }
+        );
+    } catch (err) {
+        console.error('Scanning-Fehler:', err);
+    }
+}
+
+function stopScanning() {
+    codeReader.reset();
+}
+
+async function processBarcode(barcode) {
+    if (currentStep === 'tool') {
+        // Werkzeug scannen
+        try {
+            const response = await fetch(`/api/get_item/${barcode}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            scannedTool = data;
+            document.getElementById('tool-details').innerHTML = `
+                <p><strong>${data.gegenstand}</strong></p>
+                <p>Status: ${data.status}</p>
+            `;
+            document.getElementById('tool-preview').classList.remove('hidden');
+            
+            // Zum Mitarbeiter-Scan wechseln
+            currentStep = 'worker';
+            document.getElementById('scan-title').textContent = 'Mitarbeiter scannen';
+            
+        } catch (err) {
+            console.error('Fehler:', err);
+            alert('Fehler beim Laden der Werkzeugdaten');
+        }
+    } else {
+        // Mitarbeiter scannen
+        try {
+            const response = await fetch(`/api/get_worker/${barcode}`);
+            const worker = await response.json();
+            
+            if (worker.error) {
+                alert(worker.error);
+                return;
+            }
+            
+            // Ausleihe/Rückgabe durchführen
+            const action = scannedTool.status === 'Verfügbar' ? 'checkout' : 'return';
+            const result = await fetch('/api/process_scan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tool_barcode: scannedTool.barcode,
+                    worker_barcode: worker.barcode,
+                    action: action
+                })
+            });
+            
+            const processResult = await result.json();
+            if (processResult.success) {
+                alert(processResult.message);
+                // Reset für nächsten Scan
+                resetScan();
+            } else {
+                alert('Fehler: ' + processResult.error);
+            }
+            
+        } catch (err) {
+            console.error('Fehler:', err);
+            alert('Fehler bei der Verarbeitung');
+        }
+    }
+}
+
+function resetScan() {
+    currentStep = 'tool';
+    scannedTool = null;
+    document.getElementById('scan-title').textContent = 'Werkzeug scannen';
+    document.getElementById('tool-preview').classList.add('hidden');
+    document.getElementById('worker-preview').classList.add('hidden');
+    barcodeInput.value = '';
+}
+
+// Cleanup beim Verlassen der Seite
+window.addEventListener('beforeunload', () => {
+    stopScanning();
+});
+</script>
+{% endblock %} 
