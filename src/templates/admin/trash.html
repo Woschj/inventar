@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Papierkorb{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Papierkorb</h1>
+    </div>
+
+    <!-- Werkzeuge -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Gelöschte Werkzeuge</h2>
+        {% if deleted_items.tools %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bezeichnung</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ort</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Typ</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht von</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for item in deleted_items.tools %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.barcode }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.gegenstand }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_at_local }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_by }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="confirmRestore('tool', {{ item.id }})" 
+                                    class="text-blue-600 hover:text-blue-900 mr-3">
+                                Wiederherstellen
+                            </button>
+                            <button onclick="confirmPermanentDelete('tool', {{ item.id }})" 
+                                    class="text-red-600 hover:text-red-900">
+                                Endgültig löschen
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">Keine gelöschten Werkzeuge vorhanden.</p>
+        {% endif %}
+    </div>
+
+    <!-- Verbrauchsgegenstände -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Gelöschte Verbrauchsgegenstände</h2>
+        {% if deleted_items.consumables %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bezeichnung</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ort</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Typ</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bestand</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht von</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for item in deleted_items.consumables %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.barcode }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.bezeichnung }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ item.aktueller_bestand }} {{ item.einheit }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_at_local }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_by }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="confirmRestore('consumable', {{ item.id }})" 
+                                    class="text-blue-600 hover:text-blue-900 mr-3">
+                                <i class="fas fa-undo"></i> Wiederherstellen
+                            </button>
+                            <button onclick="confirmPermanentDelete('consumable', {{ item.id }})" 
+                                    class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash-alt"></i> Endgültig löschen
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">Keine gelöschten Verbrauchsgegenstände vorhanden.</p>
+        {% endif %}
+    </div>
+
+    <!-- Mitarbeiter -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Gelöschte Mitarbeiter</h2>
+        {% if deleted_items.workers %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bereich</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gelöscht von</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for item in deleted_items.workers %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ item.name }} {{ item.lastname }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.barcode }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.bereich }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_at_local }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.deleted_by }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="confirmRestore('worker', {{ item.id }})" 
+                                    class="text-blue-600 hover:text-blue-900 mr-3">
+                                Wiederherstellen
+                            </button>
+                            <button onclick="confirmPermanentDelete('worker', {{ item.id }})" 
+                                    class="text-red-600 hover:text-red-900">
+                                Endgültig löschen
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">Keine gelöschten Mitarbeiter vorhanden.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function confirmRestore(type, id) {
+    if (confirm('Möchten Sie diesen Eintrag wirklich wiederherstellen?')) {
+        window.location.href = `/admin/restore/${type}/${id}`;
+    }
+}
+
+function confirmPermanentDelete(type, id) {
+    if (confirm('Möchten Sie diesen Eintrag wirklich endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden!')) {
+        window.location.href = `/admin/permanent_delete/${type}/${id}`;
+    }
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+
+{% block title %}Manuelle Ausleihe{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Werkzeug Ausleihe/Rückgabe</h1>
+
+    <form id="lendingForm" onsubmit="event.preventDefault(); handleLending(this);" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Mitarbeiter-Auswahl -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Mitarbeiter</label>
+                <select name="worker_barcode" required id="workerSelect"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Mitarbeiter auswählen...</option>
+                    {% for worker in workers %}
+                    <option value="{{ worker.barcode }}" {% if selected_worker == worker.barcode %}selected{% endif %}>
+                        {{ worker.name }} {{ worker.lastname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Artikel-Typ Auswahl -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Artikel-Typ</label>
+                <select name="item_type" id="itemTypeSelect" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="tool">Werkzeug</option>
+                    <option value="consumable">Verbrauchsmaterial</option>
+                </select>
+            </div>
+
+            <!-- Werkzeug/Material-Auswahl -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Artikel</label>
+                <select name="item_barcode" id="itemBarcodeSelect" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <!-- Wird dynamisch durch JavaScript gefüllt -->
+                </select>
+
+                <div id="amountDiv" class="hidden mt-2">
+                    <label class="block text-sm font-medium text-gray-700">Menge</label>
+                    <input type="number" name="amount" id="amountInput" min="1" value="1" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Aktions-Buttons -->
+        <div class="flex justify-end space-x-4 mt-4">
+            <button type="submit" name="action" value="lend"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                Ausleihen/Ausgeben
+            </button>
+        </div>
+    </form>
+
+    <!-- Aktive Ausleihen -->
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Aktive Ausleihen & Ausgaben</h2>
+        
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200 mb-4">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button onclick="switchTab('tools')" 
+                        id="tools-tab"
+                        class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Werkzeuge
+                </button>
+                <button onclick="switchTab('consumables')" 
+                        id="consumables-tab"
+                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Verbrauchsmaterial
+                </button>
+            </nav>
+        </div>
+
+        <!-- Werkzeug-Tabelle -->
+        <div id="tools-table" class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgeliehen am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for lending in active_lendings %}
+                        {% if lending.item_type == 'tool' %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ lending.formatted_time }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <button onclick="returnTool('{{ lending.item_barcode }}')"
+                                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                        Zurückgeben
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Keine aktiven Werkzeugausleihen</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Verbrauchsmaterial-Tabelle -->
+        <div id="consumables-table" class="hidden overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Material</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menge</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgegeben am</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for lending in active_lendings %}
+                        {% if lending.item_type == 'consumable' %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ lending.item_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.worker_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.amount }} {{ lending.einheit }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ lending.formatted_time }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <button onclick="returnTool('{{ lending.item_barcode }}')"
+                                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                        Zurückgeben
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Keine aktiven Materialausgaben</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const itemTypeSelect = document.getElementById('itemTypeSelect');
+    const itemBarcodeSelect = document.getElementById('itemBarcodeSelect');
+    const amountDiv = document.getElementById('amountDiv');
+    
+    // Werkzeuge und Verbrauchsmaterial aus dem Template
+    const tools = {{ tools|tojson|safe }};
+    const consumables = {{ consumables|tojson|safe }};
+    
+    function updateItemSelect(type) {
+        // Lösche bestehende Optionen
+        itemBarcodeSelect.innerHTML = '';
+        
+        if (type === 'tool') {
+            tools.forEach(tool => {
+                const option = document.createElement('option');
+                option.value = tool.barcode;
+                option.textContent = tool.gegenstand;
+                itemBarcodeSelect.appendChild(option);
+            });
+            amountDiv.classList.add('hidden');
+            document.getElementById('amountInput').removeAttribute('required');
+        } else {
+            consumables.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.barcode;
+                option.textContent = item.bezeichnung;
+                itemBarcodeSelect.appendChild(option);
+            });
+            amountDiv.classList.remove('hidden');
+            document.getElementById('amountInput').setAttribute('required', 'required');
+        }
+    }
+    
+    itemTypeSelect.addEventListener('change', function() {
+        updateItemSelect(this.value);
+    });
+    
+    // Initial auslösen
+    updateItemSelect(itemTypeSelect.value);
+});
+
+function switchTab(tabName) {
+    const toolsTable = document.getElementById('tools-table');
+    const consumablesTable = document.getElementById('consumables-table');
+    const toolsTab = document.getElementById('tools-tab');
+    const consumablesTab = document.getElementById('consumables-tab');
+    
+    if (tabName === 'tools') {
+        toolsTable.classList.remove('hidden');
+        consumablesTable.classList.add('hidden');
+        toolsTab.classList.add('border-blue-500', 'text-blue-600');
+        toolsTab.classList.remove('border-transparent', 'text-gray-500');
+        consumablesTab.classList.remove('border-blue-500', 'text-blue-600');
+        consumablesTab.classList.add('border-transparent', 'text-gray-500');
+    } else {
+        toolsTable.classList.add('hidden');
+        consumablesTable.classList.remove('hidden');
+        consumablesTab.classList.add('border-blue-500', 'text-blue-600');
+        consumablesTab.classList.remove('border-transparent', 'text-gray-500');
+        toolsTab.classList.remove('border-blue-500', 'text-blue-600');
+        toolsTab.classList.add('border-transparent', 'text-gray-500');
+    }
+}
+
+// Beim Laden der Seite den letzten aktiven Tab wiederherstellen
+document.addEventListener('DOMContentLoaded', function() {
+    const lastActiveTab = localStorage.getItem('activeTab') || 'tools';
+    switchTab(lastActiveTab);
+});
+
+// Funktion für die Rückgabe anpassen
+function returnTool(barcode) {
+    const formData = new FormData();
+    formData.append('barcode', barcode);
+    
+    fetch('/return_tool', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.message || 'Fehler bei der Rückgabe');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler bei der Rückgabe');
+    });
+}
+
+// Hilfsfunktion für Alerts
+function showAlert(message, type = 'info') {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} fixed top-4 right-4 p-4 rounded-lg shadow-lg`;
+    
+    // Farben basierend auf dem Typ
+    if (type === 'success') {
+        alertDiv.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+    } else if (type === 'error') {
+        alertDiv.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+    } else {
+        alertDiv.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+    }
+    
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
+}
+
+let currentSort = {
+    column: null,
+    ascending: true
+};
+
+function sortTable(column, tableId = '') {
+    const tableSelector = tableId ? `#${tableId} table` : 'table';
+    const table = document.querySelector(tableSelector);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Reset alle Sortier-Indikatoren
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '↕');
+    
+    // Sortierrichtung umkehren wenn gleiche Spalte
+    if (currentSort.column === column) {
+        currentSort.ascending = !currentSort.ascending;
+    } else {
+        currentSort.column = column;
+        currentSort.ascending = true;
+    }
+    
+    // Sortier-Indikator aktualisieren
+    const indicator = document.getElementById(`sort-${column}`);
+    if (indicator) {
+        indicator.textContent = currentSort.ascending ? '↑' : '↓';
+    }
+    
+    // Zeilen sortieren
+    rows.sort((a, b) => {
+        const aValue = a.children[getColumnIndex(column)].textContent.trim();
+        const bValue = b.children[getColumnIndex(column)].textContent.trim();
+        
+        // Spezielle Behandlung für numerische Werte
+        if (['bestand', 'mindestbestand', 'amount', 'barcode'].includes(column)) {
+            const aNum = parseFloat(aValue.replace(/[^\d.-]/g, ''));
+            const bNum = parseFloat(bValue.replace(/[^\d.-]/g, ''));
+            return currentSort.ascending ? aNum - bNum : bNum - aNum;
+        }
+        
+        // Spezielle Behandlung für Datumsfelder
+        if (column === 'date') {
+            return compareDates(aValue, bValue);
+        }
+        
+        return currentSort.ascending ? 
+            aValue.localeCompare(bValue) : 
+            bValue.localeCompare(aValue);
+    });
+    
+    // Sortierte Zeilen wieder einfügen
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getColumnIndex(column) {
+    const columnMap = {
+        'bezeichnung': 0,
+        'typ': 1,
+        'ort': 2,
+        'bestand': 3,
+        'mindestbestand': 4,
+        'status': 5,
+        'barcode': 6,
+        
+        'material': 0,
+        'worker': 1,
+        'amount': 2,
+        'date': 3,
+        
+        'name': 0,
+        'bereich': 1,
+        'barcode': 2,
+        'email': 3,
+        'date': 0,
+        'worker': 1,
+        'amount': 3,
+        // ... weitere Spalten je nach Bedarf
+    };
+    return columnMap[column] || 0;
+}
+
+function compareDates(a, b) {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return currentSort.ascending ? 
+        dateA - dateB : 
+        dateB - dateA;
+}
+
+// Filter-Funktion
+function filterTable() {
+    const filterInputs = document.querySelectorAll('select[id^="filter"]');
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        filterInputs.forEach(filter => {
+            const filterValue = filter.value.toLowerCase();
+            if (filterValue) {
+                const columnIndex = getFilterColumnIndex(filter.id);
+                const cellValue = row.children[columnIndex].textContent.toLowerCase();
+                if (!cellValue.includes(filterValue)) {
+                    showRow = false;
+                }
+            }
+        });
+        
+        row.style.display = showRow ? '' : 'none';
+    });
+}
+
+function getFilterColumnIndex(filterId) {
+    // Anpassen je nach Tabelle/Seite
+    const filterMap = {
+        'filterBereich': 1,
+        'filterOrt': 2,
+        'filterStatus': 5,
+        // ... weitere Filter je nach Bedarf
+    };
+    return filterMap[filterId] || 0;
+}
+
+// Event-Listener für Filter
+document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+    filter.addEventListener('change', filterTable);
+});
+
+document.getElementById('item_barcode').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const isConsumable = selectedOption.parentElement.label === 'Verbrauchsmaterial';
+    const amountField = document.getElementById('amount');
+    
+    if (isConsumable) {
+        amountField.removeAttribute('disabled');
+        amountField.setAttribute('required', 'required');
+    } else {
+        amountField.value = '1';
+        amountField.setAttribute('disabled', 'disabled');
+        amountField.removeAttribute('required');
+    }
+});
+
+function handleLending(form) {
+    // Debug-Ausgabe der Formularwerte
+    console.log('Worker:', form.worker_barcode.value);
+    console.log('Item Type:', form.item_type.value);
+    console.log('Item Barcode:', form.item_barcode.value);
+    console.log('Amount:', form.amount?.value || '1');
+
+    const formData = {
+        worker_barcode: form.worker_barcode.value,
+        item_type: form.item_type.value,
+        item_barcode: form.item_barcode.value,
+        amount: parseInt(form.amount?.value || '1'),
+        action: 'lend'
+    };
+
+    fetch('/api/process_lending', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.message || 'Fehler bei der Ausleihe');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler bei der Ausleihe');
+    });
+}
+
+// Optional: Autocomplete für Mitarbeiter
+document.getElementById('workerBarcode').addEventListener('input', function(e) {
+    const query = e.target.value;
+    if (query.length > 2) {
+        fetch(`/api/search_worker/${query}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error && !data.multiple) {
+                    this.value = data.worker.barcode;
+                }
+            });
+    }
+});
+</script>
+{% endblock %}
