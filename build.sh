@@ -11,12 +11,20 @@ pip install -r requirements.txt
 # Install gunicorn explicitly
 pip install gunicorn
 
-# Print Python and pip locations
+# Print locations and debug info
+echo "Python location:"
 which python
+echo "Pip location:"
 which pip
+echo "Gunicorn location:"
 which gunicorn
+echo "Current directory:"
+pwd
+echo "List virtual environment bin:"
+ls -la /opt/render/project/venv/bin || echo "venv/bin not found"
+ls -la /opt/render/project/.venv/bin || echo ".venv/bin not found"
 
-# Add to PATH
-export PATH="$PATH:/opt/render/project/.venv/bin"
+# Add both possible paths to PATH
+export PATH="$PATH:/opt/render/project/venv/bin:/opt/render/project/.venv/bin"
 
 # Hier können weitere Build-Schritte hinzugefügt werden 
