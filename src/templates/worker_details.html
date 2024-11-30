@@ -45,7 +45,9 @@
                 <!-- E-Mail -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">E-Mail</label>
-                    <input type="email" name="email" value="{{ worker.email }}"
+                    <input type="email" name="email" 
+                           value="{{ worker.email|replace('ö', 'oe')|replace('ä', 'ae')|replace('ü', 'ue')|replace('ß', 'ss') }}"
+                           required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 

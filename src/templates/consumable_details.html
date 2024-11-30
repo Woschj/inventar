@@ -20,7 +20,10 @@
         <div>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ consumable.bezeichnung }}</h2>
             
-            <form action="{{ url_for('update_consumable', barcode=consumable.barcode) }}" method="post" class="space-y-6">
+            <form action="{{ url_for('update_consumable_stock') }}" method="post" class="space-y-6">
+                <!-- Verstecktes Feld für Barcode -->
+                <input type="hidden" name="barcode" value="{{ consumable.barcode }}">
+                
                 <!-- Barcode (nicht editierbar) -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Barcode</label>
@@ -52,18 +55,24 @@
                 <!-- Bestandsinformationen -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Aktueller Bestand</label>
-                    <div class="flex space-x-2">
-                        <input type="number" name="aktueller_bestand" value="{{ consumable.aktueller_bestand }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <input type="text" name="einheit" value="{{ consumable.einheit }}"
-                               class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
+                    <input type="number" 
+                           name="aktueller_bestand" 
+                           value="{{ consumable.aktueller_bestand }}"
+                           min="0"
+                           onchange="validateNonNegative(this)"
+                           required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 
                 <!-- Mindestbestand -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Mindestbestand</label>
-                    <input type="number" name="mindestbestand" value="{{ consumable.mindestbestand }}"
+                    <input type="number" 
+                           name="mindestbestand" 
+                           value="{{ consumable.mindestbestand }}"
+                           min="0"
+                           onchange="validateNonNegative(this)"
+                           required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
 
@@ -128,4 +137,14 @@
         </div>
     {% endif %}
 </div>
+
+<!-- JavaScript für die Validierung -->
+<script>
+function validateNonNegative(input) {
+    if (input.value < 0) {
+        input.value = 0;
+        alert('Negative Werte sind nicht erlaubt.');
+    }
+}
+</script>
 {% endblock %} 

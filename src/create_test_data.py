@@ -73,6 +73,17 @@ def init_dbs():
                     FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
                 );
                 
+                CREATE TABLE IF NOT EXISTS tool_status_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tool_barcode TEXT NOT NULL,
+                    old_status TEXT,
+                    new_status TEXT,
+                    comment TEXT,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
+                );
+                
                 CREATE TABLE IF NOT EXISTS deleted_tools (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     barcode TEXT NOT NULL,
@@ -80,7 +91,6 @@ def init_dbs():
                     ort TEXT,
                     typ TEXT,
                     status TEXT,
-                    image_path TEXT,
                     deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     deleted_by TEXT
                 );
@@ -136,12 +146,12 @@ def init_dbs():
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     worker_barcode TEXT NOT NULL,
                     item_barcode TEXT NOT NULL,
-                    item_type TEXT NOT NULL,  -- 'tool' oder 'consumable'
+                    item_type TEXT NOT NULL,
                     checkout_time DATETIME DEFAULT CURRENT_TIMESTAMP,
                     return_time DATETIME,
                     amount INTEGER DEFAULT 1,
-                    old_stock INTEGER,  -- für Verbrauchsmaterial
-                    new_stock INTEGER,  -- für Verbrauchsmaterial
+                    old_stock INTEGER,
+                    new_stock INTEGER,
                     FOREIGN KEY (worker_barcode) REFERENCES workers(barcode)
                 );
             ''')
@@ -159,8 +169,12 @@ def clear_existing_data():
     try:
         with sqlite3.connect(WORKERS_DB) as conn:
             conn.execute('DELETE FROM workers')
+            conn.execute('DELETE FROM workers_history')
         with sqlite3.connect(TOOLS_DB) as conn:
             conn.execute('DELETE FROM tools')
+            conn.execute('DELETE FROM tools_history')
+            conn.execute('DELETE FROM tool_status_history')
+            conn.execute('DELETE FROM deleted_tools')
         with sqlite3.connect(LENDINGS_DB) as conn:
             conn.execute('DELETE FROM lendings')
         with sqlite3.connect(CONSUMABLES_DB) as conn:
@@ -365,42 +379,41 @@ def create_test_data():
                 
                 for consumable in consumables:
                     num_ausgaben = random.randint(1, 5)
-                    current_stock = consumable['aktueller_bestand']
+                    current_stock = max(0, consumable['aktueller_bestand'])  # Stelle sicher, dass der Anfangsbestand nicht negativ ist
                     
                     for _ in range(num_ausgaben):
                         worker_barcode = random.choice(workers)
                         days_ago = random.randint(1, 30)
                         ausgabe_date = datetime.now() - timedelta(days=days_ago)
                         
-                        if current_stock > consumable['mindestbestand']:
+                        # Berechne maximale Entnahmemenge
+                        if current_stock > 0:
                             max_amount = min(
-                                int(current_stock * 0.2),
-                                current_stock - consumable['mindestbestand']
+                                int(current_stock * 0.2),  # Maximal 20% des aktuellen Bestands
+                                current_stock  # Aber nie mehr als verfügbar ist
                             )
                             amount = random.randint(1, max(1, max_amount))
-                        else:
-                            amount = random.randint(1, 5)
-                        
-                        old_stock = current_stock
-                        current_stock -= amount
-                        
-                        all_lendings.append((
-                            worker_barcode,
-                            consumable['barcode'],
-                            'consumable',
-                            ausgabe_date,
-                            ausgabe_date,  # return_time gleich checkout_time bei Verbrauchsmaterial
-                            amount,
-                            old_stock,
-                            current_stock
-                        ))
-                        
-                        # Aktualisiere den Bestand in der Consumables-Tabelle
-                        cons_conn.execute('''
-                            UPDATE consumables 
-                            SET aktueller_bestand = ? 
-                            WHERE barcode = ?
-                        ''', (current_stock, consumable['barcode']))
+                            
+                            old_stock = current_stock
+                            current_stock = max(0, current_stock - amount)  # Verhindere negative Bestände
+                            
+                            all_lendings.append((
+                                worker_barcode,
+                                consumable['barcode'],
+                                'consumable',
+                                ausgabe_date,
+                                ausgabe_date,  # return_time gleich checkout_time bei Verbrauchsmaterial
+                                amount,
+                                old_stock,
+                                current_stock
+                            ))
+                            
+                            # Aktualisiere den Bestand in der Consumables-Tabelle
+                            cons_conn.execute('''
+                                UPDATE consumables 
+                                SET aktueller_bestand = ? 
+                                WHERE barcode = ?
+                            ''', (current_stock, consumable['barcode']))
             
             # Füge alle Ausleihen/Ausgaben ein
             conn.executemany('''
