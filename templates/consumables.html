@@ -307,4 +307,48 @@ document.getElementById('filterStatus').addEventListener('change', function() {
     }
 });
 </script>
+
+<!-- Vor der bestehenden Tabelle -->
+<div class="md:hidden">
+    {% for item in consumables %}
+    <div class="bg-white shadow rounded-lg mb-4 p-4">
+        <div class="flex justify-between items-start">
+            <div>
+                <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}"
+                   class="text-blue-600 hover:text-blue-800 font-medium">
+                    {{ item.bezeichnung }}
+                </a>
+                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                    {% if item.status == 'Leer' %}bg-red-100 text-red-800
+                    {% elif item.status == 'Nachbestellen' %}bg-yellow-100 text-yellow-800
+                    {% else %}bg-green-100 text-green-800{% endif %}">
+                    {{ item.status }}
+                </span>
+            </div>
+            {% if session.get('is_admin') %}
+            <button onclick="deleteConsumable('{{ item.barcode }}')" 
+                    class="text-red-600 hover:text-red-800">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+        <div class="mt-2 space-y-1 text-sm text-gray-500">
+            <p><span class="font-medium">Typ:</span> {{ item.typ }}</p>
+            <p><span class="font-medium">Ort:</span> {{ item.ort }}</p>
+            <p><span class="font-medium">Bestand:</span> {{ item.aktueller_bestand }} {{ item.einheit }}
+                {% if item.mindestbestand %}
+                <span class="text-xs text-gray-400">(Min: {{ item.mindestbestand }})</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Bestehende Tabelle nur für Desktop -->
+<div class="hidden md:block overflow-x-auto">
+    <!-- Ihre bestehende Tabelle hier -->
+</div>
 {% endblock %} 

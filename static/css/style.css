@@ -1,34 +1,72 @@
-/* Basis-Styles für mobile Geräte */
-@media screen and (max-width: 768px) {
-    /* Tabellen responsive machen */
-    table {
-        display: block;
-        overflow-x: auto;
+/* Basis Styles */
+.navbar {
+    padding: 10px;
+}
+
+/* Responsive Navigation */
+@media screen and (max-width: 991px) { /* Bootstrap's lg breakpoint */
+    /* Hamburger Menu Button anzeigen */
+    .navbar-toggler {
+        display: block !important;
+        margin-right: 10px;
     }
-    
-    /* Buttons und Inputs volle Breite */
-    .btn, input[type="text"], input[type="number"] {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    
-    /* Container-Padding anpassen */
-    .container {
+
+    /* Collapsed Menü */
+    .navbar-collapse {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 1000;
         padding: 10px;
     }
-    
-    /* Navigation für mobile Geräte */
+
+    /* Wenn Menü geöffnet ist */
+    .navbar-collapse.show {
+        display: block !important;
+    }
+
+    /* Navigation Links */
     .navbar-nav {
-        flex-direction: column;
+        flex-direction: column !important;
+    }
+
+    .nav-item {
+        width: 100%;
+        margin: 5px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .nav-item:last-child {
+        border-bottom: none;
+    }
+
+    .nav-link {
+        padding: 12px 15px !important;
+        display: block;
+    }
+
+    /* QuickScan Button im Menü */
+    .quickscan-button {
+        width: 100%;
+        margin: 10px 0;
+        text-align: left;
+    }
+}
+
+/* Desktop Styles */
+@media screen and (min-width: 992px) {
+    .navbar-collapse {
+        display: flex !important;
     }
     
-    /* Formular-Elemente stapeln */
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .navbar-toggler {
+        display: none !important;
     }
-} 
+}
 
 /* Beispiel für eine responsive Card */
 .col-12.col-md-6.col-lg-4 {
@@ -44,5 +82,82 @@
 @media screen and (min-width: 992px) {
     .col-12.col-md-6.col-lg-4 {
         width: 33.33%;
+    }
+}
+
+/* Basis Styles */
+.table-responsive {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Mobile Optimierung für Tabellen */
+@media screen and (max-width: 768px) {
+    /* Tabellen als Cards darstellen */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* Header verstecken aber für Screen Reader zugänglich lassen */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /* Zeilen als Cards stylen */
+    tr {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Zellen untereinander anordnen */
+    td {
+        position: relative;
+        padding: 0.5rem 0;
+        padding-left: 50%;
+        text-align: right;
+        border: none;
+    }
+
+    /* Labels für die Daten */
+    td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    /* Aktions-Buttons */
+    td:last-child {
+        padding-left: 0;
+        text-align: center;
+    }
+
+    /* Buttons in der letzten Zelle */
+    td:last-child button,
+    td:last-child a {
+        margin: 0.25rem;
+    }
+
+    /* Suchfeld und Filter volle Breite */
+    .search-container input,
+    .search-container select {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Pagination anpassen */
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
     }
 }
