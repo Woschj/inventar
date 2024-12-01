@@ -17,6 +17,121 @@
     </style>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script>
+    function getFilterColumnIndex(filterType) {
+        const path = window.location.pathname;
+        
+        // Mapping für verschiedene Seiten
+        const columnMaps = {
+            '/workers': {
+                'filter_abteilung': 1,  // Spalte für Abteilung
+                'filter_status': 2      // Spalte für Status
+            },
+            '/consumables': {
+                'filter_typ': 1,        // Spalte für Typ
+                'filter_ort': 2,        // Spalte für Ort
+                'filter_status': 3      // Spalte für Status
+            },
+            '/': {                      // Werkzeuge (index)
+                'filter_ort': 1,        // Spalte für Ort
+                'filter_typ': 2,        // Spalte für Typ
+                'filter_status': 3      // Spalte für Status
+            }
+        };
+
+        // Wähle das richtige Mapping basierend auf dem Pfad
+        const mapping = columnMaps[path] || columnMaps['/'];
+        return mapping[filterType] ?? -1;
+    }
+
+    function filterAndSearch() {
+        const searchText = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        const rows = document.querySelectorAll('tbody tr');
+        const path = window.location.pathname;
+        
+        // Performance-Optimierung: Cache DOM-Selektionen
+        const activeFilters = Array.from(document.querySelectorAll('select[name^="filter_"]'))
+            .filter(select => select.value)
+            .map(select => ({
+                type: select.name,
+                value: select.value.toLowerCase(),
+                columnIndex: getFilterColumnIndex(select.name)
+            }));
+
+        // Batch-Verarbeitung für bessere Performance
+        const updates = [];
+        
+        rows.forEach(row => {
+            if (!row || !row.cells) return;
+            
+            // Suche
+            const matchesSearch = searchText === '' || row.textContent.toLowerCase().includes(searchText);
+            
+            // Filter
+            const matchesFilters = activeFilters.every(filter => {
+                if (filter.columnIndex === -1) return true;
+                const cell = row.cells[filter.columnIndex]; // Verwende cells statt children
+                if (!cell) return true;
+                return cell.textContent.trim().toLowerCase() === filter.value;
+            });
+
+            // Sammle Updates
+            updates.push({
+                element: row,
+                display: matchesSearch && matchesFilters ? '' : 'none'
+            });
+        });
+
+        // Batch-Update des DOM
+        requestAnimationFrame(() => {
+            updates.forEach(update => {
+                update.element.style.display = update.display;
+            });
+        });
+    }
+
+    function initializeFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const filterSelects = document.querySelectorAll('select[name^="filter_"]');
+        
+        // Suchfeld-Handler
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                requestAnimationFrame(filterAndSearch);
+            });
+        }
+        
+        // Filter-Select-Handler
+        filterSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                const params = new URLSearchParams(window.location.search);
+                filterSelects.forEach(sel => {
+                    if (sel.value) {
+                        params.set(sel.name, sel.value);
+                    } else {
+                        params.delete(sel.name);
+                    }
+                });
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
+        });
+
+        // Setze gespeicherte Filter-Werte
+        const params = new URLSearchParams(window.location.search);
+        filterSelects.forEach(select => {
+            const savedValue = params.get(select.name);
+            if (savedValue) {
+                select.value = savedValue;
+            }
+        });
+
+        // Initial filtering
+        requestAnimationFrame(filterAndSearch);
+    }
+
+    // Initialisierung nach dem Laden der Seite
+    document.addEventListener('DOMContentLoaded', initializeFilters);
+    </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <!-- Navigation -->
@@ -692,5 +807,7 @@
         });
     }
     </script>
+    
+    {% block scripts %}{% endblock %}
 </body>
 </html>

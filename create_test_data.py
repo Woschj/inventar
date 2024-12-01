@@ -4,6 +4,7 @@ import os
 from app import DBConfig, get_db_connection
 import logging
 from datetime import datetime, timedelta
+import traceback
 
 # Absolute Pfade zu den Datenbanken
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -196,6 +197,7 @@ def create_random_date(start_date, end_date):
     return start_date + timedelta(days=random_number_of_days)
 
 def create_test_data():
+    print("\n=== ERSTELLE TESTDATEN ===")
     try:
         # Mitarbeiter-Testdaten
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
@@ -312,19 +314,20 @@ def create_test_data():
                         bezeichnung = f"{material} Typ-{random.randint(1,5)}"
                         ort = f"Lager {random.choice(['A','B','C'])}-{random.randint(1,5)}"
                         
+                        # Berechne realistischen aktuellen Bestand
                         if verbrauch == 'hoch':
                             aktueller_bestand = random.randint(
-                                int(min_bestand * 0.2), 
+                                max(1, int(min_bestand * 0.2)), 
                                 int(min_bestand * 1.5)
                             )
                         elif verbrauch == 'mittel':
                             aktueller_bestand = random.randint(
-                                int(min_bestand * 0.5), 
+                                max(1, int(min_bestand * 0.5)), 
                                 int(min_bestand * 2)
                             )
                         else:  # niedrig
                             aktueller_bestand = random.randint(
-                                int(min_bestand * 0.8), 
+                                max(1, int(min_bestand * 0.8)), 
                                 int(min_bestand * 3)
                             )
                         
@@ -379,7 +382,9 @@ def create_test_data():
                 
                 for consumable in consumables:
                     num_ausgaben = random.randint(1, 5)
-                    current_stock = max(0, consumable['aktueller_bestand'])  # Stelle sicher, dass der Anfangsbestand nicht negativ ist
+                    # Sicherstellen dass aktueller_bestand eine Zahl ist
+                    aktueller_bestand = consumable.get('aktueller_bestand', 0) or 0
+                    current_stock = max(0, aktueller_bestand)  # Jetzt ist es sicher eine Zahl
                     
                     for _ in range(num_ausgaben):
                         worker_barcode = random.choice(workers)
@@ -425,8 +430,42 @@ def create_test_data():
             conn.commit()
             logging.info(f"{len(all_lendings)} Ausleihen/Ausgaben erstellt")
 
+        # Verbrauchsmaterialien
+        print("\nAktualisiere Verbrauchsmaterialien...")
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            consumables = [dict(row) for row in conn.execute('SELECT * FROM consumables').fetchall()]
+            
+            for consumable in consumables:
+                # Setze Standardwerte für None-Werte
+                consumable['aktueller_bestand'] = consumable.get('aktueller_bestand', 0) or 0
+                consumable['mindestbestand'] = consumable.get('mindestbestand', 0) or 0
+                
+                # Stelle sicher, dass der Anfangsbestand nicht negativ ist
+                current_stock = max(0, consumable['aktueller_bestand'])
+                
+                # Berechne Status basierend auf Beständen
+                if current_stock == 0:
+                    status = 'Leer'
+                elif current_stock <= consumable['mindestbestand']:
+                    status = 'Nachbestellen'
+                else:
+                    status = 'Verfügbar'
+                    
+                # Update den Status in der Datenbank
+                conn.execute('''
+                    UPDATE consumables 
+                    SET aktueller_bestand = ?,
+                        status = ?
+                    WHERE barcode = ?
+                ''', (current_stock, status, consumable['barcode']))
+                
+                print(f"Material {consumable['barcode']}: Bestand={current_stock}, Status={status}")
+            
+            conn.commit()
+
     except Exception as e:
-        logging.error(f"Fehler beim Erstellen der Testdaten: {str(e)}")
+        print(f"\nFEHLER beim Erstellen der Testdaten: {str(e)}")
+        print(traceback.format_exc())
         raise
 
 if __name__ == "__main__":
