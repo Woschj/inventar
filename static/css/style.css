@@ -1,0 +1,48 @@
+/* Basis-Styles für mobile Geräte */
+@media screen and (max-width: 768px) {
+    /* Tabellen responsive machen */
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    /* Buttons und Inputs volle Breite */
+    .btn, input[type="text"], input[type="number"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    /* Container-Padding anpassen */
+    .container {
+        padding: 10px;
+    }
+    
+    /* Navigation für mobile Geräte */
+    .navbar-nav {
+        flex-direction: column;
+    }
+    
+    /* Formular-Elemente stapeln */
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+} 
+
+/* Beispiel für eine responsive Card */
+.col-12.col-md-6.col-lg-4 {
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .col-12.col-md-6.col-lg-4 {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .col-12.col-md-6.col-lg-4 {
+        width: 33.33%;
+    }
+}
