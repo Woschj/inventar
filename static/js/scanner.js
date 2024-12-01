@@ -57,4 +57,41 @@ class BarcodeScanner {
         this.stopScanning();
         // Neustart des Scanners mit neuer Kamera
     }
-} 
+}
+
+async function openQuickScan(event) {
+    event.preventDefault();
+    
+    // Überprüfen der Browser-Unterstützung
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Ihr Browser unterstützt keine Kamera-Funktionen. Bitte verwenden Sie einen modernen Browser oder aktivieren Sie HTTPS.');
+        return;
+    }
+
+    try {
+        // Überprüfen der Kamera-Berechtigung
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        stream.getTracks().forEach(track => track.stop()); // Stream wieder freigeben
+
+        // Wenn die Berechtigung erfolgreich war, Modal öffnen
+        window.location.href = '/quick_scan';
+    } catch (error) {
+        console.error('Kamera-Fehler:', error);
+        
+        if (error.name === 'NotAllowedError') {
+            alert('Bitte erlauben Sie den Zugriff auf die Kamera, um den Scanner zu nutzen.');
+        } else if (error.name === 'NotFoundError') {
+            alert('Keine Kamera gefunden. Bitte stellen Sie sicher, dass Ihr Gerät über eine Kamera verfügt.');
+        } else {
+            alert('Es gab einen Fehler beim Zugriff auf die Kamera. Bitte versuchen Sie es erneut oder verwenden Sie einen anderen Browser.');
+        }
+    }
+}
+
+// Wenn das Dokument geladen ist
+document.addEventListener('DOMContentLoaded', function() {
+    // Überprüfen der HTTPS-Verbindung
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+        console.warn('Scanner funktioniert am besten mit HTTPS');
+    }
+}); 

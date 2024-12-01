@@ -197,5 +197,34 @@ function resetScan() {
 window.addEventListener('beforeunload', () => {
     stopScanning();
 });
+
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        // Überprüfen der Browser-Unterstützung
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error('Browser unterstützt keine Kamera-Funktionen');
+        }
+
+        // Kamera-Zugriff anfordern
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: 'environment', // Rückkamera bevorzugen
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        });
+
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+        
+        // Rest des existierenden Codes...
+        
+    } catch (error) {
+        console.error('Scanner-Fehler:', error);
+        document.getElementById('scan-error').textContent = 
+            'Kamera konnte nicht aktiviert werden. Bitte überprüfen Sie die Kamera-Berechtigungen und laden Sie die Seite neu.';
+        document.getElementById('scan-error').classList.remove('hidden');
+    }
+});
 </script>
 {% endblock %} 
