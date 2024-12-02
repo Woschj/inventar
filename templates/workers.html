@@ -1,108 +1,84 @@
 <!-- templates/workers.html -->
 {% extends "base.html" %}
 
-{% block title %}Mitarbeiter{% endblock %}
-
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Mitarbeiterübersicht</h1>
-        {% if session.get('is_admin') %}
-        <a href="{{ url_for('add_worker') }}" 
-           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-            Neuen Mitarbeiter hinzufügen
-        </a>
-        {% endif %}
-    </div>
+<div class="container mx-auto px-4 py-8">
+    <!-- Suchleiste und Filter -->
+    <div class="mb-6">
+        <!-- Suchleiste -->
+        <div class="mb-4">
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Suchen..." 
+                       class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+        </div>
 
-    <!-- Filter-Bereich -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Suchfeld -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
-            <input type="text" id="searchInput"
-                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Name, Abteilung...">
-        </div>
-        
-        <!-- Abteilung Filter -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Abteilung</label>
-            <select name="filter_abteilung" id="filterAbteilung" 
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle Abteilungen</option>
-                {% for abteilung in abteilungen %}
-                    <option value="{{ abteilung }}" 
-                            {% if request.args.get('filter_abteilung') == abteilung %}selected{% endif %}>
-                        {{ abteilung }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <!-- Status Filter -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select name="filter_status" id="filterStatus"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle Status</option>
-                <option value="Aktiv" {% if request.args.get('filter_status') == 'Aktiv' %}selected{% endif %}>Aktiv</option>
-                <option value="Inaktiv" {% if request.args.get('filter_status') == 'Inaktiv' %}selected{% endif %}>Inaktiv</option>
-            </select>
+        <!-- Filter -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Bereich Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Bereich</label>
+                <select name="filter_bereich" 
+                        onchange="this.form.submit()"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Alle</option>
+                    {% for bereich in bereiche %}
+                    <option value="{{ bereich }}" {% if filter_bereich == bereich %}selected{% endif %}>{{ bereich }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="flex items-end">
+                <a href="{{ url_for('workers') }}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    Filter zurücksetzen
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Tabelle -->
-    <div class="overflow-x-auto">
+    <!-- Mitarbeiter Tabelle -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Abteilung
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Aktionen
-                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bereich</th>
+                    {% if is_admin %}
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aktionen</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for worker in workers %}
-                <tr>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ worker.barcode }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ worker.fullname }}</div>
-                        <div class="text-sm text-gray-500">{{ worker.email }}</div>
+                        <a href="{{ url_for('worker_details', barcode=worker.barcode) }}" 
+                           class="text-blue-600 hover:text-blue-900">
+                            {{ worker.lastname }}, {{ worker.name }}
+                        </a>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ worker.abteilung }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {% if worker.status == 'Aktiv' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                            {{ worker.status }}
-                        </span>
-                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ worker.bereich }}</td>
+                    {% if is_admin %}
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('worker_details', barcode=worker.barcode) }}"
-                           class="text-gray-600 hover:text-gray-900 mr-4">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <a href="{{ url_for('edit_worker', barcode=worker.barcode) }}"
-                           class="text-blue-600 hover:text-blue-900 mr-4">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="confirmDelete('{{ worker.barcode }}', 'worker')"
+                        <button onclick="deleteWorker('{{ worker.barcode }}')" 
                                 class="text-red-600 hover:text-red-900">
-                            <i class="fas fa-trash"></i>
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
                         </button>
-                        {% endif %}
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -118,26 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFilters();
 });
 
-function deleteWorker(workerId) {
+function deleteWorker(barcode) {
     if (confirm('Möchten Sie diesen Mitarbeiter wirklich löschen?')) {
-        fetch(`/api/workers/${workerId}`, {
+        fetch(`/worker/${barcode}/delete`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.reload();
+                location.reload();
             } else {
-                alert(data.error || 'Fehler beim Löschen');
+                alert('Fehler beim Löschen des Mitarbeiters');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Fehler beim Löschen');
         });
     }
 }

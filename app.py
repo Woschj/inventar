@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, g, session
 from werkzeug.exceptions import BadRequest
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import traceback
 from functools import wraps
@@ -12,6 +12,7 @@ from routes import export_bp
 import sys
 import subprocess
 from importlib import metadata
+import random
 
 
 def install_required_packages():
@@ -495,75 +496,73 @@ def init_app():
 def index():
     print("\n=== INDEX ROUTE ===")
     print("Lade Hauptseite...")
+    
     try:
-        print("Initialisiere leere Listen...")
-        tools = []
-        consumables = []
+        # Filter-Parameter
+        filter_status = request.args.get('filter_status')
+        filter_ort = request.args.get('filter_ort')
+        filter_typ = request.args.get('filter_typ')
         
-        print("\nVerbinde mit Tools-Datenbank...")
+        print(f"Filter: Status={filter_status}, Ort={filter_ort}, Typ={filter_typ}")
+        
         with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
-            print("Führe Werkzeug-Abfrage aus...")
-            tools_query = '''
+            # Hole Filter-Optionen
+            orte = [row['ort'] for row in tools_conn.execute(
+                'SELECT DISTINCT ort FROM tools WHERE ort IS NOT NULL ORDER BY ort'
+            ).fetchall()]
+            
+            typen = [row['typ'] for row in tools_conn.execute(
+                'SELECT DISTINCT typ FROM tools WHERE typ IS NOT NULL ORDER BY typ'
+            ).fetchall()]
+            
+            # Basis-Query
+            query = '''
                 SELECT t.*, 
-                       CASE 
-                           WHEN l.return_time IS NULL THEN w.name || ' ' || w.lastname
-                           ELSE NULL 
-                       END as current_user,
-                       CASE
-                           WHEN t.status = 'Ausgeliehen' THEN 
-                               'Ausgeliehen seit ' || datetime(l.checkout_time)
-                           WHEN t.status = 'Defekt' THEN
-                               'Defekt seit ' || datetime(t.defect_date)
-                           ELSE t.status
-                       END as status_display
+                       w.name || ' ' || w.lastname as current_worker
                 FROM tools t
                 LEFT JOIN lendings_db.lendings l ON t.barcode = l.item_barcode 
                     AND l.return_time IS NULL
                 LEFT JOIN workers_db.workers w ON l.worker_barcode = w.barcode
-                ORDER BY t.gegenstand
+                WHERE 1=1
             '''
+            params = []
             
-            print("Verbinde zusätzliche Datenbanken...")
+            # Filter anwenden
+            if filter_status:
+                query += ' AND t.status = ?'
+                params.append(filter_status)
+            if filter_ort:
+                query += ' AND t.ort = ?'
+                params.append(filter_ort)
+            if filter_typ:
+                query += ' AND t.typ = ?'
+                params.append(filter_typ)
+                
+            query += ' ORDER BY t.gegenstand'
+            
+            # Datenbank-Verbindungen
             tools_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
             tools_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
             
-            print("Führe Hauptabfrage für Werkzeuge aus...")
-            tools = tools_conn.execute(tools_query).fetchall()
-            print(f"Gefundene Werkzeuge: {len(tools)}")
+            # Hauptabfrage ausführen
+            tools = tools_conn.execute(query, params).fetchall()
             
-        print("\nVerbinde mit Consumables-Datenbank...")
-        with get_db_connection(DBConfig.CONSUMABLES_DB) as consumables_conn:
-            print("Führe Verbrauchsmaterial-Abfrage aus...")
-            consumables = consumables_conn.execute('''
-                SELECT *,
-                CASE 
-                    WHEN aktueller_bestand = 0 THEN 'Leer'
-                    WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
-                    ELSE 'Verfügbar'
-                END as status
-                FROM consumables
-                ORDER BY bezeichnung
-            ''').fetchall()  # Entfernt: WHERE deleted = 0
-            print(f"Gefundene Verbrauchsmaterialien: {len(consumables)}")
-        
-        print("\nBereite Template-Rendering vor...")
-        print(f"Sende {len(tools)} Werkzeuge und {len(consumables)} Verbrauchsmaterialien ans Template")
-        return render_template('index.html', 
-                             tools=tools,
-                             consumables=consumables,
-                             is_admin=session.get('is_admin', False))
-                             
+            return render_template('index.html',
+                                 tools=tools,
+                                 orte=orte,
+                                 typen=typen,
+                                 filter_status=filter_status,
+                                 filter_ort=filter_ort,
+                                 filter_typ=filter_typ)
+                                 
     except Exception as e:
-        print(f"\nFEHLER in Index-Route:")
-        print(f"Fehlertyp: {type(e).__name__}")
-        print(f"Fehlermeldung: {str(e)}")
-        print("Stacktrace:")
-        print(traceback.format_exc())
-        flash('Fehler beim Laden der Übersicht', 'error')
+        print(f"Fehler beim Laden der Hauptseite: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Laden', 'error')
         return render_template('index.html', 
                              tools=[],
-                             consumables=[],
-                             is_admin=session.get('is_admin', False))
+                             orte=[],
+                             typen=[])
 
 @app.route('/admin')
 @admin_required
@@ -675,140 +674,97 @@ def admin_panel():
 def workers():
     print("\n=== WORKERS ROUTE ===")
     try:
-        print("Hole Filter-Parameter...")
-        filter_status = request.args.get('filter_status')
-        filter_abteilung = request.args.get('filter_abteilung')
-        print(f"Filter: Status={filter_status}, Abteilung={filter_abteilung}")
+        filter_bereich = request.args.get('filter_bereich')
+        is_admin = session.get('is_admin', False)
         
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            print("Verbinde Lendings-Datenbank...")
-            conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
-            
-            print("Baue SQL-Query...")
-            query = '''
-                SELECT 
-                    w.barcode,
-                    w.name || ' ' || w.lastname as fullname,
-                    w.bereich as abteilung,
-                    w.email,
-                    CASE 
-                        WHEN EXISTS (
-                            SELECT 1 
-                            FROM lendings_db.lendings l 
-                            WHERE l.worker_barcode = w.barcode 
-                            AND l.return_time IS NULL
-                        ) THEN 'Inaktiv'
-                        ELSE 'Aktiv'
-                    END as status
-                FROM workers w
-                WHERE 1=1
-            '''
-            
-            params = []
-            print("Wende Filter an...")
-            if filter_status:
-                print(f"Status-Filter: {filter_status}")
-                query += ''' AND CASE 
-                    WHEN EXISTS (
-                        SELECT 1 
-                        FROM lendings_db.lendings l 
-                        WHERE l.worker_barcode = w.barcode 
-                        AND l.return_time IS NULL
-                    ) THEN 'Inaktiv'
-                    ELSE 'Aktiv'
-                END = ? '''
-                params.append(filter_status)
-                
-            if filter_abteilung:
-                print(f"Abteilungs-Filter: {filter_abteilung}")
-                query += ' AND w.bereich = ?'
-                params.append(filter_abteilung)
-            
-            print("Führe Hauptabfrage aus...")
-            workers = conn.execute(query + ' ORDER BY w.lastname, w.name', params).fetchall()
-            print(f"Gefundene Mitarbeiter: {len(workers)}")
-            
-            print("Hole Abteilungen für Filter...")
-            abteilungen = conn.execute(
+            # Hole alle eindeutigen Bereiche für Filter
+            bereiche = [row['bereich'] for row in conn.execute(
                 'SELECT DISTINCT bereich FROM workers WHERE bereich IS NOT NULL ORDER BY bereich'
-            ).fetchall()
-            print(f"Verfügbare Abteilungen: {len(abteilungen)}")
+            ).fetchall()]
             
-        print("Render Template...")
+            # Basis-Query
+            query = 'SELECT * FROM workers WHERE 1=1'
+            params = []
+            
+            # Filter anwenden
+            if filter_bereich:
+                query += ' AND bereich = ?'
+                params.append(filter_bereich)
+                
+            query += ' ORDER BY lastname, name'
+            
+            workers = conn.execute(query, params).fetchall()
+            
+            return render_template('workers.html',
+                                 workers=workers,
+                                 bereiche=bereiche,
+                                 filter_bereich=filter_bereich,
+                                 is_admin=is_admin)
+                                 
+    except Exception as e:
+        print(f"Fehler: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Laden', 'error')
         return render_template('workers.html', 
-                           workers=workers,
-                           abteilungen=abteilungen)
-                           
-    except sqlite3.Error as e:
-        print(f"FEHLER in workers: {str(e)}")
-        print(traceback.format_exc())
-        flash('Fehler beim Laden der Mitarbeiterliste', 'error')
-        return redirect(url_for('index'))
+                             workers=[],
+                             bereiche=[])
 
 @app.route('/consumables')
 def consumables():
     print("\n=== CONSUMABLES ROUTE ===")
     try:
-        print("Hole Filter-Parameter...")
         filter_status = request.args.get('filter_status')
         filter_ort = request.args.get('filter_ort')
         filter_typ = request.args.get('filter_typ')
+        
         print(f"Filter: Status={filter_status}, Ort={filter_ort}, Typ={filter_typ}")
         
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            print("Baue SQL-Query...")
-            query = '''
-                SELECT *,
-                CASE 
-                    WHEN aktueller_bestand = 0 THEN 'Leer'
-                    WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
-                    ELSE 'Verfügbar'
-                END as status
-                FROM consumables
-                WHERE 1=1
-            '''
+            # Hole Filter-Optionen
+            orte = [row['ort'] for row in conn.execute(
+                'SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL ORDER BY ort'
+            ).fetchall()]
             
+            typen = [row['typ'] for row in conn.execute(
+                'SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL ORDER BY typ'
+            ).fetchall()]
+            
+            # Basis-Query
+            query = 'SELECT * FROM consumables WHERE 1=1'
             params = []
-            print("Wende Filter an...")
+            
+            # Filter anwenden
             if filter_status:
-                print(f"Status-Filter: {filter_status}")
-                query += ''' AND CASE 
-                    WHEN aktueller_bestand = 0 THEN 'Leer'
-                    WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
-                    ELSE 'Verfügbar'
-                END = ? '''
+                query += ' AND status = ?'
                 params.append(filter_status)
-                
             if filter_ort:
-                print(f"Ort-Filter: {filter_ort}")
                 query += ' AND ort = ?'
                 params.append(filter_ort)
-                
             if filter_typ:
-                print(f"Typ-Filter: {filter_typ}")
                 query += ' AND typ = ?'
                 params.append(filter_typ)
+                
+            query += ' ORDER BY bezeichnung'
             
-            print("Führe Hauptabfrage aus...")
-            consumables = conn.execute(query + ' ORDER BY bezeichnung', params).fetchall()
-            print(f"Gefundene Verbrauchsmaterialien: {len(consumables)}")
+            consumables = conn.execute(query, params).fetchall()
             
-            print("Hole Filter-Optionen...")
-            orte = conn.execute('SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL ORDER BY ort').fetchall()
-            typen = conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL ORDER BY typ').fetchall()
-            print(f"Verfügbare Orte: {len(orte)}, Verfügbare Typen: {len(typen)}")
-            
-        print("Render Template...")
-        return render_template('consumables.html', 
-                             consumables=consumables,
-                             orte=orte,
-                             typen=typen)
-                             
+            return render_template('consumables.html',
+                                 consumables=consumables,
+                                 orte=orte,
+                                 typen=typen,
+                                 filter_status=filter_status,
+                                 filter_ort=filter_ort,
+                                 filter_typ=filter_typ)
+                                 
     except Exception as e:
-        print(f"FEHLER in consumables: {str(e)}")
-        print(traceback.format_exc())
-        flash('Fehler beim Laden der Verbrauchsmaterialien', 'error')
-        return redirect(url_for('index'))
+        print(f"Fehler: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Laden', 'error')
+        return render_template('consumables.html', 
+                             consumables=[],
+                             orte=[],
+                             typen=[])
 
 @app.route('/consumables/<barcode>')
 def consumable_details(barcode):
@@ -1087,8 +1043,6 @@ def restore_consumable(id):
             ''', (item['barcode'], item['bezeichnung'], item['ort'],
                   item['typ'], 'Verfügbar', item['mindestbestand'],
                   item['aktueller_bestand'], item['einheit']))
-            
-            conn.execute('DELETE FROM deleted_consumables WHERE id=?', (id,))
             conn.commit()
             
             flash('Verbrauchsmaterial wiederhergestellt', 'success')
@@ -1870,54 +1824,54 @@ def update_stock():
         print(f"FEHLER: {str(e)}")
         return jsonify({'error': str(e)})
 
-@app.route('/manual_lending', methods=['GET', 'POST'])
+@app.route('/manual_lending')
 def manual_lending():
-    print("\n=== MANUAL LENDING ROUTE ===")
-    print(f"Methode: {request.method}")
-    
     try:
-        # Hole Mitarbeiterliste
-        print("Lade Mitarbeiterdaten...")
-        with get_db_connection(DBConfig.WORKERS_DB) as workers_conn:
-            workers = workers_conn.execute('SELECT * FROM workers ORDER BY lastname, name').fetchall()
-            print(f"Gefundene Mitarbeiter: {len(workers)}")
-
-        # Hole aktive Ausleihen
-        print("Lade aktive Ausleihen...")
-        with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
-            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
-            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
-            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
             
-            active_lendings = lendings_conn.execute('''
-                SELECT l.*, 
-                       w.name || ' ' || w.lastname as worker_name,
-                       CASE 
-                           WHEN l.item_type = 'tool' THEN t.gegenstand
-                           ELSE c.bezeichnung
-                       END as item_name,
-                       l.item_type,
-                       COALESCE(c.einheit, 'Stück') as einheit,
-                       datetime(l.checkout_time) as checkout_time
+            # Hole aktuelle Werkzeug-Ausleihen
+            tool_lendings = conn.execute('''
+                SELECT 
+                    l.*,
+                    t.gegenstand,
+                    w.name || ' ' || w.lastname as worker_name,
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time
                 FROM lendings l
-                LEFT JOIN workers_db.workers w ON l.worker_barcode = w.barcode
-                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
-                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
-                WHERE (l.item_type = 'tool' AND l.return_time IS NULL)
-                   OR (l.item_type = 'consumable')
+                JOIN tools_db.tools t ON l.item_barcode = t.barcode
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.return_time IS NULL 
+                AND l.item_type = 'tool'
                 ORDER BY l.checkout_time DESC
             ''').fetchall()
-            print(f"Gefundene aktive Ausleihen: {len(active_lendings)}")
-
-        print("Render Template...")
-        return render_template('manual_lending.html', 
-                             workers=workers, 
-                             active_lendings=active_lendings)
-                             
+            
+            # Hole ausgegebene Verbrauchsgüter
+            consumable_lendings = conn.execute('''
+                SELECT 
+                    l.*,
+                    c.bezeichnung,
+                    w.name || ' ' || w.lastname as worker_name,
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
+                    l.amount as menge
+                FROM lendings l
+                JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.item_type = 'consumable'
+                ORDER BY l.checkout_time DESC
+            ''').fetchall()
+            
+            return render_template('manual_lending.html', 
+                                 tool_lendings=tool_lendings,
+                                 consumable_lendings=consumable_lendings)
     except Exception as e:
-        print(f"FEHLER in manual_lending: {str(e)}")
-        print(traceback.format_exc())
-        return redirect(url_for('index'))
+        print(f"Fehler beim Laden der manuellen Ausleihe: {str(e)}")
+        traceback.print_exc()
+        flash('Fehler beim Laden', 'error')
+        return render_template('manual_lending.html', 
+                             tool_lendings=[],
+                             consumable_lendings=[])
 
 @app.route('/mark_tool_defect/<barcode>', methods=['POST'])
 def mark_tool_defect(barcode):

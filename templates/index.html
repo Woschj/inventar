@@ -13,41 +13,71 @@
         </a>
     </div>
 
-    <!-- Filter und Suchbereich -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Suchfeld -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
-            <input type="text" id="searchInput"
-                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Werkzeug, Barcode...">
+    <!-- Suchleiste und Filter -->
+    <div class="mb-6">
+        <!-- Suchleiste -->
+        <div class="mb-4">
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Suchen..." 
+                       class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
         </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
-            <select id="filterOrt" data-filter-type="ort" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle Orte</option>
-                {% for ort in orte %}
-                    <option value="{{ ort }}" {% if request.args.get('filter_ort') == ort %}selected{% endif %}>{{ ort }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
-            <select id="filterTyp" data-filter-type="typ" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle Typen</option>
-                {% for typ in typen %}
-                    <option value="{{ typ }}" {% if request.args.get('filter_typ') == typ %}selected{% endif %}>{{ typ }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select id="filterStatus" data-filter-type="status" data-column-index="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Alle Status</option>
-                <option value="Verfügbar" {% if request.args.get('filter_status') == 'Verfügbar' %}selected{% endif %}>Verfügbar</option>
-                <option value="Ausgeliehen seit" {% if request.args.get('filter_status') == 'Ausgeliehen' %}selected{% endif %}>Ausgeliehen</option>
-                <option value="Defekt seit" {% if request.args.get('filter_status') == 'Defekt' %}selected{% endif %}>Defekt</option>
-            </select>
+
+        <!-- Filter -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Ort Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
+                <select name="filter_ort" 
+                        onchange="this.form.submit()"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Alle</option>
+                    {% for ort in orte %}
+                    <option value="{{ ort }}" {% if filter_ort == ort %}selected{% endif %}>{{ ort }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Typ Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
+                <select name="filter_typ" 
+                        onchange="this.form.submit()"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Alle</option>
+                    {% for typ in typen %}
+                    <option value="{{ typ }}" {% if filter_typ == typ %}selected{% endif %}>{{ typ }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select name="filter_status" 
+                        onchange="this.form.submit()"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Alle</option>
+                    <option value="Verfügbar" {% if filter_status == 'Verfügbar' %}selected{% endif %}>Verfügbar</option>
+                    <option value="Ausgeliehen" {% if filter_status == 'Ausgeliehen' %}selected{% endif %}>Ausgeliehen</option>
+                    <option value="Defekt" {% if filter_status == 'Defekt' %}selected{% endif %}>Defekt</option>
+                </select>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="flex items-end">
+                <a href="{{ url_for('index') }}" 
+                   class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    Filter zurücksetzen
+                </a>
+            </div>
         </div>
     </div>
 

@@ -57,78 +57,100 @@
         </div>
     </form>
 
-    <!-- Aktive Ausleihen -->
-    <div class="mt-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Aktive Ausleihen & Ausgaben</h2>
-        
-        <!-- Tab Navigation -->
-        <div class="border-b border-gray-200 mb-4">
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <button id="tools-tab"
-                        class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                    Werkzeuge
-                </button>
-                <button id="consumables-tab"
-                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                    Verbrauchsmaterial
-                </button>
-            </nav>
-        </div>
+    <!-- Tab Navigation -->
+    <div class="mb-4 border-b border-gray-200">
+        <nav class="-mb-px flex" aria-label="Tabs">
+            <button onclick="switchTab('tools')" 
+                    id="tools-tab"
+                    class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm border-blue-500 text-blue-600">
+                Werkzeuge
+            </button>
+            <button onclick="switchTab('consumables')" 
+                    id="consumables-tab"
+                    class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Verbrauchsgüter
+            </button>
+        </nav>
+    </div>
 
-        <!-- Tabellen-Container -->
-        <div class="hidden md:block">
-            <!-- Werkzeug-Tabelle -->
-            <div id="tools-table">
+    <!-- Werkzeuge Tab -->
+    <div id="tools-content" class="tab-content">
+        <div class="mt-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Aktuelle Werkzeug-Ausleihen</h2>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgeliehen am</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktion</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Werkzeug</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aktion</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for lending in active_lendings %}
-                        {% if lending.item_type == 'tool' %}
-                        <tr>
-                            <td class="px-6 py-4">{{ lending.item_name }}</td>
-                            <td class="px-6 py-4">{{ lending.worker_name }}</td>
-                            <td class="px-6 py-4">{{ lending.formatted_time }}</td>
-                            <td class="px-6 py-4">
-                                <button onclick="returnTool('{{ lending.item_barcode }}')"
-                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
-                                    Zurückgeben
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for lending in tool_lendings %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.formatted_checkout_time }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ lending.gegenstand }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.item_barcode }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.worker_name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button onclick="returnItem('{{ lending.item_barcode }}')"
+                                        class="text-blue-600 hover:text-blue-900">
+                                    Rückgabe
                                 </button>
                             </td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 
-            <!-- Verbrauchsmaterial-Tabelle -->
-            <div id="consumables-table" class="hidden">
+    <!-- Verbrauchsgüter Tab -->
+    <div id="consumables-content" class="tab-content hidden">
+        <div class="mt-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Ausgegebene Verbrauchsgüter</h2>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Material</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgegeben am</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Artikel</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menge</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ausgegeben am</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for lending in active_lendings %}
-                        {% if lending.item_type == 'consumable' %}
-                        <tr>
-                            <td class="px-6 py-4">{{ lending.item_name }}</td>
-                            <td class="px-6 py-4">{{ lending.worker_name }}</td>
-                            <td class="px-6 py-4">{{ lending.amount }} {{ lending.einheit }}</td>
-                            <td class="px-6 py-4">{{ lending.formatted_time }}</td>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for lending in consumable_lendings %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.formatted_checkout_time }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ lending.bezeichnung }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.item_barcode }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.worker_name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ lending.amount }}
+                            </td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -263,6 +285,26 @@ function handleLending(form) {
         console.error('Error:', error);
         alert('Fehler bei der Ausleihe/Ausgabe');
     });
+}
+
+function switchTab(tabName) {
+    // Alle Tab-Inhalte ausblenden
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    // Alle Tab-Buttons zurücksetzen
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('border-blue-500', 'text-blue-600');
+        button.classList.add('border-transparent', 'text-gray-500');
+    });
+    
+    // Gewählten Tab anzeigen
+    document.getElementById(`${tabName}-content`).classList.remove('hidden');
+    
+    // Gewählten Button hervorheben
+    document.getElementById(`${tabName}-tab`).classList.remove('border-transparent', 'text-gray-500');
+    document.getElementById(`${tabName}-tab`).classList.add('border-blue-500', 'text-blue-600');
 }
 </script>
 {% endblock %}
