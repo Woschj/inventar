@@ -508,7 +508,14 @@ def index():
                        CASE 
                            WHEN l.return_time IS NULL THEN w.name || ' ' || w.lastname
                            ELSE NULL 
-                       END as current_user
+                       END as current_user,
+                       CASE
+                           WHEN t.status = 'Ausgeliehen' THEN 
+                               'Ausgeliehen seit ' || datetime(l.checkout_time)
+                           WHEN t.status = 'Defekt' THEN
+                               'Defekt seit ' || datetime(t.defect_date)
+                           ELSE t.status
+                       END as status_display
                 FROM tools t
                 LEFT JOIN lendings_db.lendings l ON t.barcode = l.item_barcode 
                     AND l.return_time IS NULL
@@ -1240,13 +1247,11 @@ def tool_details(barcode):
             # Hole Statushistorie
             status_history = conn.execute('''
                 SELECT 
-                    tool_barcode,
+                    strftime('%d.%m.%Y %H:%M', timestamp) as formatted_time,
                     old_status,
                     new_status,
-                    comment,
-                    changed_by,
-                    strftime('%d.%m.%Y %H:%M', timestamp) as formatted_timestamp
-                FROM tool_status_history
+                    changed_by
+                FROM tool_status_history 
                 WHERE tool_barcode = ?
                 ORDER BY timestamp DESC
             ''', (barcode,)).fetchall()
@@ -1381,55 +1386,48 @@ def delete_worker(barcode):
 @app.route('/worker/<barcode>')
 @admin_required
 def worker_details(barcode):
-    """Zeigt Details eines Mitarbeiters an"""
+    print(f"\n=== WORKER DETAILS ROUTE ===")
+    print(f"Barcode: {barcode}")
     try:
-        with get_db_connection(DBConfig.WORKERS_DB) as workers_conn:
-            # Hole Mitarbeiterdaten
-            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
-            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
-            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
-            
-            worker = workers_conn.execute(
-                'SELECT * FROM workers WHERE barcode = ?', 
-                (barcode,)
-            ).fetchone()
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            worker = conn.execute('''
+                SELECT * FROM workers 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
             
             if not worker:
                 flash('Mitarbeiter nicht gefunden', 'error')
-                return redirect(url_for('workers'))
+                return redirect(url_for('index'))
+                
+            # Hole Ausleihhistorie
+            conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
             
-            # Hole aktuelle Ausleihen
-            current_lendings = [dict(row) for row in workers_conn.execute('''
-                SELECT 
-                    l.*,
-                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
-                    COALESCE(t.gegenstand, c.bezeichnung) as item_name,
-                    CASE 
-                        WHEN t.barcode IS NOT NULL THEN 'Werkzeug'
-                        ELSE 'Verbrauchsmaterial'
-                    END as item_type,
-                    CASE 
-                        WHEN c.barcode IS NOT NULL THEN l.amount || ' ' || c.einheit
-                        ELSE '1'
-                    END as amount_display
+            lending_history = conn.execute('''
+                SELECT l.*, 
+                       CASE 
+                           WHEN l.item_type = 'tool' THEN t.gegenstand
+                           ELSE c.bezeichnung
+                       END as item_name,
+                       datetime(l.checkout_time) as checkout_time,
+                       datetime(l.return_time) as return_time
                 FROM lendings_db.lendings l
-                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode
-                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
-                WHERE l.worker_barcode = ? AND l.return_time IS NULL
+                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                WHERE l.worker_barcode = ?
                 ORDER BY l.checkout_time DESC
-            ''', (barcode,)).fetchall()]
+            ''', (barcode,)).fetchall()
             
-            # Rest des bestehenden Codes...
-            
-            return render_template('worker_details.html', 
-                                worker=worker, 
-                                current_lendings=current_lendings,
-                                lending_history=lending_history)
-                                
-    except sqlite3.Error as e:
-        logging.error(f"Datenbankfehler in worker_details: {str(e)}")
-        flash('Fehler beim Laden der Mitarbeiterdetails', 'error')
-        return redirect(url_for('workers'))
+        return render_template('worker_details.html',
+                             worker=worker,
+                             lending_history=lending_history)
+                             
+    except Exception as e:
+        print(f"FEHLER beim Laden der Mitarbeiterdetails: {str(e)}")
+        print(traceback.format_exc())
+        flash('Fehler beim Laden der Details', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/admin/restore/tool/<int:id>')
 @admin_required
@@ -2356,7 +2354,14 @@ def index():
                        CASE 
                            WHEN l.return_time IS NULL THEN w.name || ' ' || w.lastname
                            ELSE NULL 
-                       END as current_user
+                       END as current_user,
+                       CASE
+                           WHEN t.status = 'Ausgeliehen' THEN 
+                               'Ausgeliehen seit ' || datetime(l.checkout_time)
+                           WHEN t.status = 'Defekt' THEN
+                               'Defekt seit ' || datetime(t.defect_date)
+                           ELSE t.status
+                       END as status_display
                 FROM tools t
                 LEFT JOIN lendings_db.lendings l ON t.barcode = l.item_barcode 
                     AND l.return_time IS NULL
@@ -2518,3 +2523,19 @@ def get_db_connection(db_path):
 
 # Stelle sicher, dass die Route registriert ist
 print("Verfügbare Routen:", [str(rule) for rule in app.url_map.iter_rules()])
+
+def log_tool_status_change(tool_barcode, old_status, new_status, changed_by=None):
+    print(f"Logging status change for {tool_barcode}: {old_status} -> {new_status} by {changed_by}")
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            # Aktuelles Datum und Zeit für System-Änderungen
+            conn.execute('''
+                INSERT INTO tool_status_history 
+                (tool_barcode, old_status, new_status, changed_by, timestamp)
+                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (tool_barcode, old_status, new_status, changed_by or 'System'))
+            conn.commit()
+            print("Status change logged successfully")
+    except Exception as e:
+        print(f"Error logging status change: {str(e)}")
+        traceback.print_exc()
