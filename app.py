@@ -10,6 +10,39 @@ from logging.handlers import TimedRotatingFileHandler
 import json
 from routes import export_bp
 import sys
+import subprocess
+from importlib import metadata
+
+
+def install_required_packages():
+    required_packages = {
+        'flask': 'flask',
+        'werkzeug': 'werkzeug',
+        'openpyxl': 'openpyxl',
+        'python-dotenv': 'python-dotenv'
+    }
+    
+    def is_package_installed(package_name):
+        try:
+            metadata.version(package_name)
+            return True
+        except metadata.PackageNotFoundError:
+            return False
+    
+    for package, pip_name in required_packages.items():
+        if not is_package_installed(package):
+            print(f"Installiere {package}...")
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
+                print(f"{package} wurde erfolgreich installiert!")
+            except subprocess.CalledProcessError:
+                print(f"Fehler beim Installieren von {package}")
+                sys.exit(1)
+
+# Am Anfang des Scripts aufrufen
+if __name__ == '__main__':
+    install_required_packages()
+
 
 # Konstanten für Datenbank
 class DBConfig:
@@ -1346,40 +1379,30 @@ def delete_worker(barcode):
     return redirect(url_for('workers'))
 
 @app.route('/worker/<barcode>')
+@admin_required
 def worker_details(barcode):
+    """Zeigt Details eines Mitarbeiters an"""
     try:
         with get_db_connection(DBConfig.WORKERS_DB) as workers_conn:
+            # Hole Mitarbeiterdaten
             workers_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
             workers_conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
             workers_conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
             
-            # Hole Mitarbeiterdetails
-            worker = dict(workers_conn.execute('SELECT * FROM workers WHERE barcode = ?', 
-                                          (barcode,)).fetchone())
+            worker = workers_conn.execute(
+                'SELECT * FROM workers WHERE barcode = ?', 
+                (barcode,)
+            ).fetchone()
+            
+            if not worker:
+                flash('Mitarbeiter nicht gefunden', 'error')
+                return redirect(url_for('workers'))
             
             # Hole aktuelle Ausleihen
             current_lendings = [dict(row) for row in workers_conn.execute('''
                 SELECT 
                     l.*,
                     strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
-                    COALESCE(t.gegenstand, c.bezeichnung) as item_name,
-                    CASE 
-                        WHEN t.barcode IS NOT NULL THEN 'Werkzeug'
-                        ELSE 'Verbrauchsmaterial'
-                    END as item_type
-                FROM lendings_db.lendings l
-                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode
-                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
-                WHERE l.worker_barcode = ? AND l.return_time IS NULL
-                ORDER BY l.checkout_time DESC
-            ''', (barcode,)).fetchall()]
-            
-            # Hole Ausleihhistorie
-            lending_history = [dict(row) for row in workers_conn.execute('''
-                SELECT 
-                    l.*,
-                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
-                    strftime('%d.%m.%Y %H:%M', l.return_time) as formatted_return_time,
                     COALESCE(t.gegenstand, c.bezeichnung) as item_name,
                     CASE 
                         WHEN t.barcode IS NOT NULL THEN 'Werkzeug'
@@ -1392,15 +1415,17 @@ def worker_details(barcode):
                 FROM lendings_db.lendings l
                 LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode
                 LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
-                WHERE l.worker_barcode = ? AND l.return_time IS NOT NULL
+                WHERE l.worker_barcode = ? AND l.return_time IS NULL
                 ORDER BY l.checkout_time DESC
             ''', (barcode,)).fetchall()]
             
-        return render_template('worker_details.html', 
-                             worker=worker, 
-                             current_lendings=current_lendings,
-                             lending_history=lending_history)
-                             
+            # Rest des bestehenden Codes...
+            
+            return render_template('worker_details.html', 
+                                worker=worker, 
+                                current_lendings=current_lendings,
+                                lending_history=lending_history)
+                                
     except sqlite3.Error as e:
         logging.error(f"Datenbankfehler in worker_details: {str(e)}")
         flash('Fehler beim Laden der Mitarbeiterdetails', 'error')
@@ -1465,8 +1490,7 @@ def restore_worker(id):
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
                     'SELECT 1 FROM workers WHERE barcode=?', 
-                    (item['barcode'],)
-                ).fetchone()  # Hier fehlte die schließende Klammer
+                    (item['barcode'],))
                 
                 if existing:
                     flash('Ein Mitarbeiter mit diesem Barcode existiert bereits', 'error')
