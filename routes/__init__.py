@@ -1,7 +1,18 @@
 from flask import Blueprint
 
-export_bp = Blueprint('export_tools_v1', __name__)
+# Blueprints erstellen
+consumables_bp = Blueprint('consumables', __name__)
+tools_bp = Blueprint('tools', __name__)
+workers_bp = Blueprint('workers', __name__)
+admin_bp = Blueprint('admin', __name__)
+export_bp = Blueprint('export', __name__)
 
-if not hasattr(export_bp, '_routes_loaded'):
-    from . import export_routes
-    export_bp._routes_loaded = True 
+# Importiere die Routen nach der Blueprint-Erstellung
+from .consumables import *
+from .tools import *
+from .workers import *
+from .admin import *
+from .export import *
+
+# Exportiere die Blueprints
+__all__ = ['consumables_bp', 'tools_bp', 'workers_bp', 'admin_bp', 'export_bp'] 
