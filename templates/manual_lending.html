@@ -6,56 +6,52 @@
 <div class="bg-white shadow rounded-lg p-6">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">Werkzeug Ausleihe/Rückgabe</h1>
 
-    <form id="lendingForm" onsubmit="event.preventDefault(); handleLending(this);" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Mitarbeiter-Auswahl -->
+    <!-- Manuelle Ausleihe Form -->
+    <div class="mb-8">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Neue Ausleihe/Ausgabe</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Typ Auswahl -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">Mitarbeiter</label>
-                <select name="worker_barcode" required id="workerSelect"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Mitarbeiter auswählen...</option>
-                    {% for worker in workers %}
-                    <option value="{{ worker.barcode }}" {% if selected_worker == worker.barcode %}selected{% endif %}>
-                        {{ worker.name }} {{ worker.lastname }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Artikel-Typ Auswahl -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Artikel-Typ</label>
-                <select name="item_type" id="itemTypeSelect" 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
+                <select id="itemType" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Bitte wählen</option>
                     <option value="tool">Werkzeug</option>
                     <option value="consumable">Verbrauchsmaterial</option>
                 </select>
             </div>
 
-            <!-- Werkzeug/Material-Auswahl -->
+            <!-- Gegenstand Auswahl -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">Artikel</label>
-                <select name="item_barcode" id="itemBarcodeSelect" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <!-- Wird dynamisch durch JavaScript gefüllt -->
+                <label class="block text-sm font-medium text-gray-700 mb-1">Gegenstand</label>
+                <select id="itemSelect" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" disabled>
+                    <option value="">Bitte wählen</option>
                 </select>
+            </div>
 
-                <div id="amountDiv" class="hidden mt-2">
-                    <label class="block text-sm font-medium text-gray-700">Menge</label>
-                    <input type="number" name="amount" id="amountInput" min="1" value="1" 
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
+            <!-- Mitarbeiter Auswahl -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mitarbeiter</label>
+                <select id="workerSelect" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">Bitte wählen</option>
+                </select>
+            </div>
+
+            <!-- Menge (nur für Verbrauchsmaterial) -->
+            <div id="amountContainer" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Menge</label>
+                <input type="number" id="amount" min="1" value="1" 
+                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="md:col-span-4">
+                <button onclick="submitLending()" 
+                        class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Ausleihen/Ausgeben
+                </button>
             </div>
         </div>
-
-        <!-- Aktions-Buttons -->
-        <div class="flex justify-end space-x-4 mt-4">
-            <button type="submit" name="action" value="lend"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-                Ausleihen/Ausgeben
-            </button>
-        </div>
-    </form>
+    </div>
 
     <!-- Tab Navigation -->
     <div class="mb-4 border-b border-gray-200">
@@ -130,6 +126,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menge</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aktion</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -150,6 +147,14 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ lending.amount }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                {% if not lending.return_time %}
+                                <button onclick="returnItem('{{ lending.item_barcode }}')"
+                                        class="text-blue-600 hover:text-blue-900">
+                                    Rückgabe
+                                </button>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -161,112 +166,93 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const toolsTab = document.getElementById('tools-tab');
-    const consumablesTab = document.getElementById('consumables-tab');
-    const toolsTable = document.getElementById('tools-table');
-    const consumablesTable = document.getElementById('consumables-table');
-    const itemTypeSelect = document.getElementById('itemTypeSelect');
-    const itemBarcodeSelect = document.getElementById('itemBarcodeSelect');
-    const amountDiv = document.getElementById('amountDiv');
+    console.log('Seite geladen, lade Mitarbeiter...');
+    loadWorkers();
+    
+    // Event Listener für Typ-Auswahl
+    document.getElementById('itemType').addEventListener('change', function() {
+        const type = this.value;
+        console.log('Typ geändert zu:', type);
+        const itemSelect = document.getElementById('itemSelect');
+        const amountContainer = document.getElementById('amountContainer');
+        
+        if (type) {
+            itemSelect.disabled = false;
+            loadItems(type);
+            amountContainer.classList.toggle('hidden', type === 'tool');
+        } else {
+            itemSelect.disabled = true;
+            itemSelect.innerHTML = '<option value="">Bitte wählen</option>';
+            amountContainer.classList.add('hidden');
+        }
+    });
+});
 
-    // Event Listener für Item-Type Dropdown
-    itemTypeSelect.addEventListener('change', async function() {
-        try {
-            const selectedType = this.value;
-            const response = await fetch(`/get_items/${selectedType}`);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            // Leere das Barcode-Dropdown
-            itemBarcodeSelect.innerHTML = '<option value="">Artikel auswählen...</option>';
-            
-            // Fülle das Barcode-Dropdown mit den neuen Optionen
-            data.forEach(item => {
+function loadWorkers() {
+    console.log('Lade Mitarbeiter...');
+    fetch('/get_workers')
+        .then(response => {
+            if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
+            return response.json();
+        })
+        .then(workers => {
+            console.log('Mitarbeiter geladen:', workers);
+            const select = document.getElementById('workerSelect');
+            select.innerHTML = '<option value="">Bitte wählen</option>';
+            workers.forEach(worker => {
+                const option = document.createElement('option');
+                option.value = worker.barcode;
+                option.textContent = worker.full_name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Fehler beim Laden der Mitarbeiter:', error);
+        });
+}
+
+function loadItems(type) {
+    console.log('Lade Items vom Typ:', type);
+    fetch(`/get_items/${type}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
+            return response.json();
+        })
+        .then(items => {
+            console.log('Items geladen:', items);
+            const select = document.getElementById('itemSelect');
+            select.innerHTML = '<option value="">Bitte wählen</option>';
+            items.forEach(item => {
                 const option = document.createElement('option');
                 option.value = item.barcode;
                 option.textContent = item.name;
-                itemBarcodeSelect.appendChild(option);
+                select.appendChild(option);
             });
-
-            // Zeige/Verstecke das Mengenfeld basierend auf dem Typ
-            amountDiv.classList.toggle('hidden', selectedType !== 'consumable');
-        } catch (error) {
+        })
+        .catch(error => {
             console.error('Fehler beim Laden der Items:', error);
-            itemBarcodeSelect.innerHTML = '<option value="">Fehler beim Laden...</option>';
-        }
-    });
-
-    // Tab-Wechsel Funktionen
-    toolsTab.addEventListener('click', function() {
-        switchToTab('tools');
-    });
-
-    consumablesTab.addEventListener('click', function() {
-        switchToTab('consumables');
-    });
-
-    function switchToTab(tabName) {
-        const isTools = tabName === 'tools';
-        
-        // Tabs styling
-        toolsTab.classList.toggle('border-blue-500', isTools);
-        toolsTab.classList.toggle('text-blue-600', isTools);
-        toolsTab.classList.toggle('border-transparent', !isTools);
-        toolsTab.classList.toggle('text-gray-500', !isTools);
-        
-        consumablesTab.classList.toggle('border-blue-500', !isTools);
-        consumablesTab.classList.toggle('text-blue-600', !isTools);
-        consumablesTab.classList.toggle('border-transparent', isTools);
-        consumablesTab.classList.toggle('text-gray-500', isTools);
-
-        // Tabellen anzeigen/verstecken
-        toolsTable.classList.toggle('hidden', !isTools);
-        consumablesTable.classList.toggle('hidden', isTools);
-        
-        localStorage.setItem('activeTab', tabName);
-    }
-
-    // Initialen Tab setzen
-    const lastActiveTab = localStorage.getItem('activeTab') || 'tools';
-    switchToTab(lastActiveTab);
-
-    // Initial Items laden
-    itemTypeSelect.dispatchEvent(new Event('change'));
-});
-
-// Funktion zum Zurückgeben eines Werkzeugs
-function returnTool(barcode) {
-    fetch('/return_tool', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ barcode: barcode })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert(data.error || 'Fehler beim Zurückgeben des Werkzeugs');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Fehler beim Zurückgeben des Werkzeugs');
-    });
+        });
 }
 
-// Funktion zum Handling der Ausleihe/Ausgabe
-function handleLending(form) {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    
-    fetch('/manual_lending', {
+function submitLending() {
+    const itemType = document.getElementById('itemType').value;
+    const itemBarcode = document.getElementById('itemSelect').value;
+    const workerBarcode = document.getElementById('workerSelect').value;
+    const amount = document.getElementById('amount').value;
+
+    if (!itemType || !itemBarcode || !workerBarcode) {
+        alert('Bitte alle Pflichtfelder ausfüllen');
+        return;
+    }
+
+    const data = {
+        item_type: itemType,
+        item_barcode: itemBarcode,
+        worker_barcode: workerBarcode,
+        amount: itemType === 'consumable' ? parseInt(amount) : 1
+    };
+
+    fetch('/lend_item', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -274,37 +260,17 @@ function handleLending(form) {
         body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
+    .then(result => {
+        if (result.success) {
             location.reload();
         } else {
-            alert(data.error || 'Fehler bei der Ausleihe/Ausgabe');
+            alert(result.error || 'Fehler bei der Ausleihe/Ausgabe');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Fehler beim Senden der Ausleihe:', error);
         alert('Fehler bei der Ausleihe/Ausgabe');
     });
-}
-
-function switchTab(tabName) {
-    // Alle Tab-Inhalte ausblenden
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.add('hidden');
-    });
-    
-    // Alle Tab-Buttons zurücksetzen
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-blue-500', 'text-blue-600');
-        button.classList.add('border-transparent', 'text-gray-500');
-    });
-    
-    // Gewählten Tab anzeigen
-    document.getElementById(`${tabName}-content`).classList.remove('hidden');
-    
-    // Gewählten Button hervorheben
-    document.getElementById(`${tabName}-tab`).classList.remove('border-transparent', 'text-gray-500');
-    document.getElementById(`${tabName}-tab`).classList.add('border-blue-500', 'text-blue-600');
 }
 </script>
 {% endblock %}

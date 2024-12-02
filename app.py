@@ -1442,7 +1442,8 @@ def restore_worker(id):
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
                     'SELECT 1 FROM workers WHERE barcode=?', 
-                    (item['barcode'],))
+                    (item['barcode'],)
+                ).fetchone()
                 
                 if existing:
                     flash('Ein Mitarbeiter mit diesem Barcode existiert bereits', 'error')
@@ -2463,18 +2464,6 @@ def process_return(tool_barcode):
         print(f"FEHLER bei Rückgabe-Verarbeitung: {str(e)}")
         return jsonify({'error': 'Datenbankfehler'})
 
-def get_db_connection(db_path):
-    print(f"\n=== DB VERBINDUNG ===")
-    print(f"Verbinde mit: {db_path}")
-    try:
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        print("Verbindung erfolgreich")
-        return conn
-    except Exception as e:
-        print(f"FEHLER bei Datenbankverbindung: {str(e)}")
-        raise
-
 # Stelle sicher, dass die Route registriert ist
 print("Verfügbare Routen:", [str(rule) for rule in app.url_map.iter_rules()])
 
@@ -2493,3 +2482,67 @@ def log_tool_status_change(tool_barcode, old_status, new_status, changed_by=None
     except Exception as e:
         print(f"Error logging status change: {str(e)}")
         traceback.print_exc()
+
+@app.route('/get_items/<item_type>')
+def get_items(item_type):
+    print(f"Lade Items vom Typ: {item_type}")
+    try:
+        if item_type == 'tool':
+            with get_db_connection(DBConfig.TOOLS_DB) as conn:
+                items = conn.execute('''
+                    SELECT barcode, gegenstand as name 
+                    FROM tools 
+                    WHERE status = 'Verfügbar'
+                    ORDER BY gegenstand
+                ''').fetchall()
+        else:  # consumable
+            with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+                items = conn.execute('''
+                    SELECT barcode, bezeichnung as name 
+                    FROM consumables 
+                    WHERE aktueller_bestand > 0
+                    ORDER BY bezeichnung
+                ''').fetchall()
+        items_list = [dict(item) for item in items]
+        print(f"Gefundene Items: {items_list}")
+        return jsonify(items_list)
+    except Exception as e:
+        print(f"Fehler beim Laden der Items: {str(e)}")
+        return jsonify([])
+
+@app.route('/get_workers')
+def get_workers():
+    print("Lade Mitarbeiter")
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            workers = conn.execute('''
+                SELECT barcode, name || ' ' || lastname as full_name 
+                FROM workers 
+                ORDER BY lastname, name
+            ''').fetchall()
+        workers_list = [dict(worker) for worker in workers]
+        print(f"Gefundene Mitarbeiter: {workers_list}")
+        return jsonify(workers_list)
+    except Exception as e:
+        print(f"Fehler beim Laden der Mitarbeiter: {str(e)}")
+        return jsonify([])
+
+@app.route('/get_item_info/<barcode>')
+def get_item_info(barcode):
+    try:
+        # Prüfe erst in Werkzeug-DB
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            item = conn.execute('SELECT * FROM tools WHERE barcode = ?', (barcode,)).fetchone()
+            if item:
+                return jsonify({'type': 'tool', 'data': dict(item)})
+        
+        # Wenn nicht gefunden, prüfe in Verbrauchsgüter-DB
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            item = conn.execute('SELECT * FROM consumables WHERE barcode = ?', (barcode,)).fetchone()
+            if item:
+                return jsonify({'type': 'consumable', 'data': dict(item)})
+        
+        return jsonify({'error': 'Item nicht gefunden'})
+    except Exception as e:
+        print(f"Fehler beim Laden der Item-Info: {str(e)}")
+        return jsonify({'error': str(e)})
