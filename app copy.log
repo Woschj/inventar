@@ -1,0 +1,613 @@
+2024-11-30 10:29:08,147 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:08,147 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:08,148 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:08,149 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:08,153 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:08,171 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:08,171 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:08,195 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:08,196 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:08,197 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:08,197 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:08,198 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:08,217 - INFO - 14 Ausleihen/Ausgaben erstellt
+2024-11-30 10:29:08,225 - WARNING -  * Debugger is active!
+2024-11-30 10:29:08,227 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:29:26,036 - INFO - Initialisiere App...
+2024-11-30 10:29:26,058 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:26] "GET / HTTP/1.1" 200 -
+2024-11-30 10:29:26,429 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:26] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:29:27,100 - ERROR - Fehler beim Laden der Mitarbeiter: no such column: bereich
+2024-11-30 10:29:27,100 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:27] "[32mGET /workers HTTP/1.1[0m" 302 -
+2024-11-30 10:29:27,125 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:27] "GET / HTTP/1.1" 200 -
+2024-11-30 10:29:27,383 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:29:28,006 - ERROR - Fehler beim Laden der Verbrauchsmaterialien: cannot UPDATE generated column "status"
+2024-11-30 10:29:28,007 - ERROR - Traceback (most recent call last):
+  File "C:\Users\wosch\Documents\GitHub\inventar\src\app.py", line 572, in consumables
+    conn.execute('''
+sqlite3.OperationalError: cannot UPDATE generated column "status"
+
+2024-11-30 10:29:28,007 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:28] "[32mGET /consumables HTTP/1.1[0m" 302 -
+2024-11-30 10:29:28,111 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:28] "GET / HTTP/1.1" 200 -
+2024-11-30 10:29:28,466 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:28] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:29:32,101 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:32,102 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:32,102 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:32,103 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:32,104 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:32,116 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:32,117 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:32,121 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:32,122 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:32,122 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:32,123 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:32,123 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:32,142 - INFO - 10 Ausleihen/Ausgaben erstellt
+2024-11-30 10:29:32,149 - WARNING -  * Debugger is active!
+2024-11-30 10:29:32,152 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:29:35,079 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:35,080 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:35,081 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:35,082 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:35,082 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:35,095 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:35,096 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:35,100 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:35,100 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:35,101 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:35,101 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:35,102 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:35,121 - INFO - 17 Ausleihen/Ausgaben erstellt
+2024-11-30 10:29:35,137 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-30 10:29:35,137 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-30 10:29:35,139 - INFO -  * Restarting with stat
+2024-11-30 10:29:35,791 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:35,792 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:35,794 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:35,795 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:35,795 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:35,808 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:35,809 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:35,812 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:35,812 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:35,813 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:35,813 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:35,814 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:35,829 - ERROR - Fehler beim Erstellen der Testdaten: CHECK constraint failed: valid_bestand
+2024-11-30 10:29:48,151 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:48,156 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:48,159 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:48,166 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:48,170 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:48,187 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:48,187 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:48,190 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:48,191 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:48,191 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:48,191 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:48,192 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:48,211 - INFO - 250 Mitarbeiter-Testdaten erfolgreich eingefügt
+2024-11-30 10:29:48,214 - INFO - 241 Werkzeug-Testdaten erfolgreich eingefügt
+2024-11-30 10:29:48,217 - INFO - 65 Verbrauchsmaterial-Testdaten erfolgreich eingefügt
+2024-11-30 10:29:48,230 - INFO - 269 Ausleihen/Ausgaben erstellt
+2024-11-30 10:29:48,244 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-30 10:29:48,245 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-30 10:29:48,246 - INFO -  * Restarting with stat
+2024-11-30 10:29:48,897 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:48,897 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:48,898 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:48,899 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:48,900 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:48,916 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:48,916 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:29:48,920 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:29:48,921 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:29:48,921 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:29:48,922 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:29:48,922 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:29:48,946 - INFO - 274 Ausleihen/Ausgaben erstellt
+2024-11-30 10:29:48,952 - WARNING -  * Debugger is active!
+2024-11-30 10:29:48,954 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:29:50,760 - INFO - Initialisiere App...
+2024-11-30 10:29:50,762 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,763 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,842 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,842 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,891 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,892 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,898 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,899 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,903 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,904 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,910 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,910 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,915 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,915 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,920 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,920 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,924 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,925 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,929 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,930 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,935 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,935 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,939 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,940 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,944 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,944 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,949 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,950 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,954 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,954 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,960 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,960 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,964 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,965 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,969 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,970 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,975 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,975 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,979 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,980 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:50,985 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:50,985 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,694 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,695 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,768 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,770 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,779 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,780 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,818 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,819 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,825 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,825 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,830 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,831 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,836 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,837 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,842 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,843 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,848 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,849 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,853 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,854 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,858 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,858 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,863 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,864 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,869 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,870 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,874 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,875 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,879 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,880 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,884 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,885 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,889 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,890 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,894 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,894 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,898 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,899 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,904 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,904 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:52,909 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:52,910 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:52] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,902 - INFO - Lade Details für Werkzeug 345678
+2024-11-30 10:29:53,903 - WARNING - Werkzeug 345678 nicht gefunden
+2024-11-30 10:29:53,904 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET /tool/345678 HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,926 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,926 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,972 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,972 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,978 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,978 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,984 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,984 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,988 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,989 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,994 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,994 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:53,999 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:53,999 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,003 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,004 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,008 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,008 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,013 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,013 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,018 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,019 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,023 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,023 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,027 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,028 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,031 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,033 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,037 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,038 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,042 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,043 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,049 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,050 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,054 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,055 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,062 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,062 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:29:54,067 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:29:54,068 - INFO - 127.0.0.1 - - [30/Nov/2024 10:29:54] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:40,525 - INFO -  * Detected change in 'C:\\Users\\wosch\\Documents\\GitHub\\inventar\\src\\routes\\tools.py', reloading
+2024-11-30 10:31:40,571 - INFO -  * Restarting with stat
+2024-11-30 10:31:41,215 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:31:41,215 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:31:41,216 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:31:41,218 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:31:41,218 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:31:41,230 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:31:41,231 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:31:41,234 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:31:41,234 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:31:41,235 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:31:41,235 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:31:41,236 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:31:41,261 - INFO - 243 Ausleihen/Ausgaben erstellt
+2024-11-30 10:31:41,267 - WARNING -  * Debugger is active!
+2024-11-30 10:31:41,270 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:31:44,527 - INFO -  * Detected change in 'C:\\Users\\wosch\\Documents\\GitHub\\inventar\\src\\create_test_data.py', reloading
+2024-11-30 10:31:44,585 - INFO -  * Restarting with stat
+2024-11-30 10:31:45,243 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:31:45,244 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:31:45,245 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:31:45,246 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:31:45,247 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:31:45,260 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:31:45,260 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:31:45,266 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:31:45,267 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:31:45,267 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:31:45,268 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:31:45,269 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:31:45,292 - INFO - 248 Ausleihen/Ausgaben erstellt
+2024-11-30 10:31:45,298 - WARNING -  * Debugger is active!
+2024-11-30 10:31:45,301 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:31:50,715 - INFO - Initialisiere App...
+2024-11-30 10:31:50,718 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,719 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,752 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,753 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,800 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,800 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,808 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,809 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,814 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,815 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,820 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,820 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,825 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,826 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,831 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,831 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,836 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,837 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,843 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,843 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,848 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,849 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,854 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,856 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,862 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,863 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,868 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,869 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,873 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,874 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,878 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,878 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,883 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,884 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,888 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,889 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,893 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,894 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,899 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,899 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:50,904 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:50,905 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:50] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:51,818 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:51] "GET /consumables HTTP/1.1" 200 -
+2024-11-30 10:31:52,435 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:52] "GET /workers HTTP/1.1" 200 -
+2024-11-30 10:31:53,467 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,468 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,493 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,494 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,567 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,568 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,573 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,573 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,581 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,581 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,587 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,588 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,593 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,594 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,599 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,599 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,604 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,605 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,610 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,610 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,615 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,616 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,621 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,621 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,626 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,626 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,631 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,632 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,638 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,638 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,643 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,645 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,649 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,650 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,655 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,656 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,660 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,660 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,666 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,667 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:53,674 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:53,675 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:53] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:54,514 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:54] "GET /workers HTTP/1.1" 200 -
+2024-11-30 10:31:55,669 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:55] "GET /consumables HTTP/1.1" 200 -
+2024-11-30 10:31:56,031 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:31:56,716 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:56] "GET /workers HTTP/1.1" 200 -
+2024-11-30 10:31:56,992 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:31:57,741 - INFO - Starte Laden der Ausleihseite...
+2024-11-30 10:31:57,754 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:57] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-30 10:31:57,958 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:57] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:31:59,026 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,027 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,113 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,114 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,122 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,123 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,166 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,166 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,173 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,173 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,178 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,179 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,183 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,184 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,188 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,189 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,194 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,194 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,199 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,199 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,204 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,205 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,209 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,210 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,214 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,215 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,219 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,219 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,225 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,225 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,230 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,231 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,236 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,236 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,241 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,242 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,245 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,246 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,251 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,251 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:31:59,256 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:31:59,256 - INFO - 127.0.0.1 - - [30/Nov/2024 10:31:59] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,204 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,205 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,235 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,235 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,286 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,287 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,293 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,293 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,299 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,299 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,305 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,305 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,310 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,311 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,316 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,316 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,320 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,321 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,326 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,326 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,333 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,333 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,338 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,338 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,343 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,343 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,348 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,348 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,353 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,354 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,358 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,358 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,363 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,363 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,367 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,368 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,374 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,374 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,378 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,379 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:16,383 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:16,383 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:16] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:17,067 - INFO - Starte Laden der Ausleihseite...
+2024-11-30 10:36:17,074 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:17] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-30 10:36:18,559 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,560 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,583 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,583 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,636 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,636 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,640 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,641 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,647 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,647 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,652 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,653 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,656 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,657 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,661 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,661 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,665 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,666 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,674 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,675 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,678 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,679 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,683 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,683 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,688 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,689 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,693 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,693 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,698 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,698 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,702 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,704 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,709 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,710 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,715 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,716 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,721 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,722 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,727 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,728 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:18,733 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:18,733 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:18] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:19,652 - INFO - Starte Laden der Ausleihseite...
+2024-11-30 10:36:19,659 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:19] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-30 10:36:26,047 - INFO - Starte Laden der Ausleihseite...
+2024-11-30 10:36:26,054 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:26] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-30 10:36:26,320 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:26] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:36:30,002 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:30] "POST /return_tool HTTP/1.1" 200 -
+2024-11-30 10:36:30,071 - INFO - Starte Laden der Ausleihseite...
+2024-11-30 10:36:30,078 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:30] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-30 10:36:30,292 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:36:31,623 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:31] "GET /consumables HTTP/1.1" 200 -
+2024-11-30 10:36:31,900 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:31] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-11-30 10:36:34,046 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,046 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,116 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,117 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,125 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,125 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,163 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,163 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,169 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,170 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,176 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,176 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,181 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,181 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,185 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,186 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,190 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,190 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,195 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,195 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,200 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,201 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,205 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,205 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,209 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,209 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,214 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,214 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,220 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,221 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,227 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,228 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,232 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,232 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,237 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,238 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,243 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,243 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,248 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,249 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:36:34,253 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:36:34,254 - INFO - 127.0.0.1 - - [30/Nov/2024 10:36:34] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:28,470 - INFO -  * Detected change in 'C:\\Users\\wosch\\Documents\\GitHub\\inventar\\src\\create_test_data.py', reloading
+2024-11-30 10:37:28,521 - INFO -  * Restarting with stat
+2024-11-30 10:37:29,160 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:37:29,161 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:37:29,161 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:37:29,162 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:37:29,163 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:37:29,175 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-11-30 10:37:29,176 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-30 10:37:29,182 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\workers.db erfolgreich initialisiert
+2024-11-30 10:37:29,183 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lager.db erfolgreich initialisiert
+2024-11-30 10:37:29,183 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\lendings.db erfolgreich initialisiert
+2024-11-30 10:37:29,184 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\consumables.db erfolgreich initialisiert
+2024-11-30 10:37:29,185 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\src\db\system_logs.db erfolgreich initialisiert
+2024-11-30 10:37:29,209 - INFO - 276 Ausleihen/Ausgaben erstellt
+2024-11-30 10:37:29,215 - WARNING -  * Debugger is active!
+2024-11-30 10:37:29,217 - INFO -  * Debugger PIN: 121-667-863
+2024-11-30 10:37:34,085 - INFO - Initialisiere App...
+2024-11-30 10:37:34,108 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:34] "GET /consumables HTTP/1.1" 200 -
+2024-11-30 10:37:34,425 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:34] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-11-30 10:37:35,199 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,199 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,269 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,270 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,277 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,278 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,321 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,322 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,327 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,328 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,332 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,333 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,338 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,339 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,343 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,343 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,349 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,349 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,354 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,355 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,360 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,361 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,365 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,366 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,370 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,370 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,375 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,375 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,380 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,381 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,385 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,386 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,391 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,391 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,396 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,396 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,400 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,400 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,405 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,406 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:37:35,410 - ERROR - Datenbankfehler: no such table: tool_status_history
+2024-11-30 10:37:35,411 - INFO - 127.0.0.1 - - [30/Nov/2024 10:37:35] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-30 10:39:35,682 - INFO -  * Detected change in 'C:\\Users\\wosch\\Documents\\GitHub\\inventar\\src\\app.py', reloading
+2024-11-30 10:39:35,740 - INFO -  * Restarting with stat

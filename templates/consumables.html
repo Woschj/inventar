@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Verbrauchsmaterial{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Verbrauchsmaterialübersicht</h1>
+        <a href="{{ url_for('add_consumable') }}" 
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+            Neues Material hinzufügen
+        </a>
+    </div>
+
+    <!-- Filter-Bereich -->
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Suchfeld -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Suche</label>
+            <input type="text" id="searchInput"
+                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                   placeholder="Bezeichnung, Barcode...">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ort</label>
+            <select id="filterOrt" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Orte</option>
+                {% for ort in orte %}
+                    <option value="{{ ort }}">{{ ort }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
+            <select id="filterTyp" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Typen</option>
+                {% for typ in typen %}
+                    <option value="{{ typ }}">{{ typ }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="filterStatus" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <option value="">Alle Status</option>
+                <option value="Verfügbar" {% if active_filter == 'Verfügbar' %}selected{% endif %}>Verfügbar</option>
+                <option value="Nachbestellen" {% if active_filter == 'Nachbestellen' %}selected{% endif %}>Nachzubestellen</option>
+                <option value="Leer" {% if active_filter == 'Leer' %}selected{% endif %}>Leer</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Tabelle anpassen -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200" id="consumablesTable">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('bezeichnung')">
+                        Bezeichnung
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-bezeichnung">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('typ')">
+                        Typ
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-typ">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('ort')">
+                        Ort
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-ort">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('status')">
+                        Status
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-status">↕</span>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Bestand
+                    </th>
+                    {% if session.get('is_admin') %}
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Aktionen
+                    </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for item in consumables %}
+                <tr class="consumable-row">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="{{ url_for('edit_consumable', barcode=item.barcode) }}"
+                           class="text-blue-600 hover:text-blue-900">
+                            {{ item.bezeichnung }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.typ }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.ort }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            {% if item.status == 'Leer' %}
+                                bg-red-100 text-red-800
+                            {% elif item.status == 'Nachbestellen' %}
+                                bg-yellow-100 text-yellow-800
+                            {% else %}
+                                bg-green-100 text-green-800
+                            {% endif %}">
+                            {{ item.status }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ item.aktueller_bestand }} {{ item.einheit }}
+                        {% if item.mindestbestand %}
+                        <span class="text-xs text-gray-400">(Min: {{ item.mindestbestand }})</span>
+                        {% endif %}
+                    </td>
+                    {% if session.get('is_admin') %}
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="deleteConsumable('{{ item.barcode }}')" 
+                                class="text-red-600 hover:text-red-900"
+                                title="Löschen">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript für Sortierung anpassen -->
+<script>
+let currentSort = {
+    column: null,
+    ascending: true
+};
+
+function sortTable(column) {
+    const table = document.querySelector('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Reset alle Sortier-Indikatoren
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '↕');
+    
+    // Sortierrichtung umkehren wenn gleiche Spalte
+    if (currentSort.column === column) {
+        currentSort.ascending = !currentSort.ascending;
+    } else {
+        currentSort.column = column;
+        currentSort.ascending = true;
+    }
+    
+    // Sortier-Indikator aktualisieren
+    const indicator = document.getElementById(`sort-${column}`);
+    indicator.textContent = currentSort.ascending ? '↑' : '↓';
+    
+    // Zeilen sortieren
+    rows.sort((a, b) => {
+        const aValue = a.children[getColumnIndex(column)].textContent.trim();
+        const bValue = b.children[getColumnIndex(column)].textContent.trim();
+        
+        return currentSort.ascending ? 
+            aValue.localeCompare(bValue) : 
+            bValue.localeCompare(aValue);
+    });
+    
+    // Sortierte Zeilen wieder einfügen
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getColumnIndex(column) {
+    const columnMap = {
+        'bezeichnung': 0,
+        'typ': 1,
+        'ort': 2,
+        'status': 3
+    };
+    return columnMap[column];
+}
+
+// Bestehende Filter-Logik beibehalten...
+
+function filterAndSearch() {
+    const searchValue = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const rows = document.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        // Suchfilter
+        if (searchValue) {
+            let rowText = Array.from(row.children)
+                .map(cell => cell.textContent.toLowerCase())
+                .join(' ');
+            if (!rowText.includes(searchValue)) {
+                showRow = false;
+            }
+        }
+        
+        // Dropdown-Filter
+        document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+            const filterValue = filter.value.toLowerCase();
+            if (filterValue) {
+                const columnIndex = getFilterColumnIndex(filter.id);
+                const cellValue = row.children[columnIndex].textContent.toLowerCase();
+                if (!cellValue.includes(filterValue)) {
+                    showRow = false;
+                }
+            }
+        });
+        
+        row.style.display = showRow ? '' : 'none';
+    });
+}
+
+// Event-Listener für Suche und Filter
+document.getElementById('searchInput')?.addEventListener('input', filterAndSearch);
+document.querySelectorAll('select[id^="filter"]').forEach(filter => {
+    filter.addEventListener('change', filterAndSearch);
+});
+</script>
+
+<!-- Am Ende der Datei, vor dem endblock -->
+{% if session.get('is_admin') %}
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-xl">
+        <h3 class="text-lg font-bold mb-4">Löschen bestätigen</h3>
+        <p id="deleteModalText" class="mb-6">Möchten Sie diesen Artikel wirklich in den Papierkorb verschieben?</p>
+        <div class="flex justify-end space-x-4">
+            <button onclick="closeDeleteModal()" 
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                Abbrechen
+            </button>
+            <button onclick="executeDelete()" 
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                Löschen
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentDeleteUrl = '';
+
+function confirmDelete(type, id) {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    currentDeleteUrl = `/consumable/delete/${id}`;
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+}
+
+function executeDelete() {
+    if (currentDeleteUrl) {
+        window.location.href = currentDeleteUrl;
+    }
+}
+</script>
+{% endif %}
+
+<script>
+function deleteConsumable(barcode) {
+    if (confirm('Möchten Sie dieses Verbrauchsmaterial wirklich löschen?')) {
+        fetch(`/api/consumables/${barcode}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Verbrauchsmaterial erfolgreich gelöscht', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showAlert(data.error || 'Fehler beim Löschen', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Fehler beim Löschen', 'error');
+        });
+    }
+}
+</script>
+
+<!-- JavaScript für Filter-Logik -->
+<script>
+document.getElementById('filterStatus').addEventListener('change', function() {
+    const status = this.value;
+    if (status) {
+        window.location.href = `{{ url_for('consumables') }}?filter=${status}`;
+    } else {
+        window.location.href = "{{ url_for('consumables') }}";
+    }
+});
+</script>
+{% endblock %} 
