@@ -1,13 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, g, session
 from werkzeug.exceptions import BadRequest
 import sqlite3
+<<<<<<< Updated upstream
 from datetime import datetime, timedelta
+=======
+from datetime import datetime
+>>>>>>> Stashed changes
 import os
 import traceback
 from functools import wraps
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import json
+<<<<<<< Updated upstream
 import sys
 import subprocess
 from importlib import metadata
@@ -223,6 +228,195 @@ class DBConfig:
                         logging.info(f"Erstelle fehlende Tabelle: {table_name}")
                         conn.execute(schema)
 
+=======
+from routes import export_bp
+import sys
+
+# Konstanten für Datenbank
+class DBConfig:
+    # Pfad zum src-Verzeichnis
+    SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+    # Pfad zum db-Verzeichnis innerhalb von src
+    DB_DIR = os.path.join(SRC_DIR, 'db')
+    
+    # Stelle sicher, dass der db Ordner existiert
+    os.makedirs(DB_DIR, exist_ok=True)
+    
+    WORKERS_DB = os.path.join(DB_DIR, 'workers.db')
+    TOOLS_DB = os.path.join(DB_DIR, 'lager.db')
+    LENDINGS_DB = os.path.join(DB_DIR, 'lendings.db')
+    CONSUMABLES_DB = os.path.join(DB_DIR, 'consumables.db')
+    SYSTEM_DB = os.path.join(DB_DIR, 'system_logs.db')
+    
+    # Schema Definitionen
+    SCHEMAS = {
+        WORKERS_DB: {
+            'workers': '''
+                CREATE TABLE IF NOT EXISTS workers (
+                    barcode TEXT PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    lastname TEXT NOT NULL,
+                    bereich TEXT,
+                    email TEXT
+                );
+            ''',
+            'deleted_workers': '''
+                CREATE TABLE IF NOT EXISTS deleted_workers (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    original_id INTEGER,
+                    name TEXT NOT NULL,
+                    lastname TEXT NOT NULL,
+                    barcode TEXT NOT NULL,
+                    bereich TEXT,
+                    email TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            '''
+        },
+        TOOLS_DB: {
+            'tools': '''
+                CREATE TABLE IF NOT EXISTS tools (
+                    barcode TEXT PRIMARY KEY,
+                    gegenstand TEXT NOT NULL,
+                    ort TEXT DEFAULT 'Lager',
+                    typ TEXT,
+                    status TEXT DEFAULT 'Verfügbar',
+                    image_path TEXT,
+                    defect_date DATETIME
+                );
+            ''',
+            'deleted_tools': '''
+                CREATE TABLE IF NOT EXISTS deleted_tools (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    barcode TEXT NOT NULL,
+                    gegenstand TEXT NOT NULL,
+                    ort TEXT,
+                    typ TEXT,
+                    status TEXT,
+                    image_path TEXT,
+                    defect_date DATETIME,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            ''',
+            'tools_history': '''
+                CREATE TABLE IF NOT EXISTS tools_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tool_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    old_status TEXT,
+                    new_status TEXT,
+                    changed_fields TEXT,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
+                );
+            ''',
+            'tool_status_history': '''
+                CREATE TABLE IF NOT EXISTS tool_status_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tool_barcode TEXT NOT NULL,
+                    old_status TEXT,
+                    new_status TEXT,
+                    comment TEXT,
+                    changed_by TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
+                );
+            ''',
+        },
+        LENDINGS_DB: {
+            'lendings': '''
+                CREATE TABLE IF NOT EXISTS lendings (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    worker_barcode TEXT NOT NULL,
+                    item_barcode TEXT NOT NULL,
+                    item_type TEXT NOT NULL,
+                    checkout_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    return_time DATETIME,
+                    amount INTEGER DEFAULT 1,
+                    old_stock INTEGER,
+                    new_stock INTEGER,
+                    FOREIGN KEY (worker_barcode) REFERENCES workers(barcode)
+                );
+            '''
+        },
+        CONSUMABLES_DB: {
+            'consumables': '''
+                CREATE TABLE IF NOT EXISTS consumables (
+                    barcode TEXT PRIMARY KEY,
+                    bezeichnung TEXT NOT NULL,
+                    ort TEXT DEFAULT 'Lager',
+                    typ TEXT,
+                    status TEXT DEFAULT 'Verfügbar',
+                    mindestbestand INTEGER DEFAULT 0,
+                    aktueller_bestand INTEGER DEFAULT 0,
+                    einheit TEXT DEFAULT 'Stück'
+                );
+            ''',
+            'deleted_consumables': '''
+                CREATE TABLE IF NOT EXISTS deleted_consumables (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    original_barcode TEXT NOT NULL,
+                    bezeichnung TEXT NOT NULL,
+                    ort TEXT,
+                    typ TEXT,
+                    mindestbestand INTEGER,
+                    aktueller_bestand INTEGER,
+                    einheit TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    deleted_by TEXT
+                );
+            '''
+        },
+        SYSTEM_DB: {
+            'system_logs': '''
+                CREATE TABLE IF NOT EXISTS system_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    action_type TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    user TEXT,
+                    affected_item TEXT,
+                    item_type TEXT,
+                    details TEXT
+                );
+            '''
+        }
+    }
+
+    @classmethod
+    def init_database(cls, db_path):
+        """Initialisiert eine einzelne Datenbank mit allen ihren Tabellen"""
+        try:
+            with sqlite3.connect(db_path) as conn:
+                for table_name, schema in cls.SCHEMAS[db_path].items():
+                    conn.execute(schema)
+                conn.commit()
+            return True
+        except Exception as e:
+            logging.error(f"Fehler bei der Initialisierung von {db_path}: {str(e)}")
+            return False
+
+    @classmethod
+    def verify_database_structure(cls, db_path):
+        """Überprüft und aktualisiert die Datenbankstruktur"""
+        try:
+            with sqlite3.connect(db_path) as conn:
+                # Hole existierende Tabellen
+                existing_tables = conn.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table'"
+                ).fetchall()
+                existing_tables = [table[0] for table in existing_tables]
+
+                # Überprüfe und erstelle fehlende Tabellen
+                for table_name, schema in cls.SCHEMAS[db_path].items():
+                    if table_name not in existing_tables:
+                        logging.info(f"Erstelle fehlende Tabelle: {table_name}")
+                        conn.execute(schema)
+
+>>>>>>> Stashed changes
                 # Überprüfe und füge fehlende Spalten hinzu
                 for table_name in existing_tables:
                     if table_name in cls.SCHEMAS[db_path]:
@@ -426,12 +620,18 @@ def init_test_data():
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+<<<<<<< Updated upstream
         print(f"\n=== ADMIN CHECK ===")
         print(f"Prüfe Admin-Status für Route: {request.path}")
         if not session.get('is_admin'):
             print("Keine Admin-Berechtigung!")
         else:
             print("Admin-Berechtigung bestätigt")
+=======
+        if not session.get('is_admin'):
+            flash('Bitte melden Sie sich als Administrator an', 'error')
+            return redirect(url_for('login'))
+>>>>>>> Stashed changes
         return f(*args, **kwargs)
     return decorated_function
 
@@ -474,6 +674,11 @@ app.debug = True  # Aktiviert Debug-Modus
 # Überprüfe, ob der Blueprint bereits registriert ist
 if not any(bp.name == export_bp.name for bp in app.blueprints.values()):
     logging.info("Registriere Export Blueprint...")
+<<<<<<< Updated upstream
+=======
+    app.register_blueprint(export_bp, url_prefix='/export')
+    logging.info(f"Export Blueprint '{export_bp.name}' registriert")
+>>>>>>> Stashed changes
 
 # Zeige alle registrierten Routen
 @app.before_request
@@ -486,6 +691,7 @@ def init_app():
 # Routen
 @app.route('/')
 def index():
+<<<<<<< Updated upstream
     print("\n=== INDEX ROUTE ===")
     print("Lade Hauptseite...")
     
@@ -555,6 +761,68 @@ def index():
                              tools=[],
                              orte=[],
                              typen=[])
+=======
+    try:
+        filter_status = request.args.get('filter')
+        
+        with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
+            # Verbinde die anderen Datenbanken
+            tools_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            tools_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            
+            query = '''
+                SELECT t.*,
+                    CASE 
+                        WHEN t.status = 'Defekt' THEN (
+                            SELECT strftime('%d.%m.%Y %H:%M', timestamp)
+                            FROM tool_status_history
+                            WHERE tool_barcode = t.barcode
+                            AND status = 'Defekt'
+                            ORDER BY timestamp DESC
+                            LIMIT 1
+                        )
+                        WHEN t.status = 'Ausgeliehen' THEN (
+                            SELECT strftime('%d.%m.%Y %H:%M', l.checkout_time)
+                            FROM lendings_db.lendings l
+                            WHERE l.item_barcode = t.barcode
+                            AND l.return_time IS NULL
+                            ORDER BY l.checkout_time DESC
+                            LIMIT 1
+                        )
+                        ELSE NULL
+                    END as status_date,
+                    CASE 
+                        WHEN t.status = 'Ausgeliehen' THEN (
+                            SELECT w.name || ' ' || w.lastname
+                            FROM lendings_db.lendings l
+                            JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                            WHERE l.item_barcode = t.barcode
+                            AND l.return_time IS NULL
+                            ORDER BY l.checkout_time DESC
+                            LIMIT 1
+                        )
+                        ELSE NULL
+                    END as current_worker
+                FROM tools t
+            '''
+            
+            if filter_status:
+                if filter_status == 'ausgeliehen':
+                    query += " WHERE t.status = 'Ausgeliehen'"
+                elif filter_status == 'defekt':
+                    query += " WHERE t.status = 'Defekt'"
+                    
+            query += " ORDER BY t.gegenstand"
+            
+            tools = tools_conn.execute(query).fetchall()
+            
+            return render_template('index.html', tools=tools, active_filter=filter_status)
+            
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler: {str(e)}")
+        flash('Fehler beim Laden der Werkzeuge', 'error')
+        return redirect(url_for('index'))
+>>>>>>> Stashed changes
 
 @app.route('/admin')
 @admin_required
@@ -664,6 +932,7 @@ def admin_panel():
 
 @app.route('/workers')
 def workers():
+<<<<<<< Updated upstream
     print("\n=== WORKERS ROUTE ===")
     try:
         filter_bereich = request.args.get('filter_bereich')
@@ -764,6 +1033,115 @@ def consumable_details(barcode):
     print(f"\n=== CONSUMABLE DETAILS für {barcode} ===")
     try:
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+=======
+    try:
+        filter_bereich = request.args.get('filter_bereich')
+        filter_status = request.args.get('filter_status')
+        
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            
+            query = '''
+                SELECT w.*,
+                    (SELECT COUNT(*) 
+                     FROM lendings_db.lendings l 
+                     WHERE l.worker_barcode = w.barcode 
+                     AND l.return_time IS NULL) as active_lendings
+                FROM workers w
+            '''
+            params = []
+            
+            where_clauses = []
+            
+            if filter_bereich:
+                where_clauses.append('w.bereich = ?')
+                params.append(filter_bereich)
+                
+            if filter_status == 'mit_ausleihen':
+                where_clauses.append('active_lendings > 0')
+                
+            if where_clauses:
+                query += ' WHERE ' + ' AND '.join(where_clauses)
+                
+            query += ' ORDER BY w.name'
+            
+            workers = conn.execute(query, params).fetchall()
+            
+            # Hole alle unique Bereiche für den Filter
+            bereiche = [b[0] for b in conn.execute(
+                'SELECT DISTINCT bereich FROM workers WHERE bereich IS NOT NULL'
+            ).fetchall()]
+            
+            return render_template('workers.html', 
+                                workers=workers,
+                                bereiche=bereiche,
+                                active_filter=filter_bereich or filter_status)
+                                
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Mitarbeiter: {str(e)}")
+        flash('Fehler beim Laden der Mitarbeiter', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/consumables')
+def consumables():
+    try:
+        filter_status = request.args.get('filter')
+        
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Zuerst alle Status aktualisieren
+            conn.execute('''
+                UPDATE consumables 
+                SET status = CASE 
+                    WHEN aktueller_bestand = 0 THEN 'Leer'
+                    WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
+                    ELSE 'Verfügbar'
+                END
+            ''')
+            conn.commit()
+            
+            # Dann die Daten abrufen
+            query = '''
+                SELECT *, 
+                    CASE 
+                        WHEN aktueller_bestand = 0 THEN 'Leer'
+                        WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
+                        ELSE 'Verfügbar'
+                    END as status
+                FROM consumables
+            '''
+            
+            if filter_status:
+                query += ' WHERE status = ?'
+                consumables = conn.execute(query, (filter_status,)).fetchall()
+            else:
+                consumables = conn.execute(query).fetchall()
+            
+            # Hole unique Orte und Typen für Filter
+            orte = [row[0] for row in conn.execute('SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL').fetchall()]
+            typen = [row[0] for row in conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL').fetchall()]
+            
+        return render_template('consumables.html', 
+                             consumables=consumables,
+                             orte=orte,
+                             typen=typen,
+                             active_filter=filter_status)
+                             
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Verbrauchsmaterialien: {str(e)}")
+        logging.error(traceback.format_exc())
+        flash('Fehler beim Laden der Verbrauchsmaterialien', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/consumables/<barcode>')
+def consumable_details(barcode):
+    logging.info(f"Lade Details für Verbrauchsmaterial {barcode}")
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            
+            # Hole Verbrauchsmaterial-Details
+>>>>>>> Stashed changes
             consumable = conn.execute('''
                 SELECT * FROM consumables 
                 WHERE barcode = ?
@@ -772,6 +1150,7 @@ def consumable_details(barcode):
             if not consumable:
                 flash('Verbrauchsmaterial nicht gefunden', 'error')
                 return redirect(url_for('consumables'))
+<<<<<<< Updated upstream
 
             consumable = dict(consumable)
             consumable['aktueller_bestand'] = int(consumable.get('aktueller_bestand', 0) or 0)
@@ -790,19 +1169,52 @@ def consumable_details(barcode):
                     WHERE l.item_barcode = ?
                     ORDER BY l.checkout_time DESC
                 ''', (barcode,)).fetchall()
+=======
+            
+            # Hole Ausgabehistorie mit Mitarbeiterdaten
+            lendings = conn.execute('''
+                SELECT 
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as checkout_time,
+                    l.amount,
+                    w.name || ' ' || w.lastname as worker_name,
+                    l.return_time
+                FROM lendings_db.lendings l
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.item_barcode = ?
+                ORDER BY l.checkout_time DESC
+            ''', (barcode,)).fetchall()
+            
+            # Status berechnen
+            if consumable['aktueller_bestand'] == 0:
+                status = 'Leer'
+            elif consumable['aktueller_bestand'] <= consumable['mindestbestand']:
+                status = 'Nachbestellen'
+            else:
+                status = 'Verfügbar'
+            
+            consumable = dict(consumable)
+            consumable['status'] = status
+>>>>>>> Stashed changes
             
             return render_template('consumable_details.html', 
                                 consumable=consumable,
                                 lendings=lendings,
                                 is_admin=session.get('is_admin', False))
+<<<<<<< Updated upstream
                                  
     except Exception as e:
         print(f"FEHLER beim Laden der Details: {str(e)}")
         print(traceback.format_exc())
+=======
+            
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler in consumable_details: {str(e)}")
+>>>>>>> Stashed changes
         flash('Fehler beim Laden der Details', 'error')
         return redirect(url_for('consumables'))
 
 @app.route('/consumables/<barcode>/edit', methods=['GET', 'POST'])
+<<<<<<< Updated upstream
 @admin_required
 def edit_consumable(barcode):
     """Verbrauchsmaterial bearbeiten"""
@@ -852,10 +1264,51 @@ def edit_consumable(barcode):
                 'SELECT * FROM consumables WHERE barcode = ?', 
                 (barcode,)
             ).fetchone()
+=======
+def edit_consumable(barcode):
+    logging.info(f"Bearbeite Verbrauchsmaterial {barcode}, Methode: {request.method}")
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            
+            # POST-Handling für Updates
+            if request.method == 'POST':
+                # Bestehende Update-Logik...
+                bezeichnung = request.form.get('bezeichnung')
+                typ = request.form.get('typ')
+                ort = request.form.get('ort')
+                mindestbestand = request.form.get('mindestbestand', type=int)
+                aktueller_bestand = request.form.get('aktueller_bestand', type=int)
+                einheit = request.form.get('einheit')
+                
+                conn.execute('''
+                    UPDATE consumables 
+                    SET bezeichnung = ?,
+                        typ = ?,
+                        ort = ?,
+                        mindestbestand = ?,
+                        aktueller_bestand = ?,
+                        einheit = ?,
+                        last_updated = CURRENT_TIMESTAMP
+                    WHERE barcode = ?
+                ''', (bezeichnung, typ, ort, mindestbestand, aktueller_bestand, einheit, barcode))
+                
+                conn.commit()
+                flash('Verbrauchsmaterial erfolgreich aktualisiert', 'success')
+                return redirect(url_for('consumables'))
+            
+            # GET-Handling für Anzeige
+            consumable = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+>>>>>>> Stashed changes
             
             if not consumable:
                 flash('Verbrauchsmaterial nicht gefunden', 'error')
                 return redirect(url_for('consumables'))
+<<<<<<< Updated upstream
                 
             return render_template('edit_consumable.html', 
                                 consumable=dict(consumable))
@@ -864,10 +1317,48 @@ def edit_consumable(barcode):
         print(f"FEHLER beim Bearbeiten: {str(e)}")
         print(traceback.format_exc())
         flash('Fehler beim Bearbeiten des Materials', 'error')
+=======
+            
+            # Hole Ausgabehistorie
+            lendings = conn.execute('''
+                SELECT 
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as checkout_time,
+                    l.amount,
+                    w.name || ' ' || w.lastname as worker_name,
+                    strftime('%d.%m.%Y %H:%M', l.return_time) as return_time
+                FROM lendings_db.lendings l
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.item_barcode = ?
+                ORDER BY l.checkout_time DESC
+            ''', (barcode,)).fetchall()
+            
+            logging.info(f"Geladene Historie für {barcode}: {lendings}")
+            
+            # Status berechnen
+            if consumable['aktueller_bestand'] == 0:
+                status = 'Leer'
+            elif consumable['aktueller_bestand'] <= consumable['mindestbestand']:
+                status = 'Nachbestellen'
+            else:
+                status = 'Verfügbar'
+            
+            consumable = dict(consumable)
+            consumable['status'] = status
+            
+            return render_template('consumable_details.html', 
+                                consumable=consumable,
+                                lendings=lendings,
+                                is_admin=session.get('is_admin', False))
+            
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler in edit_consumable: {str(e)}")
+        flash('Fehler beim Laden der Details', 'error')
+>>>>>>> Stashed changes
         return redirect(url_for('consumables'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+<<<<<<< Updated upstream
     print("\n=== LOGIN ROUTE ===")
     print(f"Methode: {request.method}")
     if request.method == 'POST':
@@ -876,20 +1367,34 @@ def login():
         print("Prüfe Passwort...")
         if password == ADMIN_PASSWORD:
             print("Login erfolgreich!")
+=======
+    logging.info(f"Login-Versuch, Methode: {request.method}")
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == ADMIN_PASSWORD:
+>>>>>>> Stashed changes
             session['is_admin'] = True
             flash('Erfolgreich als Administrator angemeldet', 'success')
             return redirect(url_for('index'))
         else:
+<<<<<<< Updated upstream
             print("Login fehlgeschlagen - falsches Passwort")
+=======
+>>>>>>> Stashed changes
             flash('Falsches Passwort', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
+<<<<<<< Updated upstream
     print("\n=== LOGOUT ROUTE ===")
     print("Entferne Admin-Status aus Session")
     session.pop('is_admin', None)
     print("Logout erfolgreich")
+=======
+    logging.info("Benutzer wird abgemeldet")
+    session.pop('is_admin', None)
+>>>>>>> Stashed changes
     flash('Erfolgreich abgemeldet', 'success')
     return redirect(url_for('index'))
 
@@ -1035,6 +1540,11 @@ def restore_consumable(id):
             ''', (item['barcode'], item['bezeichnung'], item['ort'],
                   item['typ'], 'Verfügbar', item['mindestbestand'],
                   item['aktueller_bestand'], item['einheit']))
+<<<<<<< Updated upstream
+=======
+            
+            conn.execute('DELETE FROM deleted_consumables WHERE id=?', (id,))
+>>>>>>> Stashed changes
             conn.commit()
             
             flash('Verbrauchsmaterial wiederhergestellt', 'success')
@@ -1193,11 +1703,21 @@ def tool_details(barcode):
             # Hole Statushistorie
             status_history = conn.execute('''
                 SELECT 
+<<<<<<< Updated upstream
                     strftime('%d.%m.%Y %H:%M', timestamp) as formatted_time,
                     old_status,
                     new_status,
                     changed_by
                 FROM tool_status_history 
+=======
+                    tool_barcode,
+                    old_status,
+                    new_status,
+                    comment,
+                    changed_by,
+                    strftime('%d.%m.%Y %H:%M', timestamp) as formatted_timestamp
+                FROM tool_status_history
+>>>>>>> Stashed changes
                 WHERE tool_barcode = ?
                 ORDER BY timestamp DESC
             ''', (barcode,)).fetchall()
@@ -1319,6 +1839,12 @@ def delete_worker(barcode):
             ''', (worker['barcode'], worker['name'], worker['lastname'],
                  worker['bereich'], worker['email'], 
                  session.get('username', 'System')))
+<<<<<<< Updated upstream
+=======
+            
+            # Lösche Mitarbeiter
+            conn.execute('DELETE FROM workers WHERE barcode = ?', (barcode,))
+>>>>>>> Stashed changes
             conn.commit()
             
             flash('Mitarbeiter erfolgreich gelöscht', 'success')
@@ -1330,6 +1856,7 @@ def delete_worker(barcode):
     return redirect(url_for('workers'))
 
 @app.route('/worker/<barcode>')
+<<<<<<< Updated upstream
 @admin_required
 def worker_details(barcode):
     print(f"\n=== WORKER DETAILS ROUTE ===")
@@ -1374,6 +1901,67 @@ def worker_details(barcode):
         print(traceback.format_exc())
         flash('Fehler beim Laden der Details', 'error')
         return redirect(url_for('index'))
+=======
+def worker_details(barcode):
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as workers_conn:
+            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
+            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            workers_conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+            
+            # Hole Mitarbeiterdetails
+            worker = dict(workers_conn.execute('SELECT * FROM workers WHERE barcode = ?', 
+                                          (barcode,)).fetchone())
+            
+            # Hole aktuelle Ausleihen
+            current_lendings = [dict(row) for row in workers_conn.execute('''
+                SELECT 
+                    l.*,
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
+                    COALESCE(t.gegenstand, c.bezeichnung) as item_name,
+                    CASE 
+                        WHEN t.barcode IS NOT NULL THEN 'Werkzeug'
+                        ELSE 'Verbrauchsmaterial'
+                    END as item_type
+                FROM lendings_db.lendings l
+                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode
+                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
+                WHERE l.worker_barcode = ? AND l.return_time IS NULL
+                ORDER BY l.checkout_time DESC
+            ''', (barcode,)).fetchall()]
+            
+            # Hole Ausleihhistorie
+            lending_history = [dict(row) for row in workers_conn.execute('''
+                SELECT 
+                    l.*,
+                    strftime('%d.%m.%Y %H:%M', l.checkout_time) as formatted_checkout_time,
+                    strftime('%d.%m.%Y %H:%M', l.return_time) as formatted_return_time,
+                    COALESCE(t.gegenstand, c.bezeichnung) as item_name,
+                    CASE 
+                        WHEN t.barcode IS NOT NULL THEN 'Werkzeug'
+                        ELSE 'Verbrauchsmaterial'
+                    END as item_type,
+                    CASE 
+                        WHEN c.barcode IS NOT NULL THEN l.amount || ' ' || c.einheit
+                        ELSE '1'
+                    END as amount_display
+                FROM lendings_db.lendings l
+                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode
+                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode
+                WHERE l.worker_barcode = ? AND l.return_time IS NOT NULL
+                ORDER BY l.checkout_time DESC
+            ''', (barcode,)).fetchall()]
+            
+        return render_template('worker_details.html', 
+                             worker=worker, 
+                             current_lendings=current_lendings,
+                             lending_history=lending_history)
+                             
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler in worker_details: {str(e)}")
+        flash('Fehler beim Laden der Mitarbeiterdetails', 'error')
+        return redirect(url_for('workers'))
+>>>>>>> Stashed changes
 
 @app.route('/admin/restore/tool/<int:id>')
 @admin_required
@@ -1407,6 +1995,12 @@ def restore_tool(id):
             ''', (deleted_tool['barcode'], deleted_tool['gegenstand'], 
                   deleted_tool['ort'], deleted_tool['typ'], 
                   'Verfügbar', deleted_tool['image_path']))
+<<<<<<< Updated upstream
+=======
+            
+            # Aus dem Papierkorb löschen
+            conn.execute('DELETE FROM deleted_tools WHERE id=?', (id,))
+>>>>>>> Stashed changes
             conn.commit()
             
             flash('Werkzeug erfolgreich wiederhergestellt', 'success')
@@ -1433,8 +2027,12 @@ def restore_worker(id):
             if item:
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
+<<<<<<< Updated upstream
                     'SELECT 1 FROM workers WHERE barcode=?', 
                     (item['barcode'],)
+=======
+                    'SELECT 1 FROM workers WHERE barcode=?', (item['barcode'],)
+>>>>>>> Stashed changes
                 ).fetchone()
                 
                 if existing:
@@ -1643,6 +2241,7 @@ def quick_scan():
 
 @app.route('/api/recent_lendings')
 def get_recent_lendings():
+<<<<<<< Updated upstream
     print("\n=== RECENT LENDINGS API ===")
     print("Lade aktuelle Ausleihen für Frontend-Anzeige...")
     try:
@@ -1654,11 +2253,121 @@ def get_recent_lendings():
             
             print("Führe Abfrage aus...")
             lendings = conn.execute('''
+=======
+    """Letzte 10 Ausleihen"""
+    try:
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            lendings = conn.execute('''
+                SELECT l.*, w.name || ' ' || w.lastname as worker_name,
+                       CASE 
+                           WHEN l.item_type = 'tool' THEN t.gegenstand
+                           ELSE c.bezeichnung
+                       END as item_name,
+                       CASE
+                           WHEN l.return_time IS NULL THEN 'Ausgeliehen'
+                           ELSE 'Zurückgegeben'
+                       END as status
+                FROM lendings l
+                LEFT JOIN workers w ON l.worker_barcode = w.barcode
+                LEFT JOIN tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                ORDER BY l.lending_time DESC
+                LIMIT 10
+            ''').fetchall()
+            
+            return jsonify({
+                'success': True,
+                'lendings': [dict(lending) for lending in lendings]
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/api/process_lending', methods=['POST'])
+def process_lending():
+    try:
+        data = request.get_json()
+        logging.info(f"Process lending: action={data.get('action')}, "
+                    f"barcode={data.get('item_barcode')}, "
+                    f"worker={data.get('worker_barcode')}, "
+                    f"amount={data.get('amount', 1)}")
+
+        if not data.get('worker_barcode'):
+            return jsonify({'success': False, 'message': 'Kein Mitarbeiter ausgewählt'})
+        
+        if not data.get('item_barcode'):
+            return jsonify({'success': False, 'message': 'Kein Werkzeug/Material ausgewählt'})
+
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+            
+            # Füge neue Ausleihe hinzu
+            conn.execute('''
+                INSERT INTO lendings 
+                (worker_barcode, item_barcode, item_type, amount)
+                VALUES (?, ?, ?, ?)
+            ''', (data['worker_barcode'], data['item_barcode'], 
+                  data['item_type'], data.get('amount', 1)))
+            
+            # Aktualisiere Status des Werkzeugs
+            if data['item_type'] == 'tool':
+                conn.execute('''
+                    UPDATE tools_db.tools 
+                    SET status = 'Ausgeliehen' 
+                    WHERE barcode = ?
+                ''', (data['item_barcode'],))
+            
+            conn.commit()
+            
+        return jsonify({'success': True, 'message': 'Ausleihe erfolgreich'})
+            
+    except Exception as e:
+        logging.error(f"Fehler bei der Ausleihe: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/manual_lending')
+def manual_lending():
+    try:
+        logging.info("Starte Laden der Ausleihseite...")
+        with get_db_connection(DBConfig.WORKERS_DB) as workers_conn:
+            workers = [dict(row) for row in workers_conn.execute('''
+                SELECT barcode, name, lastname 
+                FROM workers 
+                ORDER BY lastname, name
+            ''').fetchall()]
+            
+        with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
+            tools = [dict(row) for row in tools_conn.execute('''
+                SELECT barcode, gegenstand 
+                FROM tools 
+                WHERE status = 'Verfügbar'
+                ORDER BY gegenstand
+            ''').fetchall()]
+            
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as cons_conn:
+            consumables = [dict(row) for row in cons_conn.execute('''
+                SELECT barcode, bezeichnung, aktueller_bestand, einheit
+                FROM consumables 
+                WHERE aktueller_bestand > 0
+                ORDER BY bezeichnung
+            ''').fetchall()]
+            
+        with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
+            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            lendings_conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+            
+            active_lendings = [dict(row) for row in lendings_conn.execute('''
+>>>>>>> Stashed changes
                 SELECT l.*, 
                        w.name || ' ' || w.lastname as worker_name,
                        CASE 
                            WHEN l.item_type = 'tool' THEN t.gegenstand
                            ELSE c.bezeichnung
+<<<<<<< Updated upstream
                        END as item_name
                 FROM lendings l
                 LEFT JOIN workers_db.workers w ON l.worker_barcode = w.barcode
@@ -1871,6 +2580,42 @@ def mark_tool_defect(barcode):
     try:
         print("Markiere Werkzeug als defekt...")
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
+=======
+                       END as item_name,
+                       l.amount,
+                       datetime(l.checkout_time, 'localtime') as formatted_time
+                FROM lendings l
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                LEFT JOIN tools_db.tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables_db.consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                WHERE l.return_time IS NULL
+                ORDER BY l.checkout_time DESC
+            ''').fetchall()]
+            
+        return render_template('manual_lending.html', 
+                             workers=workers,
+                             tools=tools, 
+                             consumables=consumables,
+                             active_lendings=active_lendings)
+                             
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Ausleihseite: {str(e)}")
+        flash('Fehler beim Laden der Ausleihseite', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/mark_tool_defect/<barcode>', methods=['POST'])
+def mark_tool_defect(barcode):
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            # Prüfen ob das Werkzeug existiert und den aktuellen Status holen
+            current = conn.execute('SELECT status FROM tools WHERE barcode = ?', (barcode,)).fetchone()
+            
+            if not current:
+                flash('Werkzeug nicht gefunden', 'error')
+                return redirect(url_for('index'))
+            
+            # Status und Datum aktualisieren
+>>>>>>> Stashed changes
             conn.execute('''
                 UPDATE tools 
                 SET status = 'Defekt',
@@ -1878,6 +2623,7 @@ def mark_tool_defect(barcode):
                 WHERE barcode = ?
             ''', (barcode,))
             conn.commit()
+<<<<<<< Updated upstream
             print("Werkzeug erfolgreich als defekt markiert")
             
         return jsonify({'success': True})
@@ -1885,6 +2631,198 @@ def mark_tool_defect(barcode):
         print(f"FEHLER beim Markieren als defekt: {str(e)}")
         return jsonify({'error': str(e)})
 
+=======
+            
+            # Debug-Log hinzufügen
+            logging.info(f"Werkzeug {barcode} als defekt markiert mit Timestamp")
+            flash('Werkzeug wurde als defekt markiert', 'success')
+            
+    except sqlite3.Error as e:
+        logging.error(f"Fehler beim Markieren als defekt: {str(e)}")
+        flash('Fehler beim Markieren als defekt', 'error')
+    return redirect(url_for('index'))
+
+def add_defect_date_column():
+    """Fügt die defect_date Spalte zur tools Tabelle hinzu, falls sie nicht existiert"""
+    try:
+        with sqlite3.connect(DBConfig.TOOLS_DB) as conn:
+            # Prüfe ob die Spalte bereits existiert
+            cursor = conn.execute("PRAGMA table_info(tools)")
+            columns = [info[1] for info in cursor.fetchall()]
+            
+            if 'defect_date' not in columns:
+                conn.execute('''
+                    ALTER TABLE tools 
+                    ADD COLUMN defect_date DATETIME
+                ''')
+                logging.info("defect_date Spalte erfolgreich hinzugefügt")
+                
+    except Exception as e:
+        logging.error(f"Fehler beim Hinzufügen der defect_date Spalte: {str(e)}")
+
+@app.route('/consumables/<barcode>/checkout', methods=['POST'])
+def checkout_consumable(barcode):
+    try:
+        amount = request.form.get('amount', type=int)
+        worker_barcode = request.form.get('worker_barcode')
+        
+        if not amount or amount <= 0:
+            flash('Ungültige Menge', 'error')
+            return redirect(url_for('consumable_details', barcode=barcode))
+            
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Prüfe aktuellen Bestand
+            current = conn.execute('''
+                SELECT aktueller_bestand FROM consumables 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if current['aktueller_bestand'] < amount:
+                flash('Nicht genügend Bestand verfügbar', 'error')
+                return redirect(url_for('consumable_details', barcode=barcode))
+            
+            # Bestand aktualisieren
+            conn.execute('''
+                UPDATE consumables 
+                SET aktueller_bestand = aktueller_bestand - ?,
+                    last_updated = CURRENT_TIMESTAMP
+                WHERE barcode = ?
+            ''', (amount, barcode))
+            
+            # Historie eintragen
+            conn.execute('''
+                INSERT INTO consumables_history 
+                (consumable_barcode, worker_barcode, action, amount, old_stock, new_stock, changed_by)
+                VALUES (?, ?, 'checkout', ?, ?, ?, ?)
+            ''', (
+                barcode,
+                worker_barcode,
+                amount,
+                current['aktueller_bestand'],
+                current['aktueller_bestand'] - amount,
+                session.get('username', 'System')
+            ))
+            
+            conn.commit()
+            flash('Ausgabe erfolgreich verbucht', 'success')
+            
+    except Exception as e:
+        logging.error(f"Fehler bei Materialausgabe: {str(e)}")
+        flash('Fehler bei der Ausgabe', 'error')
+        
+    return redirect(url_for('consumable_details', barcode=barcode))
+
+@app.route('/api/get_item/<barcode>')
+def get_item(barcode):
+    try:
+        # Erst in Werkzeugen suchen
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            tool = conn.execute('SELECT * FROM tools WHERE barcode = ?', 
+                              (barcode,)).fetchone()
+            if tool:
+                return jsonify({
+                    'type': 'tool',
+                    'barcode': tool['barcode'],
+                    'gegenstand': tool['gegenstand'],
+                    'status': tool['status']
+                })
+        
+        # Dann in Verbrauchsmaterial
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            item = conn.execute('SELECT * FROM consumables WHERE barcode = ?', 
+                              (barcode,)).fetchone()
+            if item:
+                return jsonify({
+                    'type': 'consumable',
+                    'barcode': item['barcode'],
+                    'gegenstand': item['bezeichnung'],
+                    'bestand': item['aktueller_bestand']
+                })
+                
+        return jsonify({'error': 'Artikel nicht gefunden'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/get_worker/<barcode>')
+def get_worker(barcode):
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            worker = conn.execute('''
+                SELECT barcode, name, lastname, bereich, email 
+                FROM workers 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if worker:
+                return jsonify(dict(worker))
+            return jsonify({'error': 'Mitarbeiter nicht gefunden'})
+            
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/process_scan', methods=['POST'])
+def process_scan():
+    try:
+        data = request.json
+        tool_barcode = data['tool_barcode']
+        worker_barcode = data['worker_barcode']
+        action = data['action']
+        
+        if action == 'checkout':
+            return process_checkout(tool_barcode, worker_barcode)
+        elif action == 'return':
+            return process_return(tool_barcode)
+        else:
+            return jsonify({'error': 'Ungültige Aktion'})
+            
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/search_worker/<query>')
+def search_worker(query):
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            # Suche nach Barcode
+            if query.isdigit():
+                worker = conn.execute('''
+                    SELECT * FROM workers 
+                    WHERE barcode = ?
+                ''', (query,)).fetchone()
+                
+                if worker:
+                    return jsonify({
+                        'multiple': False,
+                        'worker': dict(worker)
+                    })
+            
+            # Suche nach Name
+            workers = conn.execute('''
+                SELECT * FROM workers 
+                WHERE name || ' ' || lastname LIKE ? 
+                OR lastname || ' ' || name LIKE ?
+                OR name LIKE ? 
+                OR lastname LIKE ?
+            ''', (f'%{query}%', f'%{query}%', f'%{query}%', f'%{query}%')).fetchall()
+            
+            if len(workers) == 0:
+                return jsonify({'error': 'Kein Mitarbeiter gefunden'})
+            elif len(workers) == 1:
+                return jsonify({
+                    'multiple': False,
+                    'worker': dict(workers[0])
+                })
+            else:
+                return jsonify({
+                    'multiple': True,
+                    'workers': [dict(w) for w in workers]
+                })
+                
+    except Exception as e:
+        logging.error(f"Fehler bei Mitarbeitersuche: {str(e)}")
+        return jsonify({'error': 'Datenbankfehler'})
+
+>>>>>>> Stashed changes
 @app.route('/admin/permanent_delete/tool/<int:id>')
 @admin_required
 def permanent_delete_tool(id):
@@ -2105,14 +3043,20 @@ def process_return(tool_barcode):
 @app.route('/consume_item', methods=['POST'])
 def consume_item():
     try:
+<<<<<<< Updated upstream
         barcode = request.form.get('barcode')
         amount = int(request.form.get('amount'))
         worker_barcode = request.form.get('worker_barcode')
+=======
+        data = request.form
+        barcode = data.get('barcode')
+>>>>>>> Stashed changes
         
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
             item = conn.execute('SELECT * FROM consumables WHERE barcode = ?', 
                               (barcode,)).fetchone()
             
+<<<<<<< Updated upstream
             if item:
                 old_stock = item['aktueller_bestand']
                 new_stock = old_stock - amount
@@ -2175,6 +3119,41 @@ def update_consumable_stock():
             ''', (new_stock, barcode))
             conn.commit()
             print("Bestand erfolgreich aktualisiert")
+=======
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
+            conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+            
+            # Hole Ausleihinformationen
+            lending = conn.execute('''
+                SELECT * FROM lendings 
+                WHERE item_barcode = ? AND return_time IS NULL
+            ''', (barcode,)).fetchone()
+            
+            if not lending:
+                return jsonify({'success': False, 'message': 'Keine aktive Ausleihe gefunden'})
+            
+            # Aktualisiere Ausleihe
+            conn.execute('''
+                UPDATE lendings 
+                SET return_time = CURRENT_TIMESTAMP 
+                WHERE item_barcode = ? AND return_time IS NULL
+            ''', (barcode,))
+            
+            # Aktualisiere Status je nach Typ
+            if lending['item_type'] == 'tool':
+                conn.execute('''
+                    UPDATE tools_db.tools 
+                    SET status = 'Verfügbar' 
+                    WHERE barcode = ?
+                ''', (barcode,))
+            else:  # consumable
+                conn.execute('''
+                    UPDATE consumables_db.consumables 
+                    SET aktueller_bestand = aktueller_bestand + ?
+                    WHERE barcode = ?
+                ''', (lending['amount'], barcode))
+>>>>>>> Stashed changes
             
         return jsonify({'success': True})
     except Exception as e:
@@ -2305,13 +3284,63 @@ def delete_worker():
             conn.execute('DELETE FROM workers WHERE barcode = ?', (worker_barcode,))
             conn.commit()
             
+<<<<<<< Updated upstream
             print(f"Mitarbeiter {worker['name']} {worker['lastname']} erfolgreich gelöscht")
             return jsonify({
                 'success': True,
                 'message': f"Mitarbeiter {worker['name']} {worker['lastname']} wurde gelöscht"
             })
+=======
+        return jsonify({'success': True, 'message': 'Artikel erfolgreich zurückgegeben'})
             
     except Exception as e:
+        logging.error(f"Fehler bei Rückgabe: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/consume_item', methods=['POST'])
+def consume_item():
+    try:
+        barcode = request.form.get('barcode')
+        amount = int(request.form.get('amount'))
+        worker_barcode = request.form.get('worker_barcode')
+        
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            item = conn.execute('SELECT * FROM consumables WHERE barcode = ?', 
+                              (barcode,)).fetchone()
+>>>>>>> Stashed changes
+            
+            if item:
+                old_stock = item['aktueller_bestand']
+                new_stock = old_stock - amount
+                
+                # Prüfe ob genug Bestand vorhanden ist
+                if new_stock < 0:
+                    return jsonify({
+                        'success': False, 
+                        'message': f'Nicht genügend Bestand vorhanden. Verfügbar: {old_stock}'
+                    })
+                
+                # Aktualisiere Bestand
+                conn.execute('''
+                    UPDATE consumables 
+                    SET aktueller_bestand = ? 
+                    WHERE barcode = ?
+                ''', (new_stock, barcode))
+                
+                # Erstelle Ausgabe-Eintrag
+                with get_db_connection(DBConfig.LENDINGS_DB) as lending_conn:
+                    lending_conn.execute('''
+                        INSERT INTO lendings 
+                        (worker_barcode, item_barcode, item_type, amount, 
+                         old_stock, new_stock, return_time)
+                        VALUES (?, ?, 'consumable', ?, ?, ?, CURRENT_TIMESTAMP)
+                    ''', (worker_barcode, barcode, amount, old_stock, new_stock))
+                
+                conn.commit()
+                return jsonify({'success': True})
+                
+    except Exception as e:
+<<<<<<< Updated upstream
         print(f"Fehler beim Löschen des Mitarbeiters: {str(e)}")
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
@@ -2379,5 +3408,160 @@ if __name__ == '__main__':
         print("\n=== FLASK APP WIRD GESTARTET ===")
         print("Verfügbare Routen:", [str(rule) for rule in app.url_map.iter_rules()])
         app.run(debug=True, port=5000)
+=======
+        logging.error(f"Fehler beim Verbrauchen: {str(e)}")
+        return jsonify({'success': False, 'message': 'Fehler beim Verbrauchen'})
+
+@app.route('/update_consumable_stock', methods=['POST'])
+def update_consumable_stock():
+    try:
+        barcode = request.form.get('barcode')
+        if not barcode:
+            flash('Barcode fehlt', 'error')
+            return redirect(url_for('consumables'))
+            
+        aktueller_bestand = int(request.form.get('aktueller_bestand', 0))
+        mindestbestand = int(request.form.get('mindestbestand', 0))
+        
+        # Validiere die Werte
+        if aktueller_bestand < 0:
+            flash('Der aktuelle Bestand darf nicht negativ sein.', 'error')
+            return redirect(url_for('consumable_details', barcode=barcode))
+            
+        if mindestbestand < 0:
+            flash('Der Mindestbestand darf nicht negativ sein.', 'error')
+            return redirect(url_for('consumable_details', barcode=barcode))
+        
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            conn.execute('''
+                UPDATE consumables 
+                SET aktueller_bestand = ?, mindestbestand = ?
+                WHERE barcode = ?
+            ''', (aktueller_bestand, mindestbestand, barcode))
+            conn.commit()
+            
+            flash('Verbrauchsmaterial erfolgreich aktualisiert', 'success')
+            return redirect(url_for('consumable_details', barcode=barcode))
+            
+    except Exception as e:
+        logging.error(f"Fehler beim Aktualisieren des Verbrauchsmaterials: {str(e)}")
+        flash('Fehler beim Aktualisieren des Verbrauchsmaterials', 'error')
+        return redirect(url_for('consumables'))  # Fallback zur Übersicht bei Fehler
+
+@app.route('/history')
+def history():
+    try:
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            history = conn.execute('''
+                SELECT l.*, w.name, w.lastname,
+                    CASE 
+                        WHEN l.item_type = 'tool' THEN t.gegenstand
+                        WHEN l.item_type = 'consumable' THEN c.bezeichnung
+                    END as item_name,
+                    CASE 
+                        WHEN l.item_type = 'tool' THEN t.typ
+                        WHEN l.item_type = 'consumable' THEN c.typ
+                    END as item_type_name
+                FROM lendings l
+                LEFT JOIN workers w ON l.worker_barcode = w.barcode
+                LEFT JOIN tools t ON l.item_barcode = t.barcode AND l.item_type = 'tool'
+                LEFT JOIN consumables c ON l.item_barcode = c.barcode AND l.item_type = 'consumable'
+                ORDER BY l.checkout_time DESC
+            ''').fetchall()
+            
+        return render_template('history.html', history=history)
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Historie: {str(e)}")
+        flash('Fehler beim Laden der Historie', 'error')
+        return redirect(url_for('index'))
+
+# Diese Funktion beim Startup aufrufen
+if __name__ == '__main__':
+    # Konfiguriere Logging
+    logging.basicConfig(level=logging.INFO)
+    
+    # Initialisiere Datenbanken
+    if init_all_databases():
+        logging.info("Datenbanken erfolgreich initialisiert")
+        # Erstelle Testdaten
+        import create_test_data
+        create_test_data.create_test_data()
+        # Starte App
+        app.run(debug=True)
+>>>>>>> Stashed changes
     else:
         logging.error("Fehler bei der Datenbankinitialisierung")
+
+def process_checkout(tool_barcode, worker_barcode):
+    """Verarbeitet die Ausleihe eines Werkzeugs"""
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
+            # Prüfe ob das Werkzeug verfügbar ist
+            tool = tools_conn.execute('''
+                SELECT * FROM tools 
+                WHERE barcode = ? AND status = 'Verfügbar'
+            ''', (tool_barcode,)).fetchone()
+            
+            if not tool:
+                return jsonify({'error': 'Werkzeug nicht verfügbar'})
+            
+            # Markiere als ausgeliehen
+            tools_conn.execute('''
+                UPDATE tools 
+                SET status = 'Ausgeliehen' 
+                WHERE barcode = ?
+            ''', (tool_barcode,))
+            tools_conn.commit()
+        
+        # Erstelle Ausleihvorgang
+        with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
+            lendings_conn.execute('''
+                INSERT INTO lendings 
+                (worker_barcode, item_barcode, item_type, checkout_time)
+                VALUES (?, ?, 'tool', CURRENT_TIMESTAMP)
+            ''', (worker_barcode, tool_barcode))
+            lendings_conn.commit()
+            
+        return jsonify({'success': True, 'message': 'Ausleihe erfolgreich'})
+        
+    except Exception as e:
+        logging.error(f"Fehler bei Werkzeugausleihe: {str(e)}")
+        return jsonify({'error': 'Datenbankfehler'})
+
+def process_return(tool_barcode):
+    """Verarbeitet die Rückgabe eines Werkzeugs"""
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
+            # Prüfe ob das Werkzeug existiert
+            tool = tools_conn.execute('''
+                SELECT * FROM tools 
+                WHERE barcode = ?
+            ''', (tool_barcode,)).fetchone()
+            
+            if not tool:
+                return jsonify({'error': 'Werkzeug nicht gefunden'})
+            
+            # Markiere als verfügbar
+            tools_conn.execute('''
+                UPDATE tools 
+                SET status = 'Verfügbar' 
+                WHERE barcode = ?
+            ''', (tool_barcode,))
+            tools_conn.commit()
+        
+        # Aktualisiere Ausleihvorgang
+        with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
+            lendings_conn.execute('''
+                UPDATE lendings 
+                SET return_time = CURRENT_TIMESTAMP
+                WHERE item_barcode = ? 
+                AND item_type = 'tool'
+                AND return_time IS NULL
+            ''', (tool_barcode,))
+            lendings_conn.commit()
+            
+        return jsonify({'success': True, 'message': 'Rückgabe erfolgreich'})
+        
+    except Exception as e:
+        logging.error(f"Fehler bei Werkzeugrückgabe: {str(e)}")
+        return jsonify({'error': 'Datenbankfehler'})
