@@ -214,5 +214,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialisierung der Filter aus base.html
     initializeFilters();
 });
+
+function deleteConsumable(barcode) {
+    if (confirm('Möchten Sie dieses Verbrauchsmaterial wirklich löschen?')) {
+        fetch('/delete_consumable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ barcode: barcode })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert('Fehler beim Löschen: ' + (data.error || 'Unbekannter Fehler'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler beim Löschen des Verbrauchsmaterials: ' + error.message);
+        });
+    }
+}
 </script>
 {% endblock %}
