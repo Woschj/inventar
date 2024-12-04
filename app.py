@@ -12,7 +12,8 @@ from routes import export_bp
 import sys
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Ersetzen Sie dies mit einem sicheren Schlüssel
+app.secret_key = 'dein_geheimer_schlüssel'  # Muss gesetzt sein, damit Sessions funktionieren
+app.config['ADMIN_PASSWORD'] = 'admin'  # Hier das gewünschte Admin-Passwort eintragen
 
 
 def get_tool_lendings(barcode):
@@ -759,7 +760,18 @@ def consumables():
         flash('Fehler beim Laden der Verbrauchsmaterialien', 'error')
         return redirect(url_for('index'))
 
+# Neue Decorator-Funktion für Login-Erfordernis
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_admin'):
+            flash('Bitte melden Sie sich an, um diese Funktion zu nutzen.', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/consumables/<barcode>')
+@admin_required  # Sicherstellen, dass nur Admins Zugriff haben
 def consumable_details(barcode):
     logging.info(f"Lade Details für Verbrauchsmaterial {barcode}")
     try:
@@ -893,22 +905,20 @@ def edit_consumable(barcode):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    logging.info(f"Login-Versuch, Methode: {request.method}")
     if request.method == 'POST':
-        password = request.form.get('password')
-        if password == ADMIN_PASSWORD:
+        if request.form.get('password') == "1234":  # Sicheres Abrufen des Passworts
             session['is_admin'] = True
-            flash('Erfolgreich als Administrator angemeldet', 'success')
+            flash('Erfolgreich eingeloggt', 'success')
             return redirect(url_for('index'))
         else:
             flash('Falsches Passwort', 'error')
+            return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
-    logging.info("Benutzer wird abgemeldet")
-    session.pop('is_admin', None)
-    flash('Erfolgreich abgemeldet', 'success')
+    session.pop('is_admin', None)  # Entfernt die is_admin Variable aus der Session
+    flash('Erfolgreich ausgeloggt', 'success')
     return redirect(url_for('index'))
 
 @app.route('/consumables/add', methods=['GET', 'POST'])
@@ -1735,6 +1745,7 @@ def process_lending():
         return jsonify({'success': False, 'message': str(e)})
 
 @app.route('/manual_lending')
+@admin_required  # oder @login_required, je nachdem welchen Decorator du verwendest
 def manual_lending():
     try:
         logging.info("Starte Laden der Ausleihseite...")

@@ -27,33 +27,9 @@
                     colors: {
                         primary: '#5b69a7',
                         'primary-focus': '#4c5789',
-                        secondary: '#475569',
                     }
                 }
-            },
-            daisyui: {
-                themes: [
-                    {
-                        light: {
-                            ...require("daisyui/src/theming/themes")["light"],
-                            "base-100": "#ffffff",
-                            "base-200": "#f3f4f6",
-                            "base-300": "#e5e7eb",
-                            "base-content": "#1f2937",
-                        },
-                        dark: {
-                            ...require("daisyui/src/theming/themes")["dark"],
-                            "base-100": "#1f2937",
-                            "base-200": "#111827",
-                            "base-300": "#0f172a",
-                            "neutral": "#1f2937",
-                            "neutral-content": "#e5e7eb",
-                            "input": "#374151",
-                            "input-content": "#ffffff",
-                        },
-                    },
-                ],
-            },
+            }
         }
     </script>
     
@@ -101,9 +77,15 @@
                             <i class="fas fa-tools mr-2"></i>Werkzeuge
                         </a>
                         <a href="{{ url_for('consumables') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'consumables' %}btn-active{% endif %}">
+                           class="btn btn-ghost {% if request.endpoint == 'consumables' %}bg-[#5b69a7] text-white{% endif %}">
                             <i class="fas fa-box-open mr-2"></i>Verbrauchsmaterial
                         </a>
+                        {% if session.get('is_admin') %}
+                        <a href="{{ url_for('manual_lending') }}" 
+                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}bg-[#5b69a7] text-white{% endif %}">
+                            <i class="fas fa-hand-holding mr-2"></i>Manuell
+                        </a>
+                        {% endif %}
                     </div>
 
                     <!-- Rechte Navigation -->
@@ -114,12 +96,6 @@
                             <i class="fas fa-users mr-2"></i>Mitarbeiter
                         </a>
                         {% endif %}
-                        
-                        <a href="{{ url_for('manual_lending') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}btn-active{% endif %}">
-                            <i class="fas fa-hand-holding mr-2"></i>Manuell
-                        </a>
-                        
                         {% if session.get('is_admin') %}
                         <a href="{{ url_for('admin_panel') }}"
                            class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
@@ -149,11 +125,13 @@
 
                 <!-- Zentrierter Quick Scan Button -->
                 <div class="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">
-                    <button onclick="openQuickScan(event)" 
-                            class="btn rounded-full w-32 h-32 flex flex-col items-center justify-center bg-[#5b69a7] hover:bg-[#4c5789] shadow-xl transition-all duration-200 hover:scale-105 border-0">
-                        <i class="fas fa-qrcode text-4xl mb-0.5 text-white"></i>
-                        <span class="text-lg font-medium text-white">Scan</span>
-                    </button>
+                    <a href="{{ url_for('quick_scan') }}" 
+                       class="flex items-center justify-center w-full max-w-xs mx-auto py-4 px-6 
+                              bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-bold 
+                              rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200">
+                        <i class="fas fa-qrcode text-2xl mr-3"></i>
+                        Quick-Scan
+                    </a>
                 </div>
             </div>
 
