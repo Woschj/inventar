@@ -1,0 +1,573 @@
+2024-11-28 08:27:52,909 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 08:27:52,910 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 08:27:52,910 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 08:27:52,910 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 08:27:52,914 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 08:27:52,937 - WARNING -  * Debugger is active!
+2024-11-28 08:27:52,946 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 08:29:32,759 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 08:29:32,959 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 08:29:32,959 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 08:29:32,959 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 08:29:32,961 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 08:29:32,965 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 08:29:32,986 - WARNING -  * Debugger is active!
+2024-11-28 08:29:32,998 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 08:49:11,613 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:11] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 08:49:11,796 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:11] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:49:12,497 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:12] "GET /workers HTTP/1.1" 200 -
+2024-11-28 08:49:12,534 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:12] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:49:13,191 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:13] "GET /quick-scan HTTP/1.1" 200 -
+2024-11-28 08:49:13,226 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:13] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:49:13,273 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:13] "GET /api/recent_lendings HTTP/1.1" 200 -
+2024-11-28 08:49:13,973 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:13] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:49:14,007 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:14] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:49:18,582 - ERROR - Datenbankfehler in process_lending: table lendings has no column named item_type
+2024-11-28 08:49:18,583 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:18] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 08:49:18,594 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:18] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:49:18,623 - INFO - 127.0.0.1 - - [28/Nov/2024 08:49:18] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:51:58,521 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 08:51:58,728 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 08:51:58,729 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 08:51:58,729 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 08:51:58,729 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 08:51:58,733 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 08:51:58,753 - WARNING -  * Debugger is active!
+2024-11-28 08:51:58,765 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 08:52:00,692 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:00] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 08:52:00,864 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:00] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:52:01,504 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:01] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:52:01,530 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:01] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:52:07,290 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:07] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 08:52:07,305 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:07] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:52:07,353 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:07] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:52:22,300 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:22] "GET /workers HTTP/1.1" 200 -
+2024-11-28 08:52:22,350 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:22] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:52:23,111 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:23] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 08:52:23,147 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:23] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:52:23,832 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:23] "GET / HTTP/1.1" 200 -
+2024-11-28 08:52:23,871 - INFO - 127.0.0.1 - - [28/Nov/2024 08:52:23] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:53:55,639 - INFO - 127.0.0.1 - - [28/Nov/2024 08:53:55] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:53:55,719 - INFO - 127.0.0.1 - - [28/Nov/2024 08:53:55] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:55:59,722 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 08:55:59,936 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 08:55:59,936 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 08:55:59,936 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 08:55:59,936 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 08:55:59,940 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 08:55:59,963 - WARNING -  * Debugger is active!
+2024-11-28 08:55:59,971 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 08:56:07,214 - INFO - 127.0.0.1 - - [28/Nov/2024 08:56:07] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:56:07,280 - INFO - 127.0.0.1 - - [28/Nov/2024 08:56:07] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 08:56:18,235 - INFO - 127.0.0.1 - - [28/Nov/2024 08:56:18] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 08:56:18,247 - INFO - 127.0.0.1 - - [28/Nov/2024 08:56:18] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 08:56:18,290 - INFO - 127.0.0.1 - - [28/Nov/2024 08:56:18] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:03:39,285 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:03:39,506 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:03:39,507 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:03:39,507 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:03:39,507 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:03:39,511 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:03:39,532 - WARNING -  * Debugger is active!
+2024-11-28 09:03:39,540 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:03:42,028 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:42] "GET / HTTP/1.1" 200 -
+2024-11-28 09:03:42,117 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:42] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:03:43,099 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:43] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 09:03:43,134 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:43] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:03:49,687 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:49] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 09:03:49,700 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:49] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 09:03:49,730 - INFO - 127.0.0.1 - - [28/Nov/2024 09:03:49] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:05:58,790 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:05:59,000 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:05:59,000 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:05:59,000 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:05:59,001 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:05:59,005 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:05:59,022 - WARNING -  * Debugger is active!
+2024-11-28 09:05:59,031 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:07:03,406 - INFO - 127.0.0.1 - - [28/Nov/2024 09:07:03] "GET /manual-lending HTTP/1.1" 200 -
+2024-11-28 09:07:03,463 - INFO - 127.0.0.1 - - [28/Nov/2024 09:07:03] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:14:48,476 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:48] "GET / HTTP/1.1" 200 -
+2024-11-28 09:14:48,552 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:14:49,532 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:49] "[35m[1mGET /manual-lending HTTP/1.1[0m" 500 -
+2024-11-28 09:14:49,552 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:49] "GET /manual-lending?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-11-28 09:14:49,553 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:49] "GET /manual-lending?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-11-28 09:14:49,562 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:49] "GET /manual-lending?__debugger__=yes&cmd=resource&f=console.png&s=2TvAcXca0hKbAD7d57oY HTTP/1.1" 200 -
+2024-11-28 09:14:49,619 - INFO - 127.0.0.1 - - [28/Nov/2024 09:14:49] "GET /manual-lending?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-11-28 09:16:07,470 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:16:07,701 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:16:07,702 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:16:07,702 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:16:07,702 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:16:07,706 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:16:07,728 - WARNING -  * Debugger is active!
+2024-11-28 09:16:07,737 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:16:25,124 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:25] "[33mGET /manual-lending HTTP/1.1[0m" 404 -
+2024-11-28 09:16:25,142 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:25] "[36mGET /manual-lending?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-28 09:16:25,142 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:25] "[36mGET /manual-lending?__debugger__=yes&cmd=resource&f=console.png&s=2TvAcXca0hKbAD7d57oY HTTP/1.1[0m" 304 -
+2024-11-28 09:16:25,142 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:25] "[36mGET /manual-lending?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-28 09:16:25,143 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:25] "[36mGET /manual-lending?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-28 09:16:32,742 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:16:32,743 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:16:32,743 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:16:32,744 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:16:32,748 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:16:32,776 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-28 09:16:32,777 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-28 09:16:32,777 - INFO -  * Restarting with stat
+2024-11-28 09:16:32,878 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:16:32,878 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:16:32,878 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:16:32,878 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:16:32,882 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:16:32,892 - WARNING -  * Debugger is active!
+2024-11-28 09:16:32,898 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:16:36,826 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:36] "GET / HTTP/1.1" 200 -
+2024-11-28 09:16:36,869 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:36] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:16:37,889 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:37] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:16:37,895 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:37] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:16:37,897 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:37] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:16:37,939 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:37] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:16:46,403 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:46] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 09:16:46,416 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:46] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:16:46,447 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:46] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:16:48,432 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:48] "GET / HTTP/1.1" 200 -
+2024-11-28 09:16:48,471 - INFO - 127.0.0.1 - - [28/Nov/2024 09:16:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:17:03,574 - INFO - 127.0.0.1 - - [28/Nov/2024 09:17:03] "GET /admin HTTP/1.1" 200 -
+2024-11-28 09:17:03,580 - INFO - 127.0.0.1 - - [28/Nov/2024 09:17:03] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:17:03,580 - INFO - 127.0.0.1 - - [28/Nov/2024 09:17:03] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:17:03,634 - INFO - 127.0.0.1 - - [28/Nov/2024 09:17:03] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:21:54,743 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:54] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:21:54,820 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:54] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:21:55,816 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:55] "GET / HTTP/1.1" 200 -
+2024-11-28 09:21:55,847 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:55] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:21:57,036 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:57] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:21:57,071 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:57] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:21:57,951 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:57] "GET / HTTP/1.1" 200 -
+2024-11-28 09:21:57,985 - INFO - 127.0.0.1 - - [28/Nov/2024 09:21:57] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:22:49,556 - INFO - 127.0.0.1 - - [28/Nov/2024 09:22:49] "GET /tools/W0098 HTTP/1.1" 200 -
+2024-11-28 09:22:49,562 - INFO - 127.0.0.1 - - [28/Nov/2024 09:22:49] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:22:49,562 - INFO - 127.0.0.1 - - [28/Nov/2024 09:22:49] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:22:49,606 - INFO - 127.0.0.1 - - [28/Nov/2024 09:22:49] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:25:46,094 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:46] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:25:46,143 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:46] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:25:47,028 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:47] "GET /quick-scan HTTP/1.1" 200 -
+2024-11-28 09:25:47,057 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:47] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:25:47,109 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:47] "GET /api/recent_lendings HTTP/1.1" 200 -
+2024-11-28 09:25:48,076 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:48] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:25:48,078 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:48] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:25:48,078 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:48] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:25:48,104 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:25:49,460 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:49] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:25:49,495 - INFO - 127.0.0.1 - - [28/Nov/2024 09:25:49] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:26:36,907 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:26:36,942 - INFO -  * Restarting with stat
+2024-11-28 09:26:37,126 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:26:37,126 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:26:37,126 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:26:37,126 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:26:37,131 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:26:37,156 - WARNING -  * Debugger is active!
+2024-11-28 09:26:37,166 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:26:39,417 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,418 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,428 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,429 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,435 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,435 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,442 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,443 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,450 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,450 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,457 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,457 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,462 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,463 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,467 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,467 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,470 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,471 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,474 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,475 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,479 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,480 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,483 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,484 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,487 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,488 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,491 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,491 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,495 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,495 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,498 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,498 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,501 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,501 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,504 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,504 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,507 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,507 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,509 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,510 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:26:39,512 - ERROR - Datenbankfehler in index: no such column: t.defect_date
+2024-11-28 09:26:39,512 - INFO - 127.0.0.1 - - [28/Nov/2024 09:26:39] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 09:29:54,211 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:29:54,261 - INFO -  * Restarting with stat
+2024-11-28 09:29:54,444 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:29:54,444 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:29:54,445 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:29:54,446 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:29:54,451 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:29:54,453 - INFO - defect_date Spalte erfolgreich hinzugefügt
+2024-11-28 09:29:54,474 - WARNING -  * Debugger is active!
+2024-11-28 09:29:54,483 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:30:04,272 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:04] "GET / HTTP/1.1" 200 -
+2024-11-28 09:30:04,303 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:04] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:05,695 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:05] "GET / HTTP/1.1" 200 -
+2024-11-28 09:30:05,698 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:05] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:05,728 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:05] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:11,156 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:11] "GET /tools/W0098 HTTP/1.1" 200 -
+2024-11-28 09:30:11,159 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:11] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:30:11,159 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:11] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:30:11,183 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:11] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:13,924 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:13] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 09:30:13,934 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:13] "GET /tools/W0098 HTTP/1.1" 200 -
+2024-11-28 09:30:13,962 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:13] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:15,648 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:15] "GET / HTTP/1.1" 200 -
+2024-11-28 09:30:15,651 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:15] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:15,682 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:15] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:27,114 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:27] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:30:27,116 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:27] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:30:27,117 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:27] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:30:27,143 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:27] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:32,128 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:32] "GET / HTTP/1.1" 200 -
+2024-11-28 09:30:32,132 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:32] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:32,160 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:32] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:39,304 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:39] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:30:39,342 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:39] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:41,810 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:41] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:30:41,842 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:41] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:30:44,545 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:44] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:30:44,579 - INFO - 127.0.0.1 - - [28/Nov/2024 09:30:44] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:12,525 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:12] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:31:12,608 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:12] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:14,081 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:14] "GET / HTTP/1.1" 200 -
+2024-11-28 09:31:14,084 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:14] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:14,115 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:14] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:16,193 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:16] "GET /tools/W0036 HTTP/1.1" 200 -
+2024-11-28 09:31:16,197 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:16] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:31:16,197 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:16] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:31:16,226 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:16] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:28,550 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:28] "GET / HTTP/1.1" 200 -
+2024-11-28 09:31:28,556 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:28] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:31:28,605 - INFO - 127.0.0.1 - - [28/Nov/2024 09:31:28] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:10,929 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:37:10,982 - INFO -  * Restarting with stat
+2024-11-28 09:37:11,166 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:37:11,166 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:37:11,166 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:37:11,166 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:37:11,171 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:37:11,189 - WARNING -  * Debugger is active!
+2024-11-28 09:37:11,197 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:37:13,473 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:13] "GET / HTTP/1.1" 200 -
+2024-11-28 09:37:13,480 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:13] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:13,528 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:13] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:15,106 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:15] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 09:37:15,155 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:15] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:17,815 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:17] "GET /tool/W0036 HTTP/1.1" 200 -
+2024-11-28 09:37:17,818 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:17] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:37:17,819 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:17] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:37:17,850 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:17] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:20,566 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:20] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:37:20,599 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:20] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:21,332 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:21] "GET /worker/M0001 HTTP/1.1" 200 -
+2024-11-28 09:37:21,362 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:21] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:24,346 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:24] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:37:24,378 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:24] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:27,236 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:27] "GET / HTTP/1.1" 200 -
+2024-11-28 09:37:27,239 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:27] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:27,271 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:27] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:28,372 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:28] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:37:28,421 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:28] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:29,964 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:29] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:37:29,997 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:29] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:31,046 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:31] "GET /worker/M0004 HTTP/1.1" 200 -
+2024-11-28 09:37:31,078 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:31] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:35,248 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:35] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:37:35,287 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:35] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:55,239 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:55] "GET /worker/M0002 HTTP/1.1" 200 -
+2024-11-28 09:37:55,312 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:55] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:37:59,450 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:59] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:37:59,490 - INFO - 127.0.0.1 - - [28/Nov/2024 09:37:59] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:38:00,690 - INFO - 127.0.0.1 - - [28/Nov/2024 09:38:00] "GET / HTTP/1.1" 200 -
+2024-11-28 09:38:00,693 - INFO - 127.0.0.1 - - [28/Nov/2024 09:38:00] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:38:00,723 - INFO - 127.0.0.1 - - [28/Nov/2024 09:38:00] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:38:01,393 - INFO - 127.0.0.1 - - [28/Nov/2024 09:38:01] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 09:38:01,426 - INFO - 127.0.0.1 - - [28/Nov/2024 09:38:01] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:10,656 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:10] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:40:10,722 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:10] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:11,652 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:11] "GET /worker/M0001 HTTP/1.1" 200 -
+2024-11-28 09:40:11,687 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:11] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:14,315 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:14] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:40:14,362 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:14] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:15,998 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:15] "GET /worker/M0004 HTTP/1.1" 200 -
+2024-11-28 09:40:16,032 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:16] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:20,214 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:20] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:40:20,247 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:20] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:21,090 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:21] "GET / HTTP/1.1" 200 -
+2024-11-28 09:40:21,093 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:21] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:21,121 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:21] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:30,956 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:30] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:40:31,017 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:31] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:40:32,303 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:32] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:40:32,338 - INFO - 127.0.0.1 - - [28/Nov/2024 09:40:32] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:11,652 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:11] "GET /quick-scan HTTP/1.1" 200 -
+2024-11-28 09:44:11,721 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:11] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:11,805 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:11] "GET /api/recent_lendings HTTP/1.1" 200 -
+2024-11-28 09:44:13,054 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:13] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:44:13,057 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:13] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:44:13,057 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:13] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:44:13,089 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:13] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:18,634 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:18] "[32mPOST /process-lending HTTP/1.1[0m" 302 -
+2024-11-28 09:44:18,652 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:18] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:44:18,703 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:18] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:22,666 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:22] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:44:22,669 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:22] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:44:22,670 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:22] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:44:22,699 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:22] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:23,419 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:23] "GET /admin HTTP/1.1" 200 -
+2024-11-28 09:44:23,428 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:23] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:44:23,428 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:23] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:44:23,461 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:23] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:24,805 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:24] "GET / HTTP/1.1" 200 -
+2024-11-28 09:44:24,810 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:24] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:44:24,840 - INFO - 127.0.0.1 - - [28/Nov/2024 09:44:24] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:46:47,665 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 09:46:47,738 - INFO -  * Restarting with stat
+2024-11-28 09:46:48,197 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:46:48,198 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:46:48,198 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:46:48,200 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:46:48,210 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:46:48,242 - WARNING -  * Debugger is active!
+2024-11-28 09:46:48,261 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:46:52,013 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:52] "GET / HTTP/1.1" 200 -
+2024-11-28 09:46:52,019 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:52] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:46:52,063 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:52] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:46:53,203 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:53] "GET /workers HTTP/1.1" 200 -
+2024-11-28 09:46:53,252 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:53] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:46:54,774 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:54] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:46:54,808 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:54] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:46:55,567 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:55] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:46:55,602 - INFO - 127.0.0.1 - - [28/Nov/2024 09:46:55] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:47:09,250 - INFO - 127.0.0.1 - - [28/Nov/2024 09:47:09] "GET /consumables/V0004/edit HTTP/1.1" 200 -
+2024-11-28 09:47:09,319 - INFO - 127.0.0.1 - - [28/Nov/2024 09:47:09] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:02,366 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:02] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:49:02,437 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:02] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:04,078 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:04] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:49:04,129 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:04] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:39,074 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:49:39,074 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:49:39,074 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:49:39,075 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:49:39,079 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:49:39,108 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-28 09:49:39,108 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-28 09:49:39,109 - INFO -  * Restarting with stat
+2024-11-28 09:49:39,192 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 09:49:39,192 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 09:49:39,193 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 09:49:39,193 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 09:49:39,197 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 09:49:39,208 - WARNING -  * Debugger is active!
+2024-11-28 09:49:39,215 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 09:49:45,756 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:45] "GET / HTTP/1.1" 200 -
+2024-11-28 09:49:45,765 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:45] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:45,790 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:45] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:48,357 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:48] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:49:48,396 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:49,214 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:49] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 09:49:49,248 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:49] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:49:52,762 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:52] "GET /consumables/V0002/edit HTTP/1.1" 200 -
+2024-11-28 09:49:52,797 - INFO - 127.0.0.1 - - [28/Nov/2024 09:49:52] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:50:28,262 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:28] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 09:50:28,267 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:28] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 09:50:28,267 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:28] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 09:50:28,333 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:28] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:50:31,092 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:31] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 09:50:31,117 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:31] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 09:50:34,237 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:34] "GET /consumables/V0009/edit HTTP/1.1" 200 -
+2024-11-28 09:50:34,263 - INFO - 127.0.0.1 - - [28/Nov/2024 09:50:34] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:40:44,203 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 11:40:44,246 - INFO -  * Restarting with stat
+2024-11-28 11:40:44,422 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:40:44,422 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:40:44,423 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:40:44,423 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:44:21,303 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:44:21,304 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:44:21,304 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:44:21,305 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:48:46,299 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:48:46,299 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:48:46,299 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:48:46,300 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:51:56,882 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:51:56,882 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:51:56,882 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:51:56,883 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:53:53,872 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:53:53,873 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:53:53,873 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:53:53,874 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:53:53,879 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 11:53:53,913 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-28 11:53:53,913 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-28 11:53:53,914 - INFO -  * Restarting with stat
+2024-11-28 11:53:54,006 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:53:54,006 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:53:54,006 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:53:54,007 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:53:54,011 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 11:53:54,023 - WARNING -  * Debugger is active!
+2024-11-28 11:53:54,031 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 11:54:04,255 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:04] "GET / HTTP/1.1" 200 -
+2024-11-28 11:54:04,267 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:04] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:19,208 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:19] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 11:54:19,269 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:19] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:20,963 - INFO - Geladene Historie für V0001: []
+2024-11-28 11:54:20,972 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:20] "GET /consumables/V0001/edit HTTP/1.1" 200 -
+2024-11-28 11:54:21,005 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:21] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:24,822 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:24] "GET /admin HTTP/1.1" 200 -
+2024-11-28 11:54:24,826 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:24] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 11:54:24,826 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:24] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 11:54:24,856 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:24] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:25,461 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:25] "GET /manual_lending HTTP/1.1" 200 -
+2024-11-28 11:54:25,464 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:25] "[36mGET /static/sw.js HTTP/1.1[0m" 304 -
+2024-11-28 11:54:25,464 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:25] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2024-11-28 11:54:25,488 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:25] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:28,371 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:28] "GET /consumables HTTP/1.1" 200 -
+2024-11-28 11:54:28,416 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:28] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:30,110 - INFO - Geladene Historie für V0009: [<sqlite3.Row object at 0x106032110>]
+2024-11-28 11:54:30,111 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:30] "GET /consumables/V0009/edit HTTP/1.1" 200 -
+2024-11-28 11:54:30,141 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:30] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:34,404 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:34] "GET / HTTP/1.1" 200 -
+2024-11-28 11:54:34,408 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:34] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:54:34,470 - INFO - 127.0.0.1 - - [28/Nov/2024 11:54:34] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:37,442 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 11:56:37,479 - INFO -  * Restarting with stat
+2024-11-28 11:56:37,623 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 11:56:37,624 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 11:56:37,624 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 11:56:37,624 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 11:56:37,629 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 11:56:37,646 - WARNING -  * Debugger is active!
+2024-11-28 11:56:37,653 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 11:56:40,571 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:40] "GET / HTTP/1.1" 200 -
+2024-11-28 11:56:40,577 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:40] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:40,616 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:40] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:42,142 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:42] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 11:56:42,190 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:42] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:44,683 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:44] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 11:56:44,693 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:44] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 11:56:44,724 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:44] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:46,748 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:46] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 11:56:46,756 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:46] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 11:56:46,783 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:46] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:48,599 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:48] "GET / HTTP/1.1" 200 -
+2024-11-28 11:56:48,602 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:56:48,631 - INFO - 127.0.0.1 - - [28/Nov/2024 11:56:48] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 11:57:11,684 - INFO - 127.0.0.1 - - [28/Nov/2024 11:57:11] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 11:57:11,766 - INFO - 127.0.0.1 - - [28/Nov/2024 11:57:11] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:32,817 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 12:00:32,866 - INFO -  * Restarting with stat
+2024-11-28 12:00:33,032 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 12:00:33,033 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 12:00:33,033 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 12:00:33,033 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 12:00:33,038 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 12:00:33,060 - WARNING -  * Debugger is active!
+2024-11-28 12:00:33,066 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 12:00:38,225 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:38] "GET / HTTP/1.1" 200 -
+2024-11-28 12:00:38,234 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:38] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:38,292 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:38] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:40,509 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:40] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 12:00:40,543 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:40] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:46,033 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:46] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 12:00:46,047 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:46] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 12:00:46,109 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:46] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:47,548 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:47] "GET / HTTP/1.1" 200 -
+2024-11-28 12:00:47,551 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:47] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:47,578 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:47] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:49,331 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:49] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 12:00:49,365 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:49] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:52,075 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:52] "[32mPOST /tools/W0098/update HTTP/1.1[0m" 302 -
+2024-11-28 12:00:52,086 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:52] "GET /tool/W0098 HTTP/1.1" 200 -
+2024-11-28 12:00:52,116 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:52] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:53,823 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:53] "GET / HTTP/1.1" 200 -
+2024-11-28 12:00:53,826 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:53] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:00:53,856 - INFO - 127.0.0.1 - - [28/Nov/2024 12:00:53] "[36mGET /static/images/BTZ_logo.jpg HTTP/1.1[0m" 304 -
+2024-11-28 12:03:21,372 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 12:03:21,407 - INFO -  * Restarting with stat
+2024-11-28 12:03:21,550 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 12:03:21,551 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 12:03:21,551 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 12:03:21,551 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 12:03:21,556 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 12:03:21,575 - WARNING -  * Debugger is active!
+2024-11-28 12:03:21,582 - INFO -  * Debugger PIN: 784-949-526
+2024-11-28 12:03:24,615 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,618 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,628 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,628 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,633 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,634 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,638 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,638 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,644 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,645 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,650 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,651 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,655 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,656 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,660 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,660 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,665 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,665 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,670 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,670 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,674 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,675 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,678 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,679 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,682 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,682 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,686 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,686 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,689 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,689 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,692 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,692 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,697 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,698 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,701 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,702 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,705 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,705 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,709 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,709 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:03:24,712 - ERROR - Datenbankfehler: no such table: lendings
+2024-11-28 12:03:24,712 - INFO - 127.0.0.1 - - [28/Nov/2024 12:03:24] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-28 12:06:13,402 - INFO -  * Detected change in '/Users/woschj/Downloads/technik/inventar/inventar/app.py', reloading
+2024-11-28 12:06:13,437 - INFO -  * Restarting with stat
+2024-11-28 12:06:13,593 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/workers.db erfolgreich initialisiert
+2024-11-28 12:06:13,594 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lager.db erfolgreich initialisiert
+2024-11-28 12:06:13,594 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/lendings.db erfolgreich initialisiert
+2024-11-28 12:06:13,595 - INFO - Datenbank /Users/woschj/Downloads/technik/inventar/inventar/consumables.db erfolgreich initialisiert
+2024-11-28 12:06:13,600 - INFO - Datenbanken erfolgreich initialisiert
+2024-11-28 12:06:13,618 - WARNING -  * Debugger is active!
+2024-11-28 12:06:13,628 - INFO -  * Debugger PIN: 784-949-526
