@@ -3,12 +3,12 @@
 {% block title %}Neuer Mitarbeiter{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Neuen Mitarbeiter hinzufügen</h1>
+<div class="bg-base-100 shadow rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-base-content mb-6">Neuen Mitarbeiter hinzufügen</h1>
     
     <form method="post" class="space-y-4">
         <div class="mb-4">
-            <label class="block text-sm font-medium">Barcode</label>
+            <label class="block text-sm font-medium text-base-content">Barcode</label>
             <div class="relative">
                 <input type="text" name="barcode" id="barcodeInput" required
                        class="input input-bordered w-full pr-16">
@@ -19,27 +19,27 @@
             </div>
         </div>
         <div>
-            <label class="block text-sm font-medium">Vorname</label>
+            <label class="block text-sm font-medium text-base-content">Vorname</label>
             <input type="text" name="name" required
                    class="input input-bordered w-full">
         </div>
         <div>
-            <label class="block text-sm font-medium">Nachname</label>
+            <label class="block text-sm font-medium text-base-content">Nachname</label>
             <input type="text" name="lastname" required
                    class="input input-bordered w-full">
         </div>
         <div>
-            <label class="block text-sm font-medium">Bereich</label>
+            <label class="block text-sm font-medium text-base-content">Bereich</label>
             <input type="text" name="bereich"
                    class="input input-bordered w-full">
         </div>
         <div>
-            <label class="block text-sm font-medium">E-Mail</label>
+            <label class="block text-sm font-medium text-base-content">E-Mail</label>
             <input type="email" name="email"
                    class="input input-bordered w-full">
         </div>
         <button type="submit" 
-                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                class="w-full bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus transition duration-300">
             Mitarbeiter hinzufügen
         </button>
     </form>
@@ -47,41 +47,41 @@
 
 <!-- Scanner Modal -->
 <div id="scannerModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full z-50">
-    <div class="relative top-10 mx-auto p-6 border w-full max-w-xl shadow-2xl rounded-xl bg-white">
+    <div class="relative top-10 mx-auto p-6 border w-full max-w-xl shadow-2xl rounded-xl bg-base-100">
         <div class="flex flex-col">
             <!-- Header mit Kamera-Reset-Button -->
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="text-2xl font-bold">Mitarbeiter-Barcode scannen</h3>
-                    <p class="text-gray-500 text-sm mt-1">Scannen Sie den Barcode für den Mitarbeiter</p>
+                    <h3 class="text-2xl font-bold text-base-content">Mitarbeiter-Barcode scannen</h3>
+                    <p class="text-base-content text-sm mt-1">Scannen Sie den Barcode für den Mitarbeiter</p>
                 </div>
                 <div class="flex space-x-2">
                     <button onclick="resetScannerCamera()" 
-                            class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            class="p-2 hover:bg-base-200 rounded-full transition-colors"
                             title="Kamera neu starten">
-                        <i class="fas fa-camera-rotate text-gray-500 text-xl"></i>
+                        <i class="fas fa-camera-rotate text-base-content text-xl"></i>
                     </button>
                     <button onclick="closeScannerModal()" 
-                            class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <i class="fas fa-times text-gray-500 text-xl"></i>
+                            class="p-2 hover:bg-base-200 rounded-full transition-colors">
+                        <i class="fas fa-times text-base-content text-xl"></i>
                     </button>
                 </div>
             </div>
             
             <!-- Scan-Bereich -->
-            <div class="relative aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
+            <div class="relative aspect-video bg-base-200 rounded-xl overflow-hidden shadow-inner">
                 <video id="scannerVideo" 
                        class="w-full h-full object-cover"
                        autoplay playsinline></video>
                 <div id="scanner-overlay" 
                      class="absolute inset-0 flex items-center justify-center">
                     <div class="relative w-64 h-64">
-                        <div class="absolute inset-0 border-2 border-blue-500 rounded-lg"></div>
-                        <div class="absolute inset-x-0 h-0.5 bg-blue-500 opacity-75 animate-scan"></div>
-                        <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-blue-500"></div>
-                        <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-blue-500"></div>
-                        <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-blue-500"></div>
-                        <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-blue-500"></div>
+                        <div class="absolute inset-0 border-2 border-primary rounded-lg"></div>
+                        <div class="absolute inset-x-0 h-0.5 bg-primary opacity-75 animate-scan"></div>
+                        <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary"></div>
+                        <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary"></div>
+                        <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary"></div>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary"></div>
                     </div>
                 </div>
                 <div id="scanner-status" 
@@ -92,7 +92,7 @@
 
             <!-- Kamera-Auswahl -->
             <select id="scanner-camera-select" 
-                    class="mt-4 w-full p-3 border rounded-xl hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="mt-4 w-full p-3 border rounded-xl hidden focus:ring-2 focus:ring-primary focus:border-primary">
             </select>
         </div>
     </div>

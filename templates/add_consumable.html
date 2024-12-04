@@ -22,31 +22,36 @@
             </div>
             <div>
                 <label class="block text-sm font-medium">Bezeichnung</label>
-                <input type="text" name="name" required
+                <input type="text" name="bezeichnung" required
                        class="input input-bordered w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium">Beschreibung</label>
-                <textarea name="description" rows="3"
-                          class="textarea textarea-bordered w-full"></textarea>
+                <label class="block text-sm font-medium">Typ</label>
+                <input type="text" name="typ"
+                       class="input input-bordered w-full">
             </div>
             <div>
                 <label class="block text-sm font-medium">Lagerort</label>
-                <input type="text" name="location"
+                <input type="text" name="ort" value="Lager"
                        class="input input-bordered w-full">
             </div>
             <div>
                 <label class="block text-sm font-medium">Mindestbestand</label>
-                <input type="number" name="min_stock" value="1"
+                <input type="number" name="mindestbestand" value="1"
                        class="input input-bordered w-full">
             </div>
             <div>
                 <label class="block text-sm font-medium">Aktueller Bestand</label>
-                <input type="number" name="current_stock" value="1"
+                <input type="number" name="aktueller_bestand" value="1"
+                       class="input input-bordered w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Einheit</label>
+                <input type="text" name="einheit" value="Stück"
                        class="input input-bordered w-full">
             </div>
             <button type="submit" 
-                    class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                    class="btn btn-primary w-full">
                 Verbrauchsmaterial hinzufügen
             </button>
         </form>

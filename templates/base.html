@@ -25,7 +25,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563eb',
+                        primary: '#5b69a7',
+                        'primary-focus': '#4c5789',
                         secondary: '#475569',
                     }
                 }
@@ -83,77 +84,76 @@
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
             <!-- Navbar -->
-            <div class="navbar bg-base-100 shadow-lg px-4">
-                <div class="flex-none lg:hidden">
-                    <label for="drawer-toggle" class="btn btn-square btn-ghost">
-                        <i class="fas fa-bars"></i>
-                    </label>
-                </div>
-                
-                <!-- Logo -->
-                <div class="flex-1 px-2">
-                    <a href="{{ url_for('index') }}" class="flex items-center">
-                        <img src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
-                             alt="BTZ Logo" class="logo-light">
-                    </a>
-                </div>
+            <div class="navbar bg-base-100 shadow-lg px-4 relative">
+                <div class="flex items-center justify-between w-full">
+                    <!-- Linke Seite mit Logo -->
+                    <div class="flex-none">
+                        <a href="{{ url_for('index') }}" class="flex items-center">
+                            <img src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
+                                 alt="BTZ Logo" style="height: 62px;" class="logo-light">
+                        </a>
+                    </div>
 
-                <!-- Desktop Navigation -->
-                <div class="flex-none hidden lg:flex items-center gap-4">
-                    <!-- Navigation Links -->
-                    <div class="flex gap-2">
+                    <!-- Linke Navigation -->
+                    <div class="hidden lg:flex items-center gap-4 flex-1 justify-start pl-8">
                         <a href="{{ url_for('index') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'index' %}btn-active{% endif %}">
+                           class="btn btn-ghost {% if request.endpoint == 'index' %}bg-[#5b69a7] text-white{% endif %}">
                             <i class="fas fa-tools mr-2"></i>Werkzeuge
                         </a>
                         <a href="{{ url_for('consumables') }}" 
                            class="btn btn-ghost {% if request.endpoint == 'consumables' %}btn-active{% endif %}">
                             <i class="fas fa-box-open mr-2"></i>Verbrauchsmaterial
                         </a>
+                    </div>
+
+                    <!-- Rechte Navigation -->
+                    <div class="hidden lg:flex items-center gap-4 flex-1 justify-end">
                         {% if session.get('is_admin') %}
                         <a href="{{ url_for('workers') }}"
                            class="btn btn-ghost {% if request.endpoint == 'workers' %}btn-active{% endif %}">
                             <i class="fas fa-users mr-2"></i>Mitarbeiter
                         </a>
                         {% endif %}
+                        
+                        <a href="{{ url_for('manual_lending') }}" 
+                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}btn-active{% endif %}">
+                            <i class="fas fa-hand-holding mr-2"></i>Manuell
+                        </a>
+                        
+                        {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin_panel') }}"
+                           class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Admin
+                        </a>
+                        {% endif %}
+
+                        <!-- Theme Toggle -->
+                        <label class="swap swap-rotate btn btn-ghost btn-circle">
+                            <input type="checkbox" class="theme-controller" value="dark" />
+                            <i class="fas fa-sun swap-on"></i>
+                            <i class="fas fa-moon swap-off"></i>
+                        </label>
+
+                        <!-- Login/Logout -->
+                        {% if session.get('is_admin') %}
+                        <a href="{{ url_for('logout') }}" class="btn btn-ghost">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-ghost">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </a>
+                        {% endif %}
                     </div>
+                </div>
 
-                    <!-- Quick Scan Button -->
+                <!-- Zentrierter Quick Scan Button -->
+                <div class="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">
                     <button onclick="openQuickScan(event)" 
-                            class="btn btn-primary btn-lg rounded-full w-16 h-16 flex items-center justify-center">
-                        <i class="fas fa-qrcode text-2xl"></i>
+                            class="btn rounded-full w-32 h-32 flex flex-col items-center justify-center bg-[#5b69a7] hover:bg-[#4c5789] shadow-xl transition-all duration-200 hover:scale-105 border-0">
+                        <i class="fas fa-qrcode text-4xl mb-0.5 text-white"></i>
+                        <span class="text-lg font-medium text-white">Scan</span>
                     </button>
-
-                    <!-- Zusätzliche Funktionen -->
-                    <a href="{{ url_for('manual_lending') }}" 
-                       class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}btn-active{% endif %}">
-                        <i class="fas fa-hand-holding mr-2"></i>Manuell
-                    </a>
-                    
-                    {% if session.get('is_admin') %}
-                    <a href="{{ url_for('admin_panel') }}"
-                       class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
-                        <i class="fas fa-tachometer-alt mr-2"></i>Admin
-                    </a>
-                    {% endif %}
-
-                    <!-- Theme Toggle -->
-                    <label class="swap swap-rotate btn btn-ghost btn-circle">
-                        <input type="checkbox" class="theme-controller" value="dark" />
-                        <i class="fas fa-sun swap-on"></i>
-                        <i class="fas fa-moon swap-off"></i>
-                    </label>
-
-                    <!-- Login/Logout -->
-                    {% if session.get('is_admin') %}
-                    <a href="{{ url_for('logout') }}" class="btn btn-ghost">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                    </a>
-                    {% else %}
-                    <a href="{{ url_for('login') }}" class="btn btn-ghost">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Login
-                    </a>
-                    {% endif %}
                 </div>
             </div>
 

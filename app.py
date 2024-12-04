@@ -925,6 +925,14 @@ def add_consumable():
             aktueller_bestand = request.form.get('aktueller_bestand', 0, type=int)
             einheit = request.form.get('einheit', 'Stück')
             
+            # Überprüfe ob required Felder ausgefüllt sind
+            if not barcode or not bezeichnung:
+                if not bezeichnung:
+                    flash('Bezeichnung ist erforderlich', 'error')
+                if not barcode:
+                    flash('Barcode ist erforderlich', 'error')
+                return render_template('add_consumable.html')
+
             # Status wird automatisch basierend auf den Beständen gesetzt
             status = 'Verfügbar'
             if aktueller_bestand == 0:
@@ -933,6 +941,12 @@ def add_consumable():
                 status = 'Nachbestellen'
 
             with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+                # Prüfe zuerst ob der Barcode bereits existiert
+                existing = conn.execute('SELECT 1 FROM consumables WHERE barcode = ?', (barcode,)).fetchone()
+                if existing:
+                    flash('Barcode existiert bereits', 'error')
+                    return render_template('add_consumable.html')
+
                 conn.execute('''
                     INSERT INTO consumables 
                     (barcode, bezeichnung, ort, typ, status,
@@ -945,11 +959,8 @@ def add_consumable():
             flash('Verbrauchsmaterial erfolgreich hinzugefügt', 'success')
             return redirect(url_for('consumables'))
             
-        except sqlite3.IntegrityError as e:
-            print(f"Integritätsfehler: {str(e)}")
-            flash('Barcode existiert bereits', 'error')
         except Exception as e:
-            print(f"Fehler beim Hinzufügen: {str(e)}")
+            logging.error(f"Fehler beim Hinzufügen: {str(e)}")
             traceback.print_exc()
             flash('Fehler beim Hinzufügen des Verbrauchsmaterials', 'error')
             

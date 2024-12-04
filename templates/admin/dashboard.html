@@ -4,73 +4,73 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+    <h1 class="text-3xl font-bold text-base-content mb-8">Admin Dashboard</h1>
 
     <!-- Statistik-Karten -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Werkzeug-Statistiken -->
         <div class="card bg-base-100 shadow-xl p-6">
-            <h3 class="text-lg font-semibold mb-4">Werkzeuge</h3>
+            <h3 class="text-lg font-semibold text-base-content mb-4">Werkzeuge</h3>
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Gesamt:</span>
-                    <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_tools }}</a>
+                    <span class="text-base-content">Gesamt:</span>
+                    <a href="{{ url_for('index') }}" class="text-primary hover:text-primary-focus">{{ stats.total_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Ausgeliehen:</span>
+                    <span class="text-base-content">Ausgeliehen:</span>
                     <a href="{{ url_for('index', filter='ausgeliehen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.borrowed_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Defekt:</span>
+                    <span class="text-base-content">Defekt:</span>
                     <a href="{{ url_for('index', filter='defekt') }}" class="text-red-600 hover:text-red-800">{{ stats.defect_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_tools }}</a>
+                    <span class="text-base-content">Im Papierkorb:</span>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_tools }}</a>
                 </li>
             </ul>
         </div>
 
         <!-- Verbrauchsmaterial-Statistiken -->
-        <div class="bg-white rounded-lg shadow p-6 h-fit">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Verbrauchsmaterial</h3>
+        <div class="card bg-base-100 shadow-xl p-6">
+            <h3 class="text-lg font-semibold text-base-content mb-4">Verbrauchsmaterial</h3>
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Gesamt:</span>
-                    <a href="{{ url_for('consumables') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_consumables }}</a>
+                    <span class="text-base-content">Gesamt:</span>
+                    <a href="{{ url_for('consumables') }}" class="text-primary hover:text-primary-focus">{{ stats.total_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Nachzubestellen:</span>
+                    <span class="text-base-content">Nachzubestellen:</span>
                     <a href="{{ url_for('consumables', filter='Nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.reorder_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Leer:</span>
+                    <span class="text-base-content">Leer:</span>
                     <a href="{{ url_for('consumables', filter='Leer') }}" class="text-red-600 hover:text-red-800">{{ stats.empty_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_consumables }}</a>
+                    <span class="text-base-content">Im Papierkorb:</span>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_consumables }}</a>
                 </li>
             </ul>
         </div>
 
         <!-- Mitarbeiter-Statistiken -->
-        <div class="bg-white rounded-lg shadow p-6 h-fit">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Mitarbeiter</h3>
+        <div class="card bg-base-100 shadow-xl p-6">
+            <h3 class="text-lg font-semibold text-base-content mb-4">Mitarbeiter</h3>
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Gesamt:</span>
-                    <a href="{{ url_for('workers') }}" class="text-blue-600 hover:text-blue-800">{{ stats.total_workers }}</a>
+                    <span class="text-base-content">Gesamt:</span>
+                    <a href="{{ url_for('workers') }}" class="text-primary hover:text-primary-focus">{{ stats.total_workers }}</a>
                 </li>
                 {% for area in stats.workers_by_area %}
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">{{ area[0] }}:</span>
-                    <a href="{{ url_for('workers', filter_bereich=area[0]) }}" class="text-blue-600 hover:text-blue-800">{{ area[1] }}</a>
+                    <span class="text-base-content">{{ area[0] }}:</span>
+                    <a href="{{ url_for('workers', filter_bereich=area[0]) }}" class="text-primary hover:text-primary-focus">{{ area[1] }}</a>
                 </li>
                 {% endfor %}
                 <li class="flex justify-between items-center">
-                    <span class="text-gray-600">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-gray-600 hover:text-gray-800">{{ stats.deleted_workers }}</a>
+                    <span class="text-base-content">Im Papierkorb:</span>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_workers }}</a>
                 </li>
             </ul>
         </div>
@@ -80,7 +80,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Papierkorb -->
         <a href="{{ url_for('trash') }}" 
-           class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-200">
+           class="card bg-base-100 shadow-xl p-6 hover:shadow-lg transition-shadow duration-200">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,14 +89,14 @@
                     </svg>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-900">Papierkorb</h4>
-                    <p class="text-gray-600">Gelöschte Einträge verwalten</p>
+                    <h4 class="text-lg font-semibold text-base-content">Papierkorb</h4>
+                    <p class="text-base-content">Gelöschte Einträge verwalten</p>
                 </div>
             </div>
         </a>
 
         <!-- Systemlogs -->
-        <a href="{{ url_for('system_logs') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-200">
+        <a href="{{ url_for('system_logs') }}" class="card bg-base-100 shadow-xl p-6 hover:shadow-lg transition-shadow duration-200">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,16 +105,16 @@
                     </svg>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-900">Systemlogs</h4>
-                    <p class="text-gray-600">Aktivitäten der letzten 14 Tage</p>
+                    <h4 class="text-lg font-semibold text-base-content">Systemlogs</h4>
+                    <p class="text-base-content">Aktivitäten der letzten 14 Tage</p>
                 </div>
             </div>
         </a>
 
         <!-- Einstellungen -->
-        <a href="#" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow duration-200">
+        <a href="#" class="card bg-base-100 shadow-xl p-6 hover:shadow-lg transition-shadow duration-200">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-gray-100 text-gray-600 mr-4">
+                <div class="p-3 rounded-full bg-base-200 text-base-content mr-4">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -123,34 +123,34 @@
                     </svg>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-900">Einstellungen</h4>
-                    <p class="text-gray-600">System konfigurieren</p>
+                    <h4 class="text-lg font-semibold text-base-content">Einstellungen</h4>
+                    <p class="text-base-content">System konfigurieren</p>
                 </div>
             </div>
         </a>
     </div>
 
-    <div class="mt-8 bg-white shadow rounded-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">Datenbank Export/Import</h2>
+    <div class="mt-8 card bg-base-100 shadow-xl p-6">
+        <h2 class="text-xl font-semibold text-base-content mb-4">Datenbank Export/Import</h2>
         
         <!-- Export Section -->
         <div class="mb-6">
-            <h3 class="text-lg font-medium mb-3">Daten exportieren</h3>
+            <h3 class="text-lg font-medium text-base-content mb-3">Daten exportieren</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button onclick="exportDB('workers')" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
                     Mitarbeiter exportieren
                 </button>
                 <button onclick="exportDB('tools')" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
                     Werkzeuge exportieren
                 </button>
                 <button onclick="exportDB('consumables')" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
                     Verbrauchsmaterial exportieren
                 </button>
                 <button onclick="exportDB('lendings')" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
                     Ausleihen exportieren
                 </button>
             </div>
@@ -158,7 +158,7 @@
         
         <!-- Import Section -->
         <div>
-            <h3 class="text-lg font-medium mb-3">Daten importieren</h3>
+            <h3 class="text-lg font-medium text-base-content mb-3">Daten importieren</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="flex flex-col">
                     <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
