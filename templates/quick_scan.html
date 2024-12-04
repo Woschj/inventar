@@ -14,11 +14,19 @@
                 <video id="video" class="w-full max-w-lg mx-auto border rounded-lg hidden"></video>
                 
                 <!-- Barcode Input für USB-Scanner -->
-                <input type="text" 
-                       id="barcode-input" 
-                       class="w-full p-2 border rounded-lg" 
-                       placeholder="Barcode scannen oder eingeben"
-                       autocomplete="off">
+                <div class="relative">
+                    <input type="text" 
+                           id="barcode-input" 
+                           class="input input-bordered w-full" 
+                           placeholder="Barcode scannen oder eingeben"
+                           autocomplete="off">
+                    
+                    <button type="button" 
+                            onclick="toggleCamera()" 
+                            class="btn btn-primary absolute right-2 top-2">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
             </div>
             
             <!-- Kamera-Steuerung -->
@@ -35,13 +43,23 @@
 
         <!-- Scan-Status und Preview -->
         <div id="scan-status" class="mt-4">
-            <div id="tool-preview" class="hidden bg-gray-50 p-4 rounded-lg mb-4">
-                <h3 class="font-bold mb-2">Gescanntes Werkzeug:</h3>
-                <div id="tool-details"></div>
+            <div id="tool-preview" class="hidden mt-4">
+                <div class="card bg-base-100 shadow-xl p-4">
+                    <h3 class="font-bold mb-2">Werkzeug Details</h3>
+                    <div class="space-y-2">
+                        <p id="tool-name"></p>
+                        <p id="tool-status"></p>
+                    </div>
+                </div>
             </div>
-            <div id="worker-preview" class="hidden bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-bold mb-2">Gescannter Mitarbeiter:</h3>
-                <div id="worker-details"></div>
+            <div id="worker-preview" class="hidden mt-4">
+                <div class="card bg-base-100 shadow-xl p-4">
+                    <h3 class="font-bold mb-2">Mitarbeiter Details</h3>
+                    <div class="space-y-2">
+                        <p id="worker-name"></p>
+                        <p id="worker-department"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

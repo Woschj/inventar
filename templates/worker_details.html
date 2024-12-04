@@ -21,41 +21,39 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ worker.name }} {{ worker.lastname }}</h2>
             
             <form action="{{ url_for('update_worker', barcode=worker.barcode) }}" method="post" class="space-y-6">
-                <!-- Barcode (nicht editierbar) -->
+                <!-- Barcode (readonly) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Mitarbeiternummer</label>
+                    <label class="block text-sm font-medium">Mitarbeiternummer</label>
                     <input type="text" value="{{ worker.barcode }}" readonly
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50">
+                           class="input input-bordered w-full bg-base-200">
                 </div>
                 
                 <!-- Vorname -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Vorname</label>
+                    <label class="block text-sm font-medium">Vorname</label>
                     <input type="text" name="name" value="{{ worker.name }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="input input-bordered w-full">
                 </div>
                 
                 <!-- Nachname -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Nachname</label>
+                    <label class="block text-sm font-medium">Nachname</label>
                     <input type="text" name="lastname" value="{{ worker.lastname }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-                
-                <!-- E-Mail -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">E-Mail</label>
-                    <input type="email" name="email" 
-                           value="{{ worker.email|replace('ö', 'oe')|replace('ä', 'ae')|replace('ü', 'ue')|replace('ß', 'ss') }}"
-                           required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="input input-bordered w-full">
                 </div>
                 
                 <!-- Bereich -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Bereich</label>
+                    <label class="block text-sm font-medium">Bereich</label>
                     <input type="text" name="bereich" value="{{ worker.bereich }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="input input-bordered w-full">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium">E-Mail</label>
+                    <input type="email" name="email" value="{{ worker.email }}"
+                           class="input input-bordered w-full">
                 </div>
 
                 <!-- Speichern Button -->

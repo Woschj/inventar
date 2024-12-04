@@ -55,45 +55,34 @@
             </div>
             
             <!-- Neue Spalte hinzufügen -->
-            <div class="border-t pt-4 mt-4">
-                <h3 class="text-md font-medium mb-4">Neues Feld hinzufügen:</h3>
-                <form action="{{ url_for('add_column') }}" method="POST" class="space-y-4">
-                    <input type="hidden" name="table" value="{{ schema.table }}">
-                    <input type="hidden" name="db_path" value="{{ schema.db_path }}">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Feldname</label>
-                            <input type="text" name="column_name" required
-                                   class="mt-1 block w-full rounded-md border-gray-300"
-                                   placeholder="z.B. unterkategorie">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Datentyp</label>
-                            <select name="column_type" required
-                                    class="mt-1 block w-full rounded-md border-gray-300">
-                                <option value="TEXT">Text</option>
-                                <option value="INTEGER">Ganzzahl</option>
-                                <option value="REAL">Dezimalzahl</option>
-                                <option value="BOOLEAN">Ja/Nein</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Standardwert</label>
-                            <input type="text" name="default_value"
-                                   class="mt-1 block w-full rounded-md border-gray-300"
-                                   placeholder="Optional">
-                        </div>
-                    </div>
-                    
-                    <button type="submit" 
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Neues Feld hinzufügen
-                    </button>
-                </form>
-            </div>
+            <form method="POST" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Spaltenname</label>
+                    <input type="text" name="column_name" required
+                           class="input input-bordered w-full">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium">Datentyp</label>
+                    <select name="data_type" required class="select select-bordered w-full">
+                        <option value="text">Text</option>
+                        <option value="integer">Ganzzahl</option>
+                        <option value="float">Dezimalzahl</option>
+                        <option value="boolean">Ja/Nein</option>
+                        <option value="date">Datum</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium">Standardwert</label>
+                    <input type="text" name="default_value"
+                           class="input input-bordered w-full">
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-full">
+                    Neue Spalte hinzufügen
+                </button>
+            </form>
         </div>
         {% endfor %}
     </div>

@@ -4,44 +4,220 @@
 {% block title %}Neues Werkzeug{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Neues Werkzeug hinzufügen</h1>
-    
-    <form method="post" enctype="multipart/form-data" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Barcode</label>
-            <input type="text" name="barcode" required
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Bezeichnung</label>
-            <input type="text" name="gegenstand" required
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Ort</label>
-            <input type="text" name="ort"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Typ</label>
-            <input type="text" name="typ"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Bild</label>
-            <input type="file" name="image" accept="image/*"
-                   class="mt-1 block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-md file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100">
-        </div>
-        <button type="submit" 
-                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-            Werkzeug hinzufügen
-        </button>
-    </form>
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <h1 class="text-2xl font-bold mb-6">Neues Werkzeug hinzufügen</h1>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Barcode</label>
+                <div class="relative">
+                    <input type="text" name="barcode" id="barcodeInput" required
+                           class="input input-bordered w-full pr-16">
+                    <button type="button" onclick="startBarcodeScanner()"
+                            class="btn btn-primary absolute right-0 top-0">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Bezeichnung</label>
+                <input type="text" name="gegenstand" required
+                       class="input input-bordered w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Ort</label>
+                <input type="text" name="ort"
+                       class="input input-bordered w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Typ</label>
+                <input type="text" name="typ"
+                       class="input input-bordered w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Bild</label>
+                <input type="file" name="image" accept="image/*"
+                       class="file-input file-input-bordered w-full">
+            </div>
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                Werkzeug hinzufügen
+            </button>
+        </form>
+    </div>
 </div>
+
+<!-- Scanner Modal im QuickScan-Style -->
+<div id="scannerModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-10 mx-auto p-6 border w-full max-w-xl shadow-2xl rounded-xl bg-white">
+        <div class="flex flex-col">
+            <!-- Header mit Kamera-Reset-Button -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold">Barcode scannen</h3>
+                    <p class="text-gray-500 text-sm mt-1">Scannen Sie den Barcode des Werkzeugs</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="resetScannerCamera()" 
+                            class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            title="Kamera neu starten">
+                        <i class="fas fa-camera-rotate text-gray-500 text-xl"></i>
+                    </button>
+                    <button onclick="closeScannerModal()" 
+                            class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <i class="fas fa-times text-gray-500 text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Scan-Bereich -->
+            <div class="relative aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
+                <video id="scannerVideo" 
+                       class="w-full h-full object-cover"
+                       autoplay playsinline></video>
+                <div id="scanner-overlay" 
+                     class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative w-64 h-64">
+                        <div class="absolute inset-0 border-2 border-blue-500 rounded-lg"></div>
+                        <div class="absolute inset-x-0 h-0.5 bg-blue-500 opacity-75 animate-scan"></div>
+                        <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-blue-500"></div>
+                        <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-blue-500"></div>
+                        <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-blue-500"></div>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-blue-500"></div>
+                    </div>
+                </div>
+                <div id="scanner-status" 
+                     class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-lg text-sm text-center">
+                    Kamera wird initialisiert...
+                </div>
+            </div>
+
+            <!-- Kamera-Auswahl -->
+            <select id="scanner-camera-select" 
+                    class="mt-4 w-full p-3 border rounded-xl hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </select>
+        </div>
+    </div>
+</div>
+
+<style>
+.scan-success {
+    animation: scanSuccess 0.3s ease-out;
+}
+
+@keyframes scanSuccess {
+    0% { background-color: rgba(34, 197, 94, 0); }
+    50% { background-color: rgba(34, 197, 94, 0.2); }
+    100% { background-color: rgba(34, 197, 94, 0); }
+}
+</style>
+
+<script>
+let scannerCodeReader;
+let isScannerActive = false;
+
+// Initialisiere den CodeReader beim Laden der Seite
+window.addEventListener('load', () => {
+    scannerCodeReader = new ZXing.BrowserMultiFormatReader();
+});
+
+async function startBarcodeScanner() {
+    const modal = document.getElementById('scannerModal');
+    modal.classList.remove('hidden');
+    
+    try {
+        const videoElement = document.getElementById('scannerVideo');
+        const statusElement = document.getElementById('scanner-status');
+        
+        // Liste verfügbare Kameras
+        const devices = await scannerCodeReader.listVideoInputDevices();
+        const cameraSelect = document.getElementById('scanner-camera-select');
+        
+        if (devices.length > 1) {
+            cameraSelect.innerHTML = devices.map(device => 
+                `<option value="${device.deviceId}">${device.label || `Kamera ${device.deviceId}`}</option>`
+            ).join('');
+            cameraSelect.classList.remove('hidden');
+            
+            // Event Listener für Kamerawechsel
+            cameraSelect.addEventListener('change', (event) => {
+                resetScannerCamera();
+                startScannerCamera(event.target.value);
+            });
+        }
+        
+        // Starte mit der ersten Kamera
+        await startScannerCamera(devices[0]?.deviceId);
+        
+    } catch (error) {
+        console.error('Scanner-Fehler:', error);
+        document.getElementById('scanner-status').textContent = 'Fehler beim Kamerazugriff';
+    }
+}
+
+async function startScannerCamera(deviceId) {
+    if (isScannerActive) return;
+    
+    try {
+        await scannerCodeReader.decodeFromVideoDevice(
+            deviceId,
+            'scannerVideo',
+            (result, err) => {
+                if (result) {
+                    // Scan-Effekt anzeigen
+                    const overlay = document.getElementById('scanner-overlay');
+                    overlay.classList.add('scan-success');
+                    
+                    // Kurzer Delay vor dem Schließen
+                    setTimeout(() => {
+                        const barcodeInput = document.getElementById('barcodeInput');
+                        barcodeInput.value = result.text;
+                        showScannerSuccess('Barcode erfolgreich gescannt: ' + result.text);
+                        
+                        // Entferne die Effekt-Klasse
+                        overlay.classList.remove('scan-success');
+                        
+                        // Schließe das Modal nach kurzem Delay
+                        setTimeout(() => {
+                            closeScannerModal();
+                        }, 500);
+                    }, 300);
+                }
+            }
+        );
+        
+        document.getElementById('scanner-status').textContent = 'Bereit zum Scannen';
+        isScannerActive = true;
+        
+    } catch (error) {
+        console.error('Scanner-Fehler:', error);
+        document.getElementById('scanner-status').textContent = 'Fehler beim Scannen';
+    }
+}
+
+function resetScannerCamera() {
+    if (isScannerActive) {
+        scannerCodeReader.reset();
+        isScannerActive = false;
+        startScannerCamera();
+    }
+}
+
+function closeScannerModal() {
+    document.getElementById('scannerModal').classList.add('hidden');
+    if (isScannerActive) {
+        scannerCodeReader.reset();
+        isScannerActive = false;
+    }
+}
+
+function showScannerSuccess(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4';
+    successDiv.textContent = message;
+    document.body.appendChild(successDiv);
+    setTimeout(() => successDiv.remove(), 3000);
+}
+</script>
 {% endblock %}

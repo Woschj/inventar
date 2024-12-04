@@ -21,62 +21,43 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ tool.gegenstand }}</h2>
             
             <form action="{{ url_for('update_tool', barcode=tool.barcode) }}" method="post" class="space-y-6">
-                <!-- Barcode (nicht editierbar) -->
+                <!-- Barcode (readonly) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Barcode</label>
+                    <label class="block text-sm font-medium">Barcode</label>
                     <input type="text" value="{{ tool.barcode }}" readonly
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50">
+                           class="input input-bordered w-full bg-base-200">
                 </div>
 
                 <!-- Bezeichnung -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Bezeichnung</label>
+                    <label class="block text-sm font-medium">Bezeichnung</label>
                     <input type="text" name="gegenstand" value="{{ tool.gegenstand }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="input input-bordered w-full">
+                </div>
+
+                <!-- Ort -->
+                <div>
+                    <label class="block text-sm font-medium">Ort</label>
+                    <input type="text" name="ort" value="{{ tool.ort }}"
+                           class="input input-bordered w-full">
                 </div>
 
                 <!-- Typ -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Typ</label>
+                    <label class="block text-sm font-medium">Typ</label>
                     <input type="text" name="typ" value="{{ tool.typ }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-
-                <!-- Ort (nur editierbar wenn nicht ausgeliehen) -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Ort</label>
-                    {% if tool.status != 'Ausgeliehen' %}
-                        <input type="text" name="ort" value="{{ tool.ort }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    {% else %}
-                        <input type="text" value="Bei {{ tool.current_worker }}" readonly
-                               class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50">
-                    {% endif %}
+                           class="input input-bordered w-full">
                 </div>
 
                 <!-- Status -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <label class="block text-sm font-medium">Status</label>
                     <select name="status" id="statusSelect" onchange="handleStatusChange()"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="Verfügbar" {% if tool.status == 'Verfügbar' %}selected{% endif %}>Verfügbar</option>
-                        <option value="In Reparatur" {% if tool.status == 'In Reparatur' %}selected{% endif %}>In Reparatur</option>
-                        <option value="Defekt" {% if tool.status == 'Defekt' %}selected{% endif %}>Defekt</option>
-                        <option value="Ausgeliehen" {% if tool.status == 'Ausgeliehen' %}selected{% endif %}>Ausgeliehen</option>
-                    </select>
-                </div>
-
-                <!-- Mitarbeiter-Auswahl (wird nur angezeigt, wenn Status "Ausgeliehen" ist) -->
-                <div id="workerSelect" class="{% if tool.status != 'Ausgeliehen' %}hidden{% endif %}">
-                    <label class="block text-sm font-medium text-gray-700">Ausgeliehen an</label>
-                    <select name="worker_barcode" 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Mitarbeiter auswählen</option>
-                        {% for worker in workers %}
-                            <option value="{{ worker.barcode }}" 
-                                    {% if tool.current_worker == worker.name + ' ' + worker.lastname %}selected{% endif %}>
-                                {{ worker.name }} {{ worker.lastname }}
-                            </option>
+                            class="select select-bordered w-full">
+                        {% for status in ['Verfügbar', 'Ausgeliehen', 'Defekt'] %}
+                        <option value="{{ status }}" {% if tool.status == status %}selected{% endif %}>
+                            {{ status }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
