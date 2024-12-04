@@ -1,601 +1,135 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="light">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} - Werkzeugverwaltung</title>
-    
-    <!-- DaisyUI und Tailwind -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet">
+    <title>{% block title %}Inventar{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Icons und Scanner -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
-    
-    <script>
-        // Theme-Persistenz
-        (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-
-        // Tailwind & DaisyUI Konfiguration
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#5b69a7',
-                        'primary-focus': '#4c5789',
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <style>
-        .logo-light {
-            filter: brightness(0) saturate(100%) invert(19%) sepia(92%) 
-                    saturate(1710%) hue-rotate(213deg) brightness(97%) contrast(105%);
-            height: 48px;
+        .nav-dropdown {
+            transition: all 0.2s ease-in-out;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
         }
-        
-        [data-theme="dark"] .logo-light {
-            filter: brightness(0) saturate(100%) invert(100%);
-        }
-
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-        
-        .animate-scan {
-            animation: scan 2s linear infinite;
+        .group:hover .nav-dropdown {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
         }
     </style>
 </head>
-
-<body class="min-h-screen bg-base-200">
-    <div class="drawer">
-        <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col">
-            <!-- Navbar -->
-            <div class="navbar bg-base-100 shadow-lg px-4 relative">
-                <div class="flex items-center justify-between w-full">
-                    <!-- Linke Seite mit Logo -->
-                    <div class="flex-none">
-                        <a href="{{ url_for('index') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
-                                 alt="BTZ Logo" style="height: 62px;" class="logo-light">
-                        </a>
-                    </div>
-
-                    <!-- Linke Navigation -->
-                    <div class="hidden lg:flex items-center gap-4 flex-1 justify-start pl-8">
-                        <a href="{{ url_for('index') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'index' %}bg-[#5b69a7] text-white{% endif %}">
-                            <i class="fas fa-tools mr-2"></i>Werkzeuge
-                        </a>
-                        <a href="{{ url_for('consumables') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'consumables' %}bg-[#5b69a7] text-white{% endif %}">
-                            <i class="fas fa-box-open mr-2"></i>Verbrauchsmaterial
-                        </a>
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('manual_lending') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}bg-[#5b69a7] text-white{% endif %}">
-                            <i class="fas fa-hand-holding mr-2"></i>Manuell
-                        </a>
-                        {% endif %}
-                    </div>
-
-                    <!-- Rechte Navigation -->
-                    <div class="hidden lg:flex items-center gap-4 flex-1 justify-end">
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('workers') }}"
-                           class="btn btn-ghost {% if request.endpoint == 'workers' %}btn-active{% endif %}">
-                            <i class="fas fa-users mr-2"></i>Mitarbeiter
-                        </a>
-                        {% endif %}
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('admin_panel') }}"
-                           class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
-                            <i class="fas fa-tachometer-alt mr-2"></i>Admin
-                        </a>
-                        {% endif %}
-
-                        <!-- Theme Toggle -->
-                        <label class="swap swap-rotate btn btn-ghost btn-circle">
-                            <input type="checkbox" class="theme-controller" value="dark" />
-                            <i class="fas fa-sun swap-on"></i>
-                            <i class="fas fa-moon swap-off"></i>
-                        </label>
-
-                        <!-- Login/Logout -->
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('logout') }}" class="btn btn-ghost">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                        </a>
-                        {% else %}
-                        <a href="{{ url_for('login') }}" class="btn btn-ghost">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Login
-                        </a>
-                        {% endif %}
-                    </div>
+<body class="bg-gray-50">
+    <nav class="bg-gray-900 border-b border-gray-800 shadow-lg">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <!-- Logo Container -->
+                <div class="flex-shrink-0 flex items-center">
+                    <img class="h-12 w-auto" 
+                         src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
+                         alt="BTZ Logo">
                 </div>
 
-                <!-- Zentrierter Quick Scan Button -->
-                <div class="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">
-                    <a href="{{ url_for('quick_scan') }}" 
-                       class="flex items-center justify-center w-full max-w-xs mx-auto py-4 px-6 
-                              bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-bold 
-                              rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200">
-                        <i class="fas fa-qrcode text-2xl mr-3"></i>
-                        Quick-Scan
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('index') }}" 
+                       class="text-gray-200 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200
+                              border-b-2 border-transparent hover:border-blue-500">
+                        Start
                     </a>
-                </div>
-            </div>
 
-            <!-- Main Content -->
-            <main class="container mx-auto px-4 py-8">
-                <!-- Flash Messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                        <div class="alert {% if category == 'error' %}alert-error{% else %}alert-success{% endif %} mb-4">
-                            <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
-                            <span>{{ message }}</span>
-                        </div>
+                    {% if g.menu_categories %}
+                        {% for department, categories in g.menu_categories.items() %}
+                            <div class="relative group">
+                                <button class="text-gray-200 hover:text-white px-3 py-2 text-sm font-medium
+                                             flex items-center space-x-1 transition-colors duration-200
+                                             border-b-2 border-transparent group-hover:border-blue-500">
+                                    <span>{{ department }}</span>
+                                    <svg class="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" 
+                                         fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" 
+                                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                                              clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <div class="nav-dropdown absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                    <div class="py-1 bg-white rounded-md shadow-xs">
+                                        {% for category in categories %}
+                                            <a href="{{ url_for('list_category_items', category_id=category.id) }}"
+                                               class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900
+                                                      transition-colors duration-150 border-l-4 border-transparent
+                                                      hover:border-blue-500">
+                                                {{ category.name }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     {% endif %}
-                {% endwith %}
 
-                {% block content %}{% endblock %}
-            </main>
-        </div>
-
-        <!-- Mobile Drawer -->
-        <div class="drawer-side z-50">
-            <label for="drawer-toggle" class="drawer-overlay"></label>
-            <ul class="menu p-4 w-80 h-full bg-base-200 gap-2">
-                <li>
-                    <a href="{{ url_for('index') }}" 
-                       class="{% if request.endpoint == 'index' %}active{% endif %}">
-                        <i class="fas fa-tools"></i>Werkzeuge
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('consumables') }}" 
-                       class="{% if request.endpoint == 'consumables' %}active{% endif %}">
-                        <i class="fas fa-box-open"></i>Verbrauchsmaterial
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('manual_lending') }}" 
-                       class="{% if request.endpoint == 'manual_lending' %}active{% endif %}">
-                        <i class="fas fa-hand-holding"></i>Manuell Ausleihen
-                    </a>
-                </li>
-                {% if session.get('is_admin') %}
-                <li class="menu-title">
-                    <span>Admin-Bereich</span>
-                </li>
-                <li>
-                    <a href="{{ url_for('workers') }}"
-                       class="{% if request.endpoint == 'workers' %}active{% endif %}">
-                        <i class="fas fa-users"></i>Mitarbeiter
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('admin_panel') }}"
-                       class="{% if request.endpoint == 'admin_panel' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i>Dashboard
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-
-    <!-- Quick-Scan Modal -->
-    <dialog id="quickScanModal" class="modal">
-        <div class="modal-box max-w-2xl">
-            <div class="flex flex-col">
-                <!-- Header mit Kamera-Reset-Button -->
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold" id="scan-title">Werkzeug scannen</h3>
-                        <p class="text-base-content/60 text-sm mt-1" id="scan-subtitle">
-                            Scannen Sie den Barcode des Werkzeugs
-                        </p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="resetCamera()" 
-                                class="btn btn-ghost btn-circle"
-                                title="Kamera neu starten">
-                            <i class="fas fa-camera-rotate"></i>
-                        </button>
-                        <button onclick="closeQuickScan()" 
-                                class="btn btn-ghost btn-circle">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Scan-Bereich -->
-                <div class="space-y-6">
-                    <!-- Video Preview mit Overlay -->
-                    <div class="relative aspect-video bg-base-200 rounded-box overflow-hidden">
-                        <video id="video" 
-                               class="w-full h-full object-cover hidden"
-                               autoplay playsinline></video>
-                        <div id="scanner-overlay" 
-                             class="absolute inset-0 flex items-center justify-center">
-                            <div class="relative w-64 h-64">
-                                <!-- Scan-Bereich -->
-                                <div class="absolute inset-0 border-2 border-primary rounded-lg"></div>
-                                
-                                <!-- Scanning-Linie -->
-                                <div class="absolute inset-x-0 h-0.5 bg-primary opacity-75 animate-scan"></div>
-                                
-                                <!-- Eckmarkierungen -->
-                                <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary"></div>
-                                <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary"></div>
-                                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary"></div>
-                                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary"></div>
-                            </div>
-                        </div>
-                        <!-- Status-Anzeige -->
-                        <div id="camera-status" 
-                             class="alert alert-info absolute bottom-4 left-4 right-4">
-                            Kamera wird initialisiert...
-                        </div>
-                    </div>
-
-                    <!-- Barcode Input -->
-                    <div class="join w-full">
-                        <div class="flex-1 relative join-item">
-                            <input type="text" 
-                                   id="barcode-input" 
-                                   class="input input-bordered w-full pl-10 join-item" 
-                                   placeholder="Barcode manuell eingeben"
-                                   autocomplete="off">
-                            <i class="fas fa-barcode absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50"></i>
-                        </div>
-                        <button onclick="submitManualBarcode()" 
-                                class="btn btn-primary join-item">
-                            <i class="fas fa-check"></i>
-                            <span class="hidden sm:inline">Bestätigen</span>
-                        </button>
-                    </div>
-
-                    <!-- Preview-Bereich -->
-                    <div id="scan-preview" class="space-y-4">
-                        <!-- Werkzeug Preview -->
-                        <div id="tool-preview" class="hidden">
-                            <div class="card bg-base-200">
-                                <div class="card-body">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-tools text-2xl text-base-content/50"></i>
-                                        </div>
-                                        <div class="flex-1" id="tool-details">
-                                            <!-- Wird dynamisch gefüllt -->
-                                        </div>
-                                    </div>
+                    <!-- Admin Menu -->
+                    {% if session.get('is_admin') %}
+                        <div class="relative group">
+                            <button class="text-gray-200 hover:text-white px-3 py-2 text-sm font-medium
+                                         flex items-center space-x-1 transition-colors duration-200
+                                         border-b-2 border-transparent group-hover:border-blue-500">
+                                <span>Admin</span>
+                                <svg class="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" 
+                                     fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" 
+                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                                          clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div class="nav-dropdown absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                <div class="py-1 bg-white rounded-md shadow-xs">
+                                    <a href="{{ url_for('admin_categories') }}"
+                                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900
+                                              transition-colors duration-150 border-l-4 border-transparent
+                                              hover:border-blue-500">
+                                        Kategorien verwalten
+                                    </a>
+                                    <a href="{{ url_for('logout') }}"
+                                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900
+                                              transition-colors duration-150 border-l-4 border-transparent
+                                              hover:border-blue-500">
+                                        Logout
+                                    </a>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Mitarbeiter Preview -->
-                        <div id="worker-preview" class="hidden">
-                            <div class="card bg-base-200">
-                                <div class="card-body">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-user text-2xl text-base-content/50"></i>
-                                        </div>
-                                        <div class="flex-1" id="worker-details">
-                                            <!-- Wird dynamisch gefüllt -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}"
+                           class="text-gray-200 hover:text-white px-3 py-2 text-sm font-medium
+                                  transition-colors duration-200 border-b-2 border-transparent
+                                  hover:border-blue-500">
+                            Login
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </dialog>
+    </nav>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script>
-        let currentStep = 'tool';
-        let scannedTool = null;
-        let scannedWorker = null;
-        let codeReader = new ZXing.BrowserMultiFormatReader();
-        let isVideoActive = false;
-        let isScanning = false;
-
-        async function openQuickScan(event) {
-            event.preventDefault();
-            document.getElementById('quickScanModal').showModal();
-            resetScan();
-            await startCamera();
-        }
-
-        function closeQuickScan() {
-            document.getElementById('quickScanModal').close();
-            stopScanning();
-            resetScan();
-        }
-
-        async function resetCamera() {
-            stopScanning();
-            isScanning = false;
-            await startCamera();
-        }
-
-        async function startCamera() {
-            if (isVideoActive) return;
-            
-            try {
-                const video = document.getElementById('video');
-                const cameraStatus = document.getElementById('camera-status');
-                
-                cameraStatus.textContent = 'Kamera wird initialisiert...';
-                cameraStatus.classList.remove('hidden');
-                
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                
-                if (videoDevices.length === 0) {
-                    showError('Keine Kamera gefunden');
-                    return;
-                }
-
-                const preferredDevice = videoDevices.find(device => 
-                    device.label.toLowerCase().includes('back') || 
-                    device.label.toLowerCase().includes('rück')
-                ) || videoDevices[0];
-
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        deviceId: preferredDevice.deviceId,
-                        facingMode: "environment",
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    }
-                });
-
-                video.srcObject = stream;
-                video.classList.remove('hidden');
-                await video.play();
-
-                isVideoActive = true;
-                await startScanning();
-                
-                cameraStatus.textContent = 'Kamera aktiv - Barcode in den Rahmen halten';
-                setTimeout(() => cameraStatus.classList.add('hidden'), 2000);
-
-            } catch (err) {
-                console.error('Kamera-Fehler:', err);
-                showError('Kamera konnte nicht aktiviert werden: ' + err.message);
-            }
-        }
-
-        async function startScanning() {
-            if (isScanning) return;
-            
-            try {
-                isScanning = true;
-                let lastScanTime = 0;
-                const SCAN_DELAY = 2000;
-                
-                await codeReader.decodeFromVideoDevice(
-                    null,
-                    'video',
-                    async (result, err) => {
-                        const currentTime = Date.now();
-                        if (result && isScanning && (currentTime - lastScanTime > SCAN_DELAY)) {
-                            lastScanTime = currentTime;
-                            
-                            const overlay = document.querySelector('#scanner-overlay');
-                            overlay.classList.add('bg-warning', 'bg-opacity-30');
-                            
-                            const cameraStatus = document.getElementById('camera-status');
-                            cameraStatus.textContent = 'Barcode erkannt - halte still...';
-                            cameraStatus.classList.remove('hidden');
-                            
-                            setTimeout(async () => {
-                                if (isScanning) {
-                                    isScanning = false;
-                                    overlay.classList.remove('bg-warning', 'bg-opacity-30');
-                                    showScanEffect();
-                                    await processBarcode(result.text);
-                                    stopScanning();
-                                }
-                            }, 1500);
-                        }
-                    }
-                );
-            } catch (err) {
-                console.error('Scanning-Fehler:', err);
-                showError('Scanning konnte nicht gestartet werden');
-            }
-        }
-
-        async function processBarcode(barcode) {
-            try {
-                if (currentStep === 'tool') {
-                    const response = await fetch(`/api/get_item/${barcode}`);
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        showError(data.error);
-                        return;
-                    }
-
-                    const toolPreview = document.getElementById('tool-preview');
-                    const toolDetails = document.getElementById('tool-details');
-                    
-                    toolPreview.classList.remove('hidden');
-                    toolDetails.innerHTML = `
-                        <div class="space-y-2">
-                            <p class="font-bold">${data.gegenstand}</p>
-                            <p class="text-sm opacity-70">Barcode: ${data.barcode}</p>
-                            <p class="text-sm opacity-70">Status: ${data.status}</p>
-                        </div>
-                        <button onclick="confirmToolAndProceed()" 
-                                class="btn btn-primary w-full mt-3">
-                            Bestätigen und Mitarbeiter scannen
-                        </button>
-                    `;
-                    
-                    scannedTool = data;
-                    
-                } else if (currentStep === 'worker') {
-                    const response = await fetch(`/api/search_worker/${encodeURIComponent(barcode)}`);
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        showError(data.error);
-                        return;
-                    }
-
-                    if (data.multiple) {
-                        showWorkerSelection(data.workers);
-                    } else {
-                        displayWorkerDetails(data.worker);
-                    }
-                }
-            } catch (err) {
-                console.error('Verarbeitungsfehler:', err);
-                showError('Fehler bei der Verarbeitung');
-            }
-        }
-
-        function showWorkerSelection(workers) {
-            const workerPreview = document.getElementById('worker-preview');
-            const workerDetails = document.getElementById('worker-details');
-            
-            workerPreview.classList.remove('hidden');
-            workerDetails.innerHTML = `
-                <div class="space-y-2">
-                    <p class="font-bold">Bitte Mitarbeiter auswählen:</p>
-                    <div class="space-y-2">
-                        ${workers.map(worker => `
-                            <button onclick="selectWorker('${worker.barcode}')" 
-                                    class="btn btn-ghost w-full justify-start">
-                                <div class="text-left">
-                                    <p class="font-medium">${worker.name} ${worker.lastname}</p>
-                                    <p class="text-sm opacity-70">${worker.bereich || '-'}</p>
-                                </div>
-                            </button>
-                        `).join('')}
+    <main class="container mx-auto px-4 py-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-lg shadow-sm transition-all duration-300 transform hover:scale-[1.02]
+                        {% if category == 'error' %}
+                            bg-red-50 border-l-4 border-red-400 text-red-700
+                        {% else %}
+                            bg-green-50 border-l-4 border-green-400 text-green-700
+                        {% endif %}">
+                        {{ message }}
                     </div>
-                </div>
-            `;
-        }
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        function displayWorkerDetails(worker) {
-            const workerPreview = document.getElementById('worker-preview');
-            const workerDetails = document.getElementById('worker-details');
-            
-            workerPreview.classList.remove('hidden');
-            workerDetails.innerHTML = `
-                <div class="space-y-2">
-                    <p class="font-bold">${worker.name} ${worker.lastname}</p>
-                    <p class="text-sm opacity-70">Barcode: ${worker.barcode}</p>
-                    <p class="text-sm opacity-70">Bereich: ${worker.bereich || '-'}</p>
-                </div>
-                <button onclick="confirmAndFinish()" 
-                        class="btn btn-success w-full mt-3">
-                    Vorgang abschließen
-                </button>
-            `;
-            
-            scannedWorker = worker;
-        }
-
-        async function confirmAndFinish() {
-            if (!scannedTool || !scannedWorker) {
-                showError('Unvollständige Scan-Daten');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/process_lending', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        worker_barcode: scannedWorker.barcode,
-                        item_barcode: scannedTool.barcode,
-                        item_type: 'tool',
-                        action: 'lend'
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.error) {
-                    showError(result.error);
-                    return;
-                }
-                
-                showSuccess('Vorgang erfolgreich abgeschlossen');
-                setTimeout(() => {
-                    closeQuickScan();
-                    window.location.reload();
-                }, 1500);
-                
-            } catch (err) {
-                console.error('Fehler beim Abschließen:', err);
-                showError('Fehler beim Speichern des Vorgangs');
-            }
-        }
-
-        function showError(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-end';
-            toast.innerHTML = `
-                <div class="alert alert-error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        function showSuccess(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-end';
-            toast.innerHTML = `
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Theme Controller
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeController = document.querySelector('.theme-controller');
-            if (themeController) {
-                themeController.checked = document.documentElement.getAttribute('data-theme') === 'dark';
-                themeController.addEventListener('change', function(e) {
-                    const theme = e.target.checked ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', theme);
-                    localStorage.setItem('theme', theme);
-                });
-            }
-        });
-    </script>
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>

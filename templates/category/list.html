@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white shadow-sm rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h1 class="text-2xl font-semibold text-gray-900">{{ category.name }}</h1>
+            <p class="mt-1 text-sm text-gray-500">Abteilung: {{ category.department_name }}</p>
+        </div>
+
+        {% if items %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Beschreibung
+                            </th>
+                            {% if 'status' in items[0] %}
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Standort
+                                </th>
+                            {% endif %}
+                            {% if 'quantity' in items[0] %}
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Menge
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Einheit
+                                </th>
+                            {% endif %}
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Aktionen
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for item in items %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ item.name }}
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-500">
+                                    {{ item.description or '-' }}
+                                </td>
+                                {% if 'status' in item %}
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {% if item.status == 'Verfügbar' %}
+                                                bg-green-100 text-green-800
+                                            {% elif item.status == 'Ausgeliehen' %}
+                                                bg-yellow-100 text-yellow-800
+                                            {% else %}
+                                                bg-red-100 text-red-800
+                                            {% endif %}">
+                                            {{ item.status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ item.location or '-' }}
+                                    </td>
+                                {% endif %}
+                                {% if 'quantity' in item %}
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ item.quantity }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ item.unit or '-' }}
+                                    </td>
+                                {% endif %}
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="{{ url_for('item_details', category_id=category.id, item_id=item.id) }}" 
+                                       class="text-blue-600 hover:text-blue-900">
+                                        Details
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <p class="text-gray-500">Keine Einträge in dieser Kategorie vorhanden.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

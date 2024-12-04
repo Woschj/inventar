@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="card-title">Kategorien verwalten</h2>
+        </div>
+
+        <!-- Formular für neue/existierende Kategorie -->
+        <form method="POST" action="{{ url_for('create_category') if not edit_mode else url_for('edit_category', category_id=category.id) }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Kategoriename</span>
+                    </label>
+                    <input type="text" name="name" class="input input-bordered" required 
+                           value="{{ category.name if edit_mode else '' }}">
+                </div>
+                
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Abteilung</span>
+                    </label>
+                    <select name="department" class="select select-bordered" required>
+                        <option value="">Bitte wählen...</option>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" 
+                                {% if edit_mode and category.department == dept.id %}selected{% endif %}>
+                            {{ dept.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamische Felder -->
+            <div id="fields" class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold">Felder</h3>
+                    <button type="button" onclick="addField()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Neues Feld
+                    </button>
+                </div>
+
+                <!-- Container für dynamische Felder -->
+                <div id="dynamic-fields">
+                    {% if edit_mode %}
+                        {% for field in fields if field.name != 'barcode' %}
+                        <div class="field-container" data-field-id="{{ loop.index0 }}">
+                            {% include 'admin/field_template.html' %}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <input type="hidden" id="field_count" name="field_count" value="{{ fields|length - 1 if edit_mode else 0 }}">
+            
+            <div class="flex justify-end gap-2">
+                {% if edit_mode %}
+                <button type="button" onclick="cancelEdit()" class="btn btn-ghost">Abbrechen</button>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">
+                    {{ 'Aktualisieren' if edit_mode else 'Erstellen' }}
+                </button>
+            </div>
+        </form>
+
+        <!-- Liste existierender Kategorien -->
+        <div class="divider"></div>
+        <h3 class="text-lg font-bold mb-4">Existierende Kategorien</h3>
+        
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Abteilung</th>
+                        <th>Felder</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.department }}</td>
+                        <td>{{ (json.loads(category.fields) if category.fields else [])|length - 1 }} Felder</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button onclick="editCategory({{ category|tojson }})" class="btn btn-sm btn-ghost">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteCategory({{ category.id }})" class="btn btn-sm btn-ghost text-error">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Template für neue Felder -->
+<template id="field-template">
+    {% include 'admin/field_template.html' %}
+</template>
+
+<script>
+let fieldCount = {{ fields|length - 1 if edit_mode else 0 }};
+
+function addField() {
+    const container = document.getElementById('dynamic-fields');
+    const template = document.getElementById('field-template');
+    const newField = document.createElement('div');
+    newField.className = 'field-container';
+    newField.dataset.fieldId = fieldCount;
+    newField.innerHTML = template.innerHTML.replace(/\{index\}/g, fieldCount);
+    container.appendChild(newField);
+    fieldCount++;
+    updateFieldCount();
+}
+
+function removeField(element) {
+    element.closest('.field-container').remove();
+    updateFieldCount();
+}
+
+function updateFieldCount() {
+    const fields = document.querySelectorAll('.field-container');
+    document.getElementById('field_count').value = fields.length;
+    
+    fields.forEach((field, index) => {
+        field.dataset.fieldId = index;
+        field.querySelectorAll('[name*="["]').forEach(input => {
+            input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
+        });
+    });
+}
+
+function editCategory(category) {
+    // Fülle das Formular mit den Kategorie-Daten
+    document.querySelector('[name="name"]').value = category.name;
+    document.querySelector('[name="department"]').value = category.department;
+    
+    // Lösche existierende Felder
+    document.getElementById('dynamic-fields').innerHTML = '';
+    
+    // Füge Felder hinzu
+    const fields = JSON.parse(category.fields);
+    fields.forEach((field, index) => {
+        if (field.name !== 'barcode') {
+            addField();
+            const container = document.querySelector(`[data-field-id="${index}"]`);
+            container.querySelector('[name*="name"]').value = field.name;
+            container.querySelector('[name*="type"]').value = field.type;
+            container.querySelector('[name*="label"]').value = field.label;
+            container.querySelector('[name*="required"]').checked = field.required;
+        }
+    });
+    
+    // Ändere Formular-Action
+    const form = document.querySelector('form');
+    form.action = `/admin/categories/${category.id}/edit`;
+    
+    // Scrolle zum Formular
+    form.scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEdit() {
+    // Reset Formular
+    document.querySelector('form').reset();
+    document.getElementById('dynamic-fields').innerHTML = '';
+    document.querySelector('form').action = '{{ url_for("create_category") }}';
+}
+
+function deleteCategory(categoryId) {
+    if (confirm('Möchten Sie diese Kategorie wirklich löschen?')) {
+        fetch(`/admin/categories/${categoryId}/delete`, {
+            method: 'POST',
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Fehler beim Löschen der Kategorie');
+            }
+        });
+    }
+}
+</script>
+{% endblock %} 

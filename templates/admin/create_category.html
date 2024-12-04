@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <h2 class="card-title">Neue Kategorie erstellen</h2>
+        
+        <form method="POST" class="space-y-4">
+            <!-- Grundlegende Informationen -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Kategoriename</span>
+                    </label>
+                    <input type="text" name="name" class="input input-bordered" required>
+                </div>
+                
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Abteilung</span>
+                    </label>
+                    <select name="department" class="select select-bordered" required>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}">{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamische Felder -->
+            <div id="fields-container" class="space-y-4">
+                <!-- Hier werden die Felder dynamisch eingefügt -->
+            </div>
+
+            <input type="hidden" name="field_count" id="field_count" value="0">
+            
+            <div class="flex justify-between items-center">
+                <button type="button" onclick="addField()" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Feld hinzufügen
+                </button>
+                <button type="submit" class="btn btn-primary">Kategorie erstellen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+let fieldCount = 0;
+
+function addField() {
+    const container = document.getElementById('fields-container');
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-base-200 rounded-lg relative';
+    fieldDiv.dataset.fieldId = fieldCount;
+    
+    fieldDiv.innerHTML = `
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Feldname</span>
+            </label>
+            <input type="text" name="field_name_${fieldCount}" class="input input-bordered" required>
+        </div>
+        
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Feldtyp</span>
+            </label>
+            <select name="field_type_${fieldCount}" class="select select-bordered" required>
+                <option value="text">Text</option>
+                <option value="number">Nummer</option>
+                <option value="decimal">Dezimalzahl</option>
+                <option value="date">Datum</option>
+                <option value="datetime">Datum & Zeit</option>
+                <option value="boolean">Ja/Nein</option>
+            </select>
+        </div>
+        
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Bezeichnung</span>
+            </label>
+            <input type="text" name="field_label_${fieldCount}" class="input input-bordered">
+        </div>
+        
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Pflichtfeld</span>
+            </label>
+            <label class="label cursor-pointer justify-start gap-4">
+                <input type="checkbox" name="field_required_${fieldCount}" class="checkbox">
+                <span class="label-text">Erforderlich</span>
+            </label>
+        </div>
+        
+        <button type="button" onclick="removeField(${fieldCount})" 
+                class="btn btn-error btn-sm absolute right-2 top-2">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    
+    container.appendChild(fieldDiv);
+    fieldCount++;
+    updateFieldCount();
+}
+
+function removeField(id) {
+    const field = document.querySelector(`[data-field-id="${id}"]`);
+    if (field) {
+        field.remove();
+        updateFieldCount();
+    }
+}
+
+function updateFieldCount() {
+    const fields = document.querySelectorAll('[data-field-id]');
+    document.getElementById('field_count').value = fields.length;
+    
+    // Aktualisiere die Indizes der verbleibenden Felder
+    fields.forEach((field, index) => {
+        const inputs = field.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            const oldName = input.getAttribute('name');
+            if (oldName) {
+                const newName = oldName.replace(/\d+/, index);
+                input.setAttribute('name', newName);
+            }
+        });
+    });
+}
+</script>
+{% endblock %} 

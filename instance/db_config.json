@@ -1,0 +1,51 @@
+{
+    "system": {
+        "file": "system.db",
+        "tables": {
+            "departments": "\n                            CREATE TABLE IF NOT EXISTS departments (\n                                id TEXT PRIMARY KEY,\n                                name TEXT NOT NULL\n                            );\n                        ",
+            "categories": "\n                            DROP TABLE IF EXISTS categories;\n                            CREATE TABLE categories (\n                                id INTEGER PRIMARY KEY AUTOINCREMENT,\n                                name TEXT NOT NULL,\n                                department TEXT NOT NULL,\n                                db_name TEXT NOT NULL,\n                                schema TEXT NOT NULL,\n                                FOREIGN KEY (department) REFERENCES departments(id)\n                            );\n                        "
+        },
+        "initial_data": {
+            "departments": [
+                [
+                    "technik",
+                    "Technik"
+                ],
+                [
+                    "verwaltung",
+                    "Verwaltung"
+                ],
+                [
+                    "lager",
+                    "Lager"
+                ]
+            ],
+            "categories": [
+                [
+                    "Werkzeuge",
+                    "technik",
+                    "tools.db",
+                    "\n                                CREATE TABLE IF NOT EXISTS tools (\n                                    id INTEGER PRIMARY KEY AUTOINCREMENT,\n                                    name TEXT NOT NULL,\n                                    status TEXT DEFAULT 'Verf\u00fcgbar',\n                                    description TEXT\n                                );\n                            "
+                ],
+                [
+                    "Verbrauchsmaterial",
+                    "lager",
+                    "consumables.db",
+                    "\n                                CREATE TABLE IF NOT EXISTS consumables (\n                                    id INTEGER PRIMARY KEY AUTOINCREMENT,\n                                    name TEXT NOT NULL,\n                                    description TEXT,\n                                    quantity INTEGER DEFAULT 0,\n                                    status TEXT DEFAULT 'Verf\u00fcgbar'\n                                );\n                            "
+                ],
+                [
+                    "Ausleihen",
+                    "verwaltung",
+                    "lendings.db",
+                    "\n                                CREATE TABLE IF NOT EXISTS lendings (\n                                    id INTEGER PRIMARY KEY AUTOINCREMENT,\n                                    tool_id INTEGER NOT NULL,\n                                    worker_id INTEGER NOT NULL,\n                                    lending_date DATETIME NOT NULL,\n                                    expected_return_date DATE,\n                                    actual_return_date DATETIME,\n                                    status TEXT DEFAULT 'Aktiv'\n                                );\n                            "
+                ],
+                [
+                    "Mitarbeiter",
+                    "verwaltung",
+                    "workers.db",
+                    "\n                                CREATE TABLE IF NOT EXISTS workers (\n                                    id INTEGER PRIMARY KEY AUTOINCREMENT,\n                                    name TEXT NOT NULL,\n                                    department TEXT,\n                                    status TEXT DEFAULT 'Aktiv'\n                                );\n                            "
+                ]
+            ]
+        }
+    }
+}

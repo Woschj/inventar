@@ -3,7 +3,7 @@
 {% block title %}{{ consumable.bezeichnung }} - Details{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
+<div class="bg-base-100 shadow rounded-lg p-6">
     <!-- Zurück-Button -->
     <div class="mb-6">
         <a href="{{ url_for('consumables') }}" 
@@ -28,7 +28,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Barcode</label>
                     <input type="text" value="{{ consumable.barcode }}" readonly
-                           class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50">
+                           class="mt-1 block w-full rounded-md border-gray-300 bg-base-200">
                 </div>
                 
                 <!-- Bezeichnung -->
@@ -90,8 +90,8 @@
         <div>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Ausgabehistorie</h3>
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="min-w-full divide-y divide-base-200">
+                    <thead class="bg-base-200">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Datum</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mitarbeiter</th>
@@ -99,7 +99,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktion</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-base-100 divide-y divide-base-200">
                         {% for lending in lendings %}
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

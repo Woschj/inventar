@@ -1,0 +1,40 @@
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-base-200 rounded-lg relative">
+    <button type="button" onclick="removeField(this)" 
+            class="btn btn-ghost btn-sm absolute top-2 right-2 text-error">
+        <i class="fas fa-times"></i>
+    </button>
+    
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Feldname</span>
+        </label>
+        <input type="text" name="field_name_{index}" class="input input-bordered" required>
+    </div>
+    
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Typ</span>
+        </label>
+        <select name="field_type_{index}" class="select select-bordered" required>
+            <option value="text">Text</option>
+            <option value="number">Zahl</option>
+            <option value="decimal">Dezimalzahl</option>
+            <option value="date">Datum</option>
+            <option value="boolean">Ja/Nein</option>
+        </select>
+    </div>
+    
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Bezeichnung</span>
+        </label>
+        <input type="text" name="field_label_{index}" class="input input-bordered">
+    </div>
+    
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Pflichtfeld</span>
+        </label>
+        <input type="checkbox" name="field_required_{index}" class="toggle toggle-primary">
+    </div>
+</div> 
