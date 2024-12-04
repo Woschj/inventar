@@ -2,9 +2,23 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from database import get_db_connection
 from config import DBConfig
 import logging
+from functools import wraps
 
-# Blueprint definieren
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_admin'):
+            flash('Bitte melden Sie sich als Administrator an', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 workers_bp = Blueprint('workers', __name__)
+
+@workers_bp.route('/')
+@admin_required
+def list_workers():
+    # ... bestehender Code ...
 
 @workers_bp.route('/delete/<barcode>')
 def delete_worker(barcode):

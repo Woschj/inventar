@@ -42,10 +42,12 @@
                                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 Verbrauchsmaterial
                             </a>
-                            <a href="{{ url_for('workers') }}"
-                               class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                Mitarbeiter
-                            </a>
+                            {% if session.get('is_admin') %}
+                                <a href="{{ url_for('workers') }}"
+                                   class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                    Mitarbeiter
+                                </a>
+                            {% endif %}
                             <div class="flex items-center">
                                 <div class="relative group">
                                     <button onclick="openQuickScan(event)"
@@ -227,6 +229,7 @@
 
     <!-- Quick-Scan JavaScript -->
     <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script>
     let currentStep = 'tool';
     let scannedTool = null;

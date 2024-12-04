@@ -82,7 +82,14 @@
                         <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-status_date">↕</span>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {% if session.get('is_admin') %}
                         Ausgeliehen an
+                        {% endif %}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer group"
+                        onclick="sortTable('barcode')">
+                        Barcode
+                        <span class="inline-block ml-1 group-hover:text-gray-700" id="sort-barcode">↕</span>
                     </th>
                     {% if session.get('is_admin') %}
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -119,9 +126,21 @@
                         {{ tool.status_date or '-' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ tool.current_worker or '-' }}
+                        {% if session.get('is_admin') %}
+                            {{ tool.current_worker or '-' }}
+                        {% endif %}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tool.barcode }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div class="flex flex-col items-center space-y-2">
+                            <svg class="barcode" jsbarcode-value="{{ tool.barcode }}" 
+                                 jsbarcode-width="1" 
+                                 jsbarcode-height="30"
+                                 jsbarcode-fontSize="12"
+                                 jsbarcode-margin="0">
+                            </svg>
+                            <span class="text-xs">{{ tool.barcode }}</span>
+                        </div>
+                    </td>
                     {% if session.get('is_admin') %}
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <button onclick="confirmDelete('tool', '{{ tool.barcode }}')" 
@@ -324,4 +343,11 @@ function executeDelete() {
 }
 </script>
 {% endif %}
+
+<script>
+    // Initialisiere alle Barcodes
+    window.onload = function() {
+        JsBarcode(".barcode").init();
+    }
+</script>
 {% endblock %}

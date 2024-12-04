@@ -57,11 +57,27 @@
                 <!-- Status -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Status</label>
-                    <select name="status" 
+                    <select name="status" id="statusSelect" onchange="handleStatusChange()"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="Verfügbar" {% if tool.status == 'Verfügbar' %}selected{% endif %}>Verfügbar</option>
-                        <option value="Ausgeliehen" {% if tool.status == 'Ausgeliehen' %}selected{% endif %} disabled>Ausgeliehen</option>
+                        <option value="In Reparatur" {% if tool.status == 'In Reparatur' %}selected{% endif %}>In Reparatur</option>
                         <option value="Defekt" {% if tool.status == 'Defekt' %}selected{% endif %}>Defekt</option>
+                        <option value="Ausgeliehen" {% if tool.status == 'Ausgeliehen' %}selected{% endif %}>Ausgeliehen</option>
+                    </select>
+                </div>
+
+                <!-- Mitarbeiter-Auswahl (wird nur angezeigt, wenn Status "Ausgeliehen" ist) -->
+                <div id="workerSelect" class="{% if tool.status != 'Ausgeliehen' %}hidden{% endif %}">
+                    <label class="block text-sm font-medium text-gray-700">Ausgeliehen an</label>
+                    <select name="worker_barcode" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Mitarbeiter auswählen</option>
+                        {% for worker in workers %}
+                            <option value="{{ worker.barcode }}" 
+                                    {% if tool.current_worker == worker.name + ' ' + worker.lastname %}selected{% endif %}>
+                                {{ worker.name }} {{ worker.lastname }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -138,4 +154,17 @@
         </div>
     </div>
 </div>
+
+<script>
+function handleStatusChange() {
+    const statusSelect = document.getElementById('statusSelect');
+    const workerSelect = document.getElementById('workerSelect');
+    
+    if (statusSelect.value === 'Ausgeliehen') {
+        workerSelect.classList.remove('hidden');
+    } else {
+        workerSelect.classList.add('hidden');
+    }
+}
+</script>
 {% endblock %} 
