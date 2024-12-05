@@ -1,201 +1,102 @@
-2024-12-04 22:09:47,851 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2024-12-05 06:14:24,484 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
-2024-12-04 22:09:47,851 - INFO - [33mPress CTRL+C to quit[0m
-2024-12-04 22:09:47,855 - INFO -  * Restarting with stat
-2024-12-04 22:09:48,137 - WARNING -  * Debugger is active!
-2024-12-04 22:09:48,143 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:09:49,397 - INFO - 127.0.0.1 - - [04/Dec/2024 22:09:49] "[35m[1mGET / HTTP/1.1[0m" 500 -
-2024-12-04 22:09:49,580 - INFO - 127.0.0.1 - - [04/Dec/2024 22:09:49] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
-2024-12-04 22:09:49,581 - INFO - 127.0.0.1 - - [04/Dec/2024 22:09:49] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:09:49,728 - INFO - 127.0.0.1 - - [04/Dec/2024 22:09:49] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
-2024-12-04 22:10:46,724 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:46] "[35m[1mGET / HTTP/1.1[0m" 500 -
-2024-12-04 22:10:46,836 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:46] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
-2024-12-04 22:10:46,836 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:46] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:10:47,028 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:47] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
-2024-12-04 22:10:47,659 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:47] "[33mGET /admin_panel HTTP/1.1[0m" 404 -
-2024-12-04 22:10:48,733 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:48] "[33mGET /admin_panel HTTP/1.1[0m" 404 -
-2024-12-04 22:10:50,707 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:50] "[35m[1mGET / HTTP/1.1[0m" 500 -
-2024-12-04 22:10:50,849 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:50] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:10:50,851 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:50] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
-2024-12-04 22:10:51,029 - INFO - 127.0.0.1 - - [04/Dec/2024 22:10:51] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
-2024-12-04 22:11:31,879 - INFO - 127.0.0.1 - - [04/Dec/2024 22:11:31] "GET / HTTP/1.1" 200 -
-2024-12-04 22:11:32,054 - INFO - 127.0.0.1 - - [04/Dec/2024 22:11:32] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
-2024-12-04 22:11:44,648 - INFO - 127.0.0.1 - - [04/Dec/2024 22:11:44] "GET / HTTP/1.1" 200 -
-2024-12-04 22:11:44,800 - INFO - 127.0.0.1 - - [04/Dec/2024 22:11:44] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
-2024-12-04 22:12:08,562 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:12:08,562 - INFO - 127.0.0.1 - - [04/Dec/2024 22:12:08] "[32mGET /category/2 HTTP/1.1[0m" 302 -
-2024-12-04 22:12:08,648 - INFO - 127.0.0.1 - - [04/Dec/2024 22:12:08] "GET / HTTP/1.1" 200 -
-2024-12-04 22:12:08,821 - INFO - 127.0.0.1 - - [04/Dec/2024 22:12:08] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:21,100 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:21,270 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET /static/css/navbar.css HTTP/1.1" 200 -
-2024-12-04 22:13:21,271 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:21,271 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET /static/css/forms.css HTTP/1.1" 200 -
-2024-12-04 22:13:21,273 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET /static/css/style.css HTTP/1.1" 200 -
-2024-12-04 22:13:21,273 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET /static/css/alerts.css HTTP/1.1" 200 -
-2024-12-04 22:13:21,274 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:21] "GET /static/js/sidebar.js HTTP/1.1" 200 -
-2024-12-04 22:13:26,143 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:13:26,143 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[32mGET /category/2 HTTP/1.1[0m" 302 -
-2024-12-04 22:13:26,225 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:26,363 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:26,365 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[36mGET /static/css/navbar.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:26,366 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[36mGET /static/css/forms.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:26,366 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:26,367 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[36mGET /static/css/alerts.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:26,368 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:26] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
-2024-12-04 22:13:27,537 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:13:27,538 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[32mGET /category/2 HTTP/1.1[0m" 302 -
-2024-12-04 22:13:27,620 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:27,779 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:27,780 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[36mGET /static/css/forms.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:27,782 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:27,782 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[36mGET /static/css/navbar.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:27,784 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[36mGET /static/css/alerts.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:27,785 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:27] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
-2024-12-04 22:13:28,360 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:13:28,361 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[32mGET /category/1 HTTP/1.1[0m" 302 -
-2024-12-04 22:13:28,382 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:28,523 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:28,523 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[36mGET /static/css/forms.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:28,524 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[36mGET /static/css/alerts.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:28,525 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
-2024-12-04 22:13:28,525 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:28,531 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:28] "[36mGET /static/css/navbar.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:49,218 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:13:49,219 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[32mGET /category/3 HTTP/1.1[0m" 302 -
-2024-12-04 22:13:49,304 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:49,454 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:49,455 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[36mGET /static/css/navbar.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:49,457 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[36mGET /static/css/forms.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:49,463 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:49,465 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[36mGET /static/css/alerts.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:49,467 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:49] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
-2024-12-04 22:13:56,645 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:13:56,645 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[32mGET /category/4 HTTP/1.1[0m" 302 -
-2024-12-04 22:13:56,669 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "GET / HTTP/1.1" 200 -
-2024-12-04 22:13:56,800 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:56,800 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[36mGET /static/css/navbar.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:56,803 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[33mGET /static/css/tables.css HTTP/1.1[0m" 404 -
-2024-12-04 22:13:56,804 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[36mGET /static/css/forms.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:56,806 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[36mGET /static/css/alerts.css HTTP/1.1[0m" 304 -
-2024-12-04 22:13:56,807 - INFO - 127.0.0.1 - - [04/Dec/2024 22:13:56] "[36mGET /static/js/sidebar.js HTTP/1.1[0m" 304 -
-2024-12-04 22:14:41,546 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:41] "GET / HTTP/1.1" 200 -
-2024-12-04 22:14:41,706 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:41] "GET /static/css/style.css HTTP/1.1" 200 -
-2024-12-04 22:14:41,845 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-2024-12-04 22:14:45,120 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:14:45,121 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:45] "[32mGET /category/2 HTTP/1.1[0m" 302 -
-2024-12-04 22:14:45,153 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:45] "GET / HTTP/1.1" 200 -
-2024-12-04 22:14:45,264 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:14:47,067 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:14:47,068 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:47] "[32mGET /category/1 HTTP/1.1[0m" 302 -
-2024-12-04 22:14:47,097 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:47] "GET / HTTP/1.1" 200 -
-2024-12-04 22:14:47,227 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:14:48,836 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:48] "GET /login HTTP/1.1" 200 -
-2024-12-04 22:14:48,991 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:14:51,559 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:51] "POST /login HTTP/1.1" 200 -
-2024-12-04 22:14:51,753 - INFO - 127.0.0.1 - - [04/Dec/2024 22:14:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:15:37,226 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:37] "[32mPOST /login HTTP/1.1[0m" 302 -
-2024-12-04 22:15:37,269 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:37] "GET / HTTP/1.1" 200 -
-2024-12-04 22:15:37,420 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:15:39,812 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:15:39,812 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:39] "[32mGET /category/4 HTTP/1.1[0m" 302 -
-2024-12-04 22:15:39,843 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:39] "GET / HTTP/1.1" 200 -
-2024-12-04 22:15:39,963 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:39] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:15:40,851 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:15:40,851 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:40] "[32mGET /category/3 HTTP/1.1[0m" 302 -
-2024-12-04 22:15:40,875 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:40] "GET / HTTP/1.1" 200 -
-2024-12-04 22:15:40,998 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:15:41,906 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:15:41,907 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:41] "[32mGET /category/1 HTTP/1.1[0m" 302 -
-2024-12-04 22:15:41,931 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:41] "GET / HTTP/1.1" 200 -
-2024-12-04 22:15:42,070 - INFO - 127.0.0.1 - - [04/Dec/2024 22:15:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-2024-12-04 22:15:45,282 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\config.py', reloading
-2024-12-04 22:15:45,306 - INFO -  * Restarting with stat
-2024-12-04 22:15:45,584 - WARNING -  * Debugger is active!
-2024-12-04 22:15:45,589 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:16:00,574 - INFO - 127.0.0.1 - - [04/Dec/2024 22:16:00] "GET / HTTP/1.1" 200 -
-2024-12-04 22:16:00,725 - INFO - 127.0.0.1 - - [04/Dec/2024 22:16:00] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
-2024-12-04 22:16:00,913 - INFO - 127.0.0.1 - - [04/Dec/2024 22:16:00] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
-2024-12-04 22:16:01,048 - INFO - 127.0.0.1 - - [04/Dec/2024 22:16:01] "[33mGET /static/favicon.ico HTTP/1.1[0m" 404 -
-2024-12-04 22:17:40,545 - INFO - 127.0.0.1 - - [04/Dec/2024 22:17:40] "GET / HTTP/1.1" 200 -
-2024-12-04 22:17:40,742 - INFO - 127.0.0.1 - - [04/Dec/2024 22:17:40] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:17:46,740 - ERROR - Fehler beim Laden der Kategorie-Items: category/list.html
-2024-12-04 22:17:46,741 - INFO - 127.0.0.1 - - [04/Dec/2024 22:17:46] "[32mGET /category/3 HTTP/1.1[0m" 302 -
-2024-12-04 22:17:46,771 - INFO - 127.0.0.1 - - [04/Dec/2024 22:17:46] "GET / HTTP/1.1" 200 -
-2024-12-04 22:17:47,045 - INFO - 127.0.0.1 - - [04/Dec/2024 22:17:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:18:34,060 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\routes.py', reloading
-2024-12-04 22:18:34,084 - INFO -  * Restarting with stat
-2024-12-04 22:18:34,359 - WARNING -  * Debugger is active!
-2024-12-04 22:18:34,363 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:18:50,756 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:50] "GET / HTTP/1.1" 200 -
-2024-12-04 22:18:51,165 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:51] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:18:53,275 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:53] "GET /category/2 HTTP/1.1" 200 -
-2024-12-04 22:18:53,614 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:53] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:18:55,514 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:55] "GET /category/1 HTTP/1.1" 200 -
-2024-12-04 22:18:55,835 - INFO - 127.0.0.1 - - [04/Dec/2024 22:18:55] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:19:58,587 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\migrate_db.py', reloading
-2024-12-04 22:19:58,609 - INFO -  * Restarting with stat
-2024-12-04 22:19:58,884 - WARNING -  * Debugger is active!
-2024-12-04 22:19:58,889 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:20:00,946 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\migrate_db.py', reloading
-2024-12-04 22:20:00,967 - INFO -  * Restarting with stat
-2024-12-04 22:20:01,236 - WARNING -  * Debugger is active!
-2024-12-04 22:20:01,241 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:20:07,005 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2024-12-05 06:14:24,485 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-05 06:14:24,489 - INFO -  * Restarting with stat
+2024-12-05 06:14:24,744 - WARNING -  * Debugger is active!
+2024-12-05 06:14:24,748 - INFO -  * Debugger PIN: 119-533-644
+2024-12-05 06:14:27,110 - ERROR - Fehler beim Laden der Kategorie-Items: Could not build url for endpoint 'add_item' with values ['category_id']. Did you mean 'list_category_items' instead?
+2024-12-05 06:14:27,110 - INFO - 127.0.0.1 - - [05/Dec/2024 06:14:27] "[32mGET /category/2 HTTP/1.1[0m" 302 -
+2024-12-05 06:14:27,163 - INFO - 127.0.0.1 - - [05/Dec/2024 06:14:27] "GET / HTTP/1.1" 200 -
+2024-12-05 06:14:27,437 - INFO - 127.0.0.1 - - [05/Dec/2024 06:14:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:15:56,897 - ERROR - Fehler beim Laden der Kategorie-Items: Could not build url for endpoint 'add_category_item' with values ['category_id']. Did you mean 'list_category_items' instead?
+2024-12-05 06:15:56,897 - INFO - 127.0.0.1 - - [05/Dec/2024 06:15:56] "[32mGET /category/2 HTTP/1.1[0m" 302 -
+2024-12-05 06:15:56,914 - INFO - 127.0.0.1 - - [05/Dec/2024 06:15:56] "GET / HTTP/1.1" 200 -
+2024-12-05 06:15:57,171 - INFO - 127.0.0.1 - - [05/Dec/2024 06:15:57] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:22:27,269 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\routes.py', reloading
+2024-12-05 06:22:27,290 - INFO -  * Restarting with stat
+2024-12-05 06:31:48,659 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
-2024-12-04 22:20:07,005 - INFO - [33mPress CTRL+C to quit[0m
-2024-12-04 22:20:07,008 - INFO -  * Restarting with stat
-2024-12-04 22:20:07,285 - WARNING -  * Debugger is active!
-2024-12-04 22:20:07,289 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:20:07,712 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:07] "GET /category/1 HTTP/1.1" 200 -
-2024-12-04 22:20:08,026 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:08] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:20:08,983 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:08] "GET /category/1 HTTP/1.1" 200 -
-2024-12-04 22:20:09,331 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:09] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:20:11,749 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:11] "GET /category/1 HTTP/1.1" 200 -
-2024-12-04 22:20:12,107 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:12] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:20:13,482 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:13] "GET /category/2 HTTP/1.1" 200 -
-2024-12-04 22:20:13,801 - INFO - 127.0.0.1 - - [04/Dec/2024 22:20:13] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:21:32,798 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-2024-12-04 22:21:32,798 - INFO - [33mPress CTRL+C to quit[0m
-2024-12-04 22:21:32,801 - INFO -  * Restarting with stat
-2024-12-04 22:21:33,072 - WARNING -  * Debugger is active!
-2024-12-04 22:21:33,076 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:21:35,753 - INFO - 127.0.0.1 - - [04/Dec/2024 22:21:35] "GET /category/2 HTTP/1.1" 200 -
-2024-12-04 22:21:36,070 - INFO - 127.0.0.1 - - [04/Dec/2024 22:21:36] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:21:45,276 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\migrate_db.py', reloading
-2024-12-04 22:21:45,300 - INFO -  * Restarting with stat
-2024-12-04 22:21:45,571 - WARNING -  * Debugger is active!
-2024-12-04 22:21:45,576 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:22:56,278 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-2024-12-04 22:22:56,279 - INFO - [33mPress CTRL+C to quit[0m
-2024-12-04 22:22:56,282 - INFO -  * Restarting with stat
-2024-12-04 22:22:56,556 - WARNING -  * Debugger is active!
-2024-12-04 22:22:56,560 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:22:57,627 - INFO - 127.0.0.1 - - [04/Dec/2024 22:22:57] "GET /category/2 HTTP/1.1" 200 -
-2024-12-04 22:22:57,971 - INFO - 127.0.0.1 - - [04/Dec/2024 22:22:57] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:23:01,824 - INFO - 127.0.0.1 - - [04/Dec/2024 22:23:01] "GET /category/1 HTTP/1.1" 200 -
-2024-12-04 22:23:02,224 - INFO - 127.0.0.1 - - [04/Dec/2024 22:23:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:23:34,723 - ERROR - Fehler beim Laden der Kategorien: Object of type Row is not JSON serializable
-2024-12-04 22:23:34,724 - INFO - 127.0.0.1 - - [04/Dec/2024 22:23:34] "[32mGET /admin/categories HTTP/1.1[0m" 302 -
-2024-12-04 22:23:34,856 - INFO - 127.0.0.1 - - [04/Dec/2024 22:23:34] "GET / HTTP/1.1" 200 -
-2024-12-04 22:23:35,174 - INFO - 127.0.0.1 - - [04/Dec/2024 22:23:35] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:24:03,879 - ERROR - Fehler beim Laden der Kategorie-Items: Could not build url for endpoint 'item_details' with values ['category_id', 'item_id']. Did you mean 'admin_categories' instead?
-2024-12-04 22:24:03,879 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:03] "[32mGET /category/2 HTTP/1.1[0m" 302 -
-2024-12-04 22:24:03,899 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:03] "GET / HTTP/1.1" 200 -
-2024-12-04 22:24:04,233 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:04] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:24:06,035 - ERROR - Fehler beim Laden der Kategorie-Items: Could not build url for endpoint 'item_details' with values ['category_id', 'item_id']. Did you mean 'admin_categories' instead?
-2024-12-04 22:24:06,036 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:06] "[32mGET /category/1 HTTP/1.1[0m" 302 -
-2024-12-04 22:24:06,058 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:06] "GET / HTTP/1.1" 200 -
-2024-12-04 22:24:06,328 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:24:18,777 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\routes.py', reloading
-2024-12-04 22:24:18,801 - INFO -  * Restarting with stat
-2024-12-04 22:24:19,083 - WARNING -  * Debugger is active!
-2024-12-04 22:24:19,088 - INFO -  * Debugger PIN: 119-533-644
-2024-12-04 22:24:33,993 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:33] "GET / HTTP/1.1" 200 -
-2024-12-04 22:24:34,372 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:34] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
-2024-12-04 22:24:35,738 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:35] "GET /category/2 HTTP/1.1" 200 -
-2024-12-04 22:24:36,030 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:36] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:24:38,071 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:38] "GET /category/2/item/1 HTTP/1.1" 200 -
-2024-12-04 22:24:38,346 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
-2024-12-04 22:24:40,057 - INFO - 127.0.0.1 - - [04/Dec/2024 22:24:40] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:31:48,659 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-05 06:31:48,662 - INFO -  * Restarting with stat
+2024-12-05 06:31:48,934 - WARNING -  * Debugger is active!
+2024-12-05 06:31:48,938 - INFO -  * Debugger PIN: 119-533-644
+2024-12-05 06:31:51,948 - INFO - 127.0.0.1 - - [05/Dec/2024 06:31:51] "GET / HTTP/1.1" 200 -
+2024-12-05 06:31:52,120 - INFO - 127.0.0.1 - - [05/Dec/2024 06:31:52] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:31:54,538 - ERROR - Fehler beim Laden der Kategorie-Items: Could not build url for endpoint 'edit_category_item' with values ['category_id']. Did you forget to specify values ['item_id']?
+2024-12-05 06:31:54,538 - INFO - 127.0.0.1 - - [05/Dec/2024 06:31:54] "[32mGET /category/2 HTTP/1.1[0m" 302 -
+2024-12-05 06:31:54,555 - INFO - 127.0.0.1 - - [05/Dec/2024 06:31:54] "GET / HTTP/1.1" 200 -
+2024-12-05 06:31:54,832 - INFO - 127.0.0.1 - - [05/Dec/2024 06:31:54] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:33:10,183 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:10] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:33:10,591 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:10] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:33:30,613 - ERROR - Fehler beim Laden des Add-Formulars: category/add_item.html
+2024-12-05 06:33:30,613 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:30] "[32mGET /category/2/add HTTP/1.1[0m" 302 -
+2024-12-05 06:33:30,625 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:30] "GET / HTTP/1.1" 200 -
+2024-12-05 06:33:30,949 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:33:31,953 - INFO - 127.0.0.1 - - [05/Dec/2024 06:33:31] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:37:10,554 - INFO - 127.0.0.1 - - [05/Dec/2024 06:37:10] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:37:10,765 - INFO - 127.0.0.1 - - [05/Dec/2024 06:37:10] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:39:06,948 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\routes.py', reloading
+2024-12-05 06:39:06,969 - INFO -  * Restarting with stat
+2024-12-05 06:39:07,240 - WARNING -  * Debugger is active!
+2024-12-05 06:39:07,244 - INFO -  * Debugger PIN: 119-533-644
+2024-12-05 06:39:26,797 - ERROR - Fehler beim Laden der Kategorie-Items: Encountered unknown tag 'endblock'.
+2024-12-05 06:39:26,797 - INFO - 127.0.0.1 - - [05/Dec/2024 06:39:26] "[32mGET /category/2 HTTP/1.1[0m" 302 -
+2024-12-05 06:39:26,828 - INFO - 127.0.0.1 - - [05/Dec/2024 06:39:26] "GET / HTTP/1.1" 200 -
+2024-12-05 06:39:27,196 - INFO - 127.0.0.1 - - [05/Dec/2024 06:39:27] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:40:32,203 - INFO - 127.0.0.1 - - [05/Dec/2024 06:40:32] "GET / HTTP/1.1" 200 -
+2024-12-05 06:40:32,511 - INFO - 127.0.0.1 - - [05/Dec/2024 06:40:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:40:35,807 - INFO - 127.0.0.1 - - [05/Dec/2024 06:40:35] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:40:36,077 - INFO - 127.0.0.1 - - [05/Dec/2024 06:40:36] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:41:12,274 - INFO - 127.0.0.1 - - [05/Dec/2024 06:41:12] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-12-05 06:41:12,301 - INFO - 127.0.0.1 - - [05/Dec/2024 06:41:12] "GET / HTTP/1.1" 200 -
+2024-12-05 06:41:12,634 - INFO - 127.0.0.1 - - [05/Dec/2024 06:41:12] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:41:14,191 - INFO - 127.0.0.1 - - [05/Dec/2024 06:41:14] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:41:14,409 - INFO - 127.0.0.1 - - [05/Dec/2024 06:41:14] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:41:35,289 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\routes.py', reloading
+2024-12-05 06:41:35,314 - INFO -  * Restarting with stat
+2024-12-05 06:41:35,588 - WARNING -  * Debugger is active!
+2024-12-05 06:41:35,592 - INFO -  * Debugger PIN: 119-533-644
+2024-12-05 06:42:17,303 - INFO - 127.0.0.1 - - [05/Dec/2024 06:42:17] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:42:17,656 - INFO - 127.0.0.1 - - [05/Dec/2024 06:42:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:44:24,178 - INFO - 127.0.0.1 - - [05/Dec/2024 06:44:24] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:44:24,481 - INFO - 127.0.0.1 - - [05/Dec/2024 06:44:24] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:46:59,311 - INFO - 127.0.0.1 - - [05/Dec/2024 06:46:59] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:46:59,584 - INFO - 127.0.0.1 - - [05/Dec/2024 06:46:59] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:49:02,239 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:02] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:49:02,545 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:02] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:49:15,859 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:15] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:49:16,227 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:16] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:49:17,464 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:17] "GET /category/3 HTTP/1.1" 200 -
+2024-12-05 06:49:17,817 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:21,042 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:21] "GET /category/4 HTTP/1.1" 200 -
+2024-12-05 06:49:21,321 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:25,242 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:25] "GET /login HTTP/1.1" 200 -
+2024-12-05 06:49:25,533 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:25] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:28,470 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:28] "[32mPOST /login HTTP/1.1[0m" 302 -
+2024-12-05 06:49:28,492 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:28] "GET / HTTP/1.1" 200 -
+2024-12-05 06:49:28,740 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:28] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:31,863 - ERROR - Fehler beim Laden der Kategorien: Object of type Row is not JSON serializable
+2024-12-05 06:49:31,863 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:31] "[32mGET /admin/categories HTTP/1.1[0m" 302 -
+2024-12-05 06:49:31,932 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:31] "GET / HTTP/1.1" 200 -
+2024-12-05 06:49:32,186 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:34,326 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:34] "GET /category/3 HTTP/1.1" 200 -
+2024-12-05 06:49:34,725 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:34] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:36,732 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:36] "GET /category/1 HTTP/1.1" 200 -
+2024-12-05 06:49:37,081 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:37] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:41,181 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:41] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:49:41,589 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:41] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:46,649 - ERROR - Fehler beim Laden des Edit-Formulars: category/edit_item.html
+2024-12-05 06:49:46,650 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:46] "[32mGET /category/2/edit/1 HTTP/1.1[0m" 302 -
+2024-12-05 06:49:46,741 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:46] "GET / HTTP/1.1" 200 -
+2024-12-05 06:49:46,993 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:49:47,869 - INFO - 127.0.0.1 - - [05/Dec/2024 06:49:47] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:50:16,816 - INFO - 127.0.0.1 - - [05/Dec/2024 06:50:16] "GET / HTTP/1.1" 200 -
+2024-12-05 06:50:17,190 - INFO - 127.0.0.1 - - [05/Dec/2024 06:50:17] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:50:17,317 - INFO - 127.0.0.1 - - [05/Dec/2024 06:50:17] "[33mGET /static/favicon.ico HTTP/1.1[0m" 404 -
+2024-12-05 06:51:23,721 - INFO - 127.0.0.1 - - [05/Dec/2024 06:51:23] "GET / HTTP/1.1" 200 -
+2024-12-05 06:51:24,010 - INFO - 127.0.0.1 - - [05/Dec/2024 06:51:24] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 06:51:24,087 - INFO - 127.0.0.1 - - [05/Dec/2024 06:51:24] "[33mGET /static/favicon.ico HTTP/1.1[0m" 404 -
+2024-12-05 06:51:27,084 - INFO - 127.0.0.1 - - [05/Dec/2024 06:51:27] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:51:27,286 - INFO - 127.0.0.1 - - [05/Dec/2024 06:51:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 06:52:48,359 - INFO - 127.0.0.1 - - [05/Dec/2024 06:52:48] "GET /category/2 HTTP/1.1" 200 -
+2024-12-05 06:52:48,720 - INFO - 127.0.0.1 - - [05/Dec/2024 06:52:48] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -

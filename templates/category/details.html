@@ -4,55 +4,65 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white shadow-sm rounded-lg">
-        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+    <div class="card bg-base-100 shadow-lg">
+        <!-- Header -->
+        <div class="card-body border-b border-base-200">
             <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-semibold text-gray-900">{{ item.name }}</h1>
-                <a href="{{ url_for('list_category_items', category_id=category.id) }}" 
-                   class="text-blue-600 hover:text-blue-900">
-                    Zurück zur Liste
-                </a>
+                <div>
+                    <h1 class="text-2xl font-bold">{{ item.name }}</h1>
+                    <p class="text-base-content/60">{{ category.name }} - {{ category.department_name }}</p>
+                </div>
+                <div class="join">
+                    <a href="{{ url_for('list_category_items', category_id=category.id) }}" 
+                       class="btn btn-ghost join-item">
+                        <i class="fas fa-arrow-left mr-2"></i>Zurück
+                    </a>
+                    {% if session.get('is_admin') %}
+                    <button class="btn btn-ghost join-item">
+                        <i class="fas fa-edit mr-2"></i>Bearbeiten
+                    </button>
+                    {% endif %}
+                </div>
             </div>
-            <p class="mt-1 text-sm text-gray-500">{{ category.name }} - {{ category.department_name }}</p>
         </div>
         
-        <div class="px-4 py-5 sm:px-6">
-            <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                <div class="sm:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ item.description or '-' }}</dd>
+        <!-- Details -->
+        <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="col-span-2">
+                    <label class="label">
+                        <span class="label-text font-medium">Beschreibung</span>
+                    </label>
+                    <p class="text-base-content/70">{{ item.description or '-' }}</p>
                 </div>
                 
                 {% if item.status is defined %}
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Status</dt>
-                        <dd class="mt-1">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                {% if item.status == 'Verfügbar' %}
-                                    bg-green-100 text-green-800
-                                {% elif item.status == 'Ausgeliehen' %}
-                                    bg-yellow-100 text-yellow-800
-                                {% else %}
-                                    bg-red-100 text-red-800
-                                {% endif %}">
-                                {{ item.status }}
-                            </span>
-                        </dd>
+                        <label class="label">
+                            <span class="label-text font-medium">Status</span>
+                        </label>
+                        <div class="badge {% if item.status == 'Verfügbar' %}badge-success{% elif item.status == 'Ausgeliehen' %}badge-warning{% else %}badge-error{% endif %}">
+                            {{ item.status }}
+                        </div>
                     </div>
                     
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Standort</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.location or '-' }}</dd>
+                        <label class="label">
+                            <span class="label-text font-medium">Standort</span>
+                        </label>
+                        <p class="text-base-content/70">{{ item.location or '-' }}</p>
                     </div>
                 {% endif %}
                 
                 {% if item.quantity is defined %}
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Menge</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.quantity }} {{ item.unit or '' }}</dd>
+                        <label class="label">
+                            <span class="label-text font-medium">Menge</span>
+                        </label>
+                        <p class="text-base-content/70">{{ item.quantity }} {{ item.unit or '' }}</p>
                     </div>
                 {% endif %}
-            </dl>
+            </div>
         </div>
     </div>
 </div>

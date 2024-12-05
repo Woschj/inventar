@@ -3,95 +3,242 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="bg-white shadow-sm rounded-lg">
-        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-            <h1 class="text-2xl font-semibold text-gray-900">{{ category.name }}</h1>
-            <p class="mt-1 text-sm text-gray-500">Abteilung: {{ category.department_name }}</p>
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <!-- Header mit verbessertem Styling -->
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <div>
+                <h1 class="text-3xl font-bold text-primary">{{ category.name }}</h1>
+                <p class="text-base-content/60 text-lg mt-1">{{ category.department_name }}</p>
+            </div>
+            {% if session.get('is_admin') %}
+            <a href="{{ url_for('add_category_item', category_id=category.id) }}" 
+               class="btn btn-primary btn-lg">
+                <i class="fas fa-plus mr-2"></i>Neuer Eintrag
+            </a>
+            {% endif %}
         </div>
 
-        {% if items %}
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Beschreibung
-                            </th>
-                            {% if 'status' in items[0] %}
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Standort
-                                </th>
-                            {% endif %}
-                            {% if 'quantity' in items[0] %}
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Menge
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Einheit
-                                </th>
-                            {% endif %}
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Aktionen
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        {% for item in items %}
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ item.name }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    {{ item.description or '-' }}
-                                </td>
-                                {% if 'status' in item %}
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {% if item.status == 'Verfügbar' %}
-                                                bg-green-100 text-green-800
-                                            {% elif item.status == 'Ausgeliehen' %}
-                                                bg-yellow-100 text-yellow-800
-                                            {% else %}
-                                                bg-red-100 text-red-800
-                                            {% endif %}">
-                                            {{ item.status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">
-                                        {{ item.location or '-' }}
-                                    </td>
-                                {% endif %}
-                                {% if 'quantity' in item %}
-                                    <td class="px-6 py-4 text-sm text-gray-500">
-                                        {{ item.quantity }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">
-                                        {{ item.unit or '-' }}
-                                    </td>
-                                {% endif %}
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ url_for('item_details', category_id=category.id, item_id=item.id) }}" 
-                                       class="text-blue-600 hover:text-blue-900">
-                                        Details
-                                    </a>
-                                </td>
-                            </tr>
+        <!-- Filter mit verbessertem Styling -->
+        <div class="mb-8 bg-base-200 p-4 rounded-lg">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <label class="label">
+                        <span class="label-text font-medium">Suche</span>
+                    </label>
+                    <input type="text" id="searchInput"
+                           class="input input-bordered w-full"
+                           placeholder="Suche...">
+                </div>
+                {% for column in schema if column.filterable %}
+                <div>
+                    <label class="label">
+                        <span class="label-text font-medium">{{ column.label }}</span>
+                    </label>
+                    <select id="filter_{{ column.name }}" class="select select-bordered w-full">
+                        <option value="">Alle {{ column.label }}</option>
+                        {% for value in column.distinct_values %}
+                            <option value="{{ value }}">{{ value }}</option>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    </select>
+                </div>
+                {% endfor %}
             </div>
-        {% else %}
-            <div class="text-center py-12">
-                <p class="text-gray-500">Keine Einträge in dieser Kategorie vorhanden.</p>
-            </div>
-        {% endif %}
+        </div>
+
+        <!-- Verbesserte Tabelle -->
+        <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+                <thead>
+                    <tr>
+                        {% for column in schema %}
+                        <th class="{% if column.width %}w-{{ column.width }}{% endif %} 
+                                 text-base font-bold py-4">
+                            {{ column.label }}
+                        </th>
+                        {% endfor %}
+                        {% if session.get('is_admin') %}
+                        <th class="w-24">Aktionen</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="hover">
+                        {% for column in schema %}
+                        <td>
+                            {% if column.type == 'link' %}
+                            <div class="font-bold">{{ item[column.name] }}</div>
+                            {% if item.beschreibung %}
+                            <div class="text-sm opacity-50">{{ item.beschreibung }}</div>
+                            {% endif %}
+                            {% elif column.type == 'barcode' %}
+                            <div class="flex items-center space-x-3">
+                                <div class="font-mono">{{ item[column.name] }}</div>
+                                <button onclick="showBarcodeModal('{{ item[column.name] }}')"
+                                        class="btn btn-ghost btn-xs">
+                                    <i class="fas fa-barcode"></i>
+                                </button>
+                            </div>
+                            {% elif column.type == 'status' %}
+                            <div class="badge badge-lg
+                                {% if item[column.name] == 'Verfügbar' %}badge-success
+                                {% elif item[column.name] == 'Ausgeliehen' %}badge-warning
+                                {% else %}badge-error{% endif %}">
+                                {{ item[column.name] }}
+                            </div>
+                            {% elif column.type == 'badge' %}
+                            <div class="badge badge-ghost badge-lg">{{ item[column.name] }}</div>
+                            {% else %}
+                            {{ item[column.name] }}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                        {% if session.get('is_admin') %}
+                        <td>
+                            <div class="flex space-x-1">
+                                <a href="{{ url_for('edit_category_item', category_id=category.id, item_id=item.id) }}" 
+                                   class="btn btn-ghost btn-xs tooltip" 
+                                   data-tip="Bearbeiten">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="deleteItem({{ item.id }})" 
+                                        class="btn btn-ghost btn-xs tooltip text-error" 
+                                        data-tip="Löschen">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-{% endblock %} 
+
+<!-- Verbessertes Barcode Modal -->
+<dialog id="barcodeModal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Barcode</h3>
+        <div class="py-4">
+            <svg id="modalBarcode" class="w-full"></svg>
+            <p id="modalBarcodeText" class="text-center mt-2 font-mono"></p>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Schließen</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+<script>
+// Verbesserte Filterfunktion
+function filterTable() {
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const filters = {};
+    
+    // Sammle aktive Filter
+    {% for column in schema if column.filterable %}
+    const filterElement = document.getElementById('filter_{{ column.name }}');
+    if (filterElement) {
+        filters['{{ column.name }}'] = filterElement.value;
+    }
+    {% endfor %}
+    
+    // Wende Filter an
+    document.querySelectorAll('tbody tr').forEach(row => {
+        let showRow = true;
+        
+        // Textsuche
+        if (searchText) {
+            const rowText = Array.from(row.querySelectorAll('td'))
+                .map(td => td.textContent.toLowerCase())
+                .join(' ');
+            showRow = rowText.includes(searchText);
+        }
+        
+        // Spaltenfilter
+        if (showRow) {
+            {% for column in schema if column.filterable %}
+            const columnIndex = {{ loop.index0 }};
+            const cell = row.querySelectorAll('td')[columnIndex];
+            const cellText = cell ? cell.textContent.trim() : '';
+            
+            if (filters['{{ column.name }}'] && cellText !== filters['{{ column.name }}']) {
+                showRow = false;
+            }
+            {% endfor %}
+        }
+        
+        // Zeige/Verstecke Zeile mit Animation
+        if (showRow) {
+            row.classList.remove('hidden');
+            row.style.display = '';
+        } else {
+            row.classList.add('hidden');
+            row.style.display = 'none';
+        }
+    });
+}
+
+// Event Listener
+document.getElementById('searchInput').addEventListener('input', filterTable);
+
+{% for column in schema if column.filterable %}
+const filterElement = document.getElementById('filter_{{ column.name }}');
+if (filterElement) {
+    filterElement.addEventListener('change', filterTable);
+}
+{% endfor %}
+
+// Barcode Modal Funktionen
+function showBarcodeModal(barcode) {
+    const modal = document.getElementById('barcodeModal');
+    const modalBarcode = document.getElementById('modalBarcode');
+    const modalBarcodeText = document.getElementById('modalBarcodeText');
+    
+    modalBarcode.setAttribute('jsbarcode-value', barcode);
+    modalBarcodeText.textContent = barcode;
+    
+    JsBarcode("#modalBarcode").init();
+    modal.showModal();
+}
+
+// Admin Funktionen
+{% if session.get('is_admin') %}
+function deleteItem(id) {
+    if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
+        fetch(`/api/items/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Eintrag erfolgreich gelöscht', 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showAlert(data.error || 'Fehler beim Löschen', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Fehler beim Löschen', 'error');
+        });
+    }
+}
+{% endif %}
+</script>
+{% endblock %}
