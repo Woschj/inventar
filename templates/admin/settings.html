@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-8">Einstellungen</h1>
+
+    <!-- Kategorieverwaltung -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">Kategorien verwalten</h2>
+        
+        <!-- Bestehende Kategorien -->
+        <div class="overflow-x-auto mb-6">
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Beschreibung</th>
+                        <th>Felder</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.description }}</td>
+                        <td>{{ category.field_count }} Felder</td>
+                        <td class="flex gap-2">
+                            <button onclick="editCategory({{ category.id }})" 
+                                    class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteCategory({{ category.id }})" 
+                                    class="btn btn-sm btn-error">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Neue Kategorie Button -->
+        <button onclick="showNewCategoryModal()" 
+                class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>Neue Kategorie
+        </button>
+    </div>
+</div>
+
+<!-- Modal für neue Kategorie -->
+<dialog id="new-category-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Neue Kategorie erstellen</h3>
+        <form id="newCategoryForm" class="space-y-4">
+            <div class="form-control">
+                <label class="label">Name</label>
+                <input type="text" name="name" class="input input-bordered" required>
+            </div>
+            
+            <div class="form-control">
+                <label class="label">Beschreibung</label>
+                <textarea name="description" class="textarea textarea-bordered"></textarea>
+            </div>
+
+            <div class="space-y-4">
+                <h4 class="font-semibold">Felder</h4>
+                <div id="fields" class="space-y-4">
+                    <!-- Hier werden die Felder dynamisch eingefügt -->
+                </div>
+                <button type="button" onclick="addField()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-plus mr-2"></i>Feld hinzufügen
+                </button>
+            </div>
+
+            <div class="modal-action">
+                <button type="button" onclick="closeNewCategoryModal()" class="btn">Abbrechen</button>
+                <button type="submit" class="btn btn-primary">Speichern</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<script>
+function showNewCategoryModal() {
+    document.getElementById('new-category-modal').showModal();
+}
+
+function closeNewCategoryModal() {
+    document.getElementById('new-category-modal').close();
+}
+
+function addField() {
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'grid grid-cols-3 gap-4 items-end';
+    fieldDiv.innerHTML = `
+        <div class="form-control">
+            <label class="label">Feldname</label>
+            <input type="text" class="input input-bordered field-name" required>
+        </div>
+        <div class="form-control">
+            <label class="label">Feldtyp</label>
+            <select class="select select-bordered field-type" required>
+                <option value="TEXT">Text</option>
+                <option value="INTEGER">Zahl</option>
+                <option value="DATE">Datum</option>
+                <option value="BOOLEAN">Ja/Nein</option>
+            </select>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" 
+                class="btn btn-error btn-sm">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    document.getElementById('fields').appendChild(fieldDiv);
+}
+
+document.getElementById('newCategoryForm').onsubmit = async function(e) {
+    e.preventDefault();
+    
+    const fields = [];
+    document.querySelectorAll('#fields > div').forEach(fieldDiv => {
+        fields.push({
+            name: fieldDiv.querySelector('.field-name').value,
+            type: fieldDiv.querySelector('.field-type').value,
+            required: true
+        });
+    });
+    
+    const formData = new FormData(this);
+    formData.append('fields', JSON.stringify(fields));
+    
+    try {
+        const response = await fetch("{{ url_for('new_category') }}", {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Fehler beim Erstellen der Kategorie');
+        }
+    } catch (error) {
+        console.error('Fehler:', error);
+        alert('Fehler beim Erstellen der Kategorie');
+    }
+};
+
+// Initial ein leeres Feld hinzufügen
+addField();
+</script>
+{% endblock %} 

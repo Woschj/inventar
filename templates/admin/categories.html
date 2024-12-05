@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Kategorien verwalten</h1>
+        <a href="{{ url_for('new_category') }}" class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>Neue Kategorie
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for category in categories %}
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title">{{ category.name }}</h2>
+                <p class="text-gray-600">{{ category.description }}</p>
+                <p class="text-sm">Felder: {{ category.field_count }}</p>
+                <div class="card-actions justify-end mt-4">
+                    <a href="{{ url_for('view_category', category_name=category.name) }}" 
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye mr-2"></i>Ansehen
+                    </a>
+                    <a href="{{ url_for('manage_category_fields', category_id=category.id) }}" 
+                       class="btn btn-secondary btn-sm">
+                        <i class="fas fa-cog mr-2"></i>Felder
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

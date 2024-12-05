@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Neue Kategorie erstellen</h1>
+        
+        <form method="POST" class="space-y-6" id="categoryForm">
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Name der Kategorie</span>
+                </label>
+                <input type="text" name="name" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Beschreibung</span>
+                </label>
+                <textarea name="description" class="textarea textarea-bordered" rows="3"></textarea>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold">Felder</h2>
+                <div id="fields" class="space-y-4">
+                    <!-- Hier werden die Felder dynamisch eingefügt -->
+                </div>
+                <button type="button" onclick="addField()" class="btn btn-secondary">
+                    <i class="fas fa-plus mr-2"></i>Feld hinzufügen
+                </button>
+            </div>
+
+            <div class="flex justify-end gap-4">
+                <a href="{{ url_for('manage_categories') }}" class="btn">Abbrechen</a>
+                <button type="submit" class="btn btn-primary">Kategorie erstellen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function addField() {
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'grid grid-cols-3 gap-4 items-end';
+    fieldDiv.innerHTML = `
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Feldname</span>
+            </label>
+            <input type="text" class="input input-bordered field-name" required>
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Feldtyp</span>
+            </label>
+            <select class="select select-bordered field-type" required>
+                <option value="TEXT">Text</option>
+                <option value="INTEGER">Zahl</option>
+                <option value="DATE">Datum</option>
+                <option value="BOOLEAN">Ja/Nein</option>
+            </select>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" 
+                class="btn btn-error">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    document.getElementById('fields').appendChild(fieldDiv);
+}
+
+document.getElementById('categoryForm').onsubmit = function(e) {
+    e.preventDefault();
+    
+    const fields = [];
+    document.querySelectorAll('#fields > div').forEach(fieldDiv => {
+        fields.push({
+            name: fieldDiv.querySelector('.field-name').value,
+            type: fieldDiv.querySelector('.field-type').value,
+            required: true
+        });
+    });
+    
+    const formData = new FormData(this);
+    formData.append('fields', JSON.stringify(fields));
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    }).then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = "{{ url_for('manage_categories') }}";
+        } else {
+            alert('Fehler beim Erstellen der Kategorie');
+        }
+    });
+};
+
+// Initial ein leeres Feld hinzufügen
+addField();
+</script>
+{% endblock %} 

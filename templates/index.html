@@ -118,11 +118,27 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ tool.status_date or '-' }}
+                            {% if tool.status == 'Ausgeliehen' %}
+                                {% if tool.lending_date %}
+                                    {{ tool.lending_date|datetime }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {% if session.get('is_admin') %}
-                                {{ tool.current_worker or '-' }}
+                                {% if tool.status == 'Ausgeliehen' %}
+                                    {% if tool.borrower_name %}
+                                        {{ tool.borrower_name }}
+                                    {% else %}
+                                        Unbekannt
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -208,8 +224,8 @@ function getColumnIndex(column) {
         'ort': 1,
         'typ': 2,
         'status': 3,
-        'status_date': 4,
-        'current_worker': 5,
+        'lending_date': 4,
+        'borrower_name': 5,
         'barcode': 6
     };
     return columnMap[column];

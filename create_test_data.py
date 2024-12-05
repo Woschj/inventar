@@ -16,7 +16,7 @@ def init_dbs():
     """Erstellt alle notwendigen Datenbanktabellen"""
     try:
         # Workers Database
-        with sqlite3.connect(DBConfig.WORKERS_DB) as conn:
+        with sqlite3.connect(WORKERS_DB) as conn:
             conn.executescript('''
                 CREATE TABLE IF NOT EXISTS workers (
                     barcode TEXT PRIMARY KEY,
@@ -35,22 +35,10 @@ def init_dbs():
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (worker_barcode) REFERENCES workers(barcode)
                 );
-                
-                CREATE TABLE IF NOT EXISTS deleted_workers (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    original_id INTEGER,
-                    name TEXT NOT NULL,
-                    lastname TEXT NOT NULL,
-                    barcode TEXT NOT NULL,
-                    bereich TEXT,
-                    email TEXT,
-                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    deleted_by TEXT
-                );
             ''')
             
         # Tools Database
-        with sqlite3.connect(DBConfig.TOOLS_DB) as conn:
+        with sqlite3.connect(TOOLS_DB) as conn:
             conn.executescript('''
                 CREATE TABLE IF NOT EXISTS tools (
                     barcode TEXT PRIMARY KEY,
@@ -65,39 +53,15 @@ def init_dbs():
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     tool_barcode TEXT NOT NULL,
                     action TEXT NOT NULL,
-                    old_status TEXT,
-                    new_status TEXT,
                     changed_fields TEXT,
                     changed_by TEXT,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
                 );
-                
-                CREATE TABLE IF NOT EXISTS tool_status_history (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tool_barcode TEXT NOT NULL,
-                    old_status TEXT,
-                    new_status TEXT,
-                    comment TEXT,
-                    changed_by TEXT,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
-                );
-                
-                CREATE TABLE IF NOT EXISTS deleted_tools (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    barcode TEXT NOT NULL,
-                    gegenstand TEXT NOT NULL,
-                    ort TEXT,
-                    typ TEXT,
-                    status TEXT,
-                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    deleted_by TEXT
-                );
             ''')
             
         # Consumables Database
-        with sqlite3.connect(DBConfig.CONSUMABLES_DB) as conn:
+        with sqlite3.connect(CONSUMABLES_DB) as conn:
             conn.executescript('''
                 CREATE TABLE IF NOT EXISTS consumables (
                     barcode TEXT PRIMARY KEY,
@@ -107,18 +71,15 @@ def init_dbs():
                     status TEXT DEFAULT 'Verfügbar',
                     mindestbestand INTEGER DEFAULT 0,
                     aktueller_bestand INTEGER DEFAULT 0,
-                    einheit TEXT DEFAULT 'Stück',
-                    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
+                    einheit TEXT,
+                    image_path TEXT
                 );
                 
                 CREATE TABLE IF NOT EXISTS consumables_history (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     consumable_barcode TEXT NOT NULL,
-                    worker_barcode TEXT NOT NULL,
                     action TEXT NOT NULL,
-                    amount INTEGER NOT NULL,
-                    old_stock INTEGER NOT NULL,
-                    new_stock INTEGER NOT NULL,
+                    changed_fields TEXT,
                     changed_by TEXT,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (consumable_barcode) REFERENCES consumables(barcode)
@@ -126,13 +87,13 @@ def init_dbs():
                 
                 CREATE TABLE IF NOT EXISTS deleted_consumables (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    original_id INTEGER,
                     barcode TEXT NOT NULL,
                     bezeichnung TEXT NOT NULL,
                     ort TEXT,
                     typ TEXT,
+                    status TEXT,
                     mindestbestand INTEGER,
-                    letzter_bestand INTEGER,
+                    aktueller_bestand INTEGER,
                     einheit TEXT,
                     deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     deleted_by TEXT
@@ -140,7 +101,7 @@ def init_dbs():
             ''')
             
         # Lendings Database
-        with sqlite3.connect(DBConfig.LENDINGS_DB) as conn:
+        with sqlite3.connect(LENDINGS_DB) as conn:
             conn.executescript('''
                 CREATE TABLE IF NOT EXISTS lendings (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -156,31 +117,47 @@ def init_dbs():
                 );
             ''')
             
-        print("✓ Alle Datenbanken erfolgreich initialisiert")
-        return True
+        logging.info("✓ Alle Datenbanken erfolgreich initialisiert")
         
     except Exception as e:
-        print(f"✗ Fehler bei der Datenbankinitialisierung: {str(e)}")
-        return False
+        logging.error(f"✗ Fehler beim Initialisieren der Datenbanken: {str(e)}")
+        raise
 
 def clear_existing_data():
-    """Löscht alle vorhandenen Daten"""
-    print("Lösche bestehende Daten...")
+    """Löscht alle bestehenden Daten aus den Datenbanken"""
     try:
+        # Lösche zuerst die Daten aus der Lendings-Tabelle (wegen Foreign Keys)
+        with sqlite3.connect(LENDINGS_DB) as conn:
+            conn.execute('DELETE FROM lendings')
+            conn.commit()
+            
+        # Dann die Workers-Daten
         with sqlite3.connect(WORKERS_DB) as conn:
             conn.execute('DELETE FROM workers')
             conn.execute('DELETE FROM workers_history')
+            conn.execute('DELETE FROM deleted_workers')
+            conn.commit()
+            
+        # Dann die Tools-Daten
         with sqlite3.connect(TOOLS_DB) as conn:
             conn.execute('DELETE FROM tools')
             conn.execute('DELETE FROM tools_history')
             conn.execute('DELETE FROM tool_status_history')
             conn.execute('DELETE FROM deleted_tools')
-        with sqlite3.connect(LENDINGS_DB) as conn:
-            conn.execute('DELETE FROM lendings')
+            conn.commit()
+            
+        # Zuletzt die Consumables-Daten
         with sqlite3.connect(CONSUMABLES_DB) as conn:
             conn.execute('DELETE FROM consumables')
+            conn.execute('DELETE FROM consumables_history')
+            conn.execute('DELETE FROM deleted_consumables')
+            conn.commit()
+            
+        logging.info("✓ Alle Daten erfolgreich gelöscht")
+        
     except Exception as e:
-        print(f"Fehler beim Löschen: {str(e)}")
+        logging.error(f"✗ Fehler beim Löschen der Daten: {str(e)}")
+        print(f"\nLösche bestehende Daten...\nFehler beim Löschen: {str(e)}")
 
 def check_if_empty(conn, table_name):
     """Prüft ob eine Tabelle leer ist"""
@@ -196,7 +173,11 @@ def create_random_date(start_date, end_date):
     return start_date + timedelta(days=random_number_of_days)
 
 def create_test_data():
+    """Erstellt Testdaten in allen Datenbanken"""
     try:
+        # Stelle sicher, dass die Tabellen existieren
+        init_dbs()
+        
         # Mitarbeiter-Testdaten
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
             if check_if_empty(conn, 'workers'):
@@ -340,7 +321,7 @@ def create_test_data():
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ''', test_consumables)
                 conn.commit()
-                logging.info(f"{len(test_consumables)} Verbrauchsmaterial-Testdaten erfolgreich eingefügt")
+                logging.info(f"{len(test_consumables)} Verbrauchsmaterial-Testdaten erfolgreich eingefgt")
 
         # Gemeinsame Ausleihen/Ausgaben-Tabelle
         with get_db_connection(DBConfig.LENDINGS_DB) as conn:

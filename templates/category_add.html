@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category_name }} - Neu{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Neuer Eintrag: {{ category_name }}</h1>
+        
+        <form method="POST" class="space-y-4">
+            {% for field in fields %}
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">{{ field.name }}</span>
+                </label>
+                <input type="{{ 'date' if field.type == 'DATE' else 'number' if field.type == 'INTEGER' else 'text' }}"
+                       name="{{ field.name }}"
+                       class="input input-bordered"
+                       {% if field.required %}required{% endif %}>
+            </div>
+            {% endfor %}
+            
+            <div class="flex justify-end gap-4 mt-6">
+                <a href="{{ url_for('view_category', category_name=category_name) }}"
+                   class="btn">Abbrechen</a>
+                <button type="submit" class="btn btn-primary">Speichern</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

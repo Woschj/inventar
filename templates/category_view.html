@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">{{ category_name }}</h1>
+        {% if session.get('is_admin') %}
+        <a href="{{ url_for('add_category_item', category_name=category_name) }}" 
+           class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>Neu hinzufügen
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="table w-full">
+            <thead>
+                <tr>
+                    {% for field in fields %}
+                    <th>{{ field.name }}</th>
+                    {% endfor %}
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    {% for field in fields %}
+                    <td>{{ item[field.name] }}</td>
+                    {% endfor %}
+                    <td class="flex gap-2">
+                        {% if session.get('is_admin') %}
+                        <a href="{{ url_for('edit_category_item', category_name=category_name, item_id=item.id) }}"
+                           class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="deleteItem({{ item.id }})"
+                                class="btn btn-sm btn-error">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

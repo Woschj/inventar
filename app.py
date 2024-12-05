@@ -15,6 +15,19 @@ app = Flask(__name__)
 app.secret_key = 'dein_geheimer_schlüssel'  # Muss gesetzt sein, damit Sessions funktionieren
 app.config['ADMIN_PASSWORD'] = 'admin'  # Hier das gewünschte Admin-Passwort eintragen
 
+def load_categories():
+    """Hilfsfunktion zum Laden der Kategorien"""
+    try:
+        conn = sqlite3.connect('inventory.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, name, description FROM categories')
+        categories = [{'id': row[0], 'name': row[1], 'description': row[2]} 
+                     for row in cursor.fetchall()]
+        conn.close()
+        return categories
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Kategorien: {str(e)}")
+        return []
 
 def get_tool_lendings(barcode):
     try:
@@ -525,173 +538,213 @@ def init_app():
         # Hier kommt deine Initialisierungslogik
         app._initialized = True
 
-# Routen
+@app.template_filter('datetime')
+def format_datetime(value):
+    """Format a datetime string into German format"""
+    if value:
+        try:
+            if isinstance(value, str):
+                dt = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+            else:
+                dt = value
+            return dt.strftime('%d.%m.%Y %H:%M')
+        except Exception:
+            return value
+    return '-'
+
 @app.route('/')
 def index():
+    filter_status = request.args.get('status', 'Alle')
     try:
-        filter_status = request.args.get('filter')
-        
-        with get_db_connection(DBConfig.TOOLS_DB) as tools_conn:
-            # Verbinde die anderen Datenbanken
-            tools_conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
-            tools_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+        # Hole Werkzeuge mit Status
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            if filter_status != 'Alle':
+                tools_raw = conn.execute('SELECT * FROM tools WHERE status = ?', 
+                                   (filter_status,)).fetchall()
+            else:
+                tools_raw = conn.execute('SELECT * FROM tools').fetchall()
             
-            query = '''
-                SELECT t.*,
-                    CASE 
-                        WHEN t.status = 'Defekt' THEN (
-                            SELECT strftime('%d.%m.%Y %H:%M', timestamp)
-                            FROM tool_status_history
-                            WHERE tool_barcode = t.barcode
-                            AND status = 'Defekt'
-                            ORDER BY timestamp DESC
-                            LIMIT 1
-                        )
-                        WHEN t.status = 'Ausgeliehen' THEN (
-                            SELECT strftime('%d.%m.%Y %H:%M', l.checkout_time)
-                            FROM lendings_db.lendings l
-                            WHERE l.item_barcode = t.barcode
-                            AND l.return_time IS NULL
-                            ORDER BY l.checkout_time DESC
-                            LIMIT 1
-                        )
-                        ELSE NULL
-                    END as status_date,
-                    CASE 
-                        WHEN t.status = 'Ausgeliehen' THEN (
-                            SELECT w.name || ' ' || w.lastname
-                            FROM lendings_db.lendings l
-                            JOIN workers_db.workers w ON l.worker_barcode = w.barcode
-                            WHERE l.item_barcode = t.barcode
-                            AND l.return_time IS NULL
-                            ORDER BY l.checkout_time DESC
-                            LIMIT 1
-                        )
-                        ELSE NULL
-                    END as current_worker
-                FROM tools t
-            '''
+            tools = [dict(tool) for tool in tools_raw]
             
-            if filter_status:
-                if filter_status == 'ausgeliehen':
-                    query += " WHERE t.status = 'Ausgeliehen'"
-                elif filter_status == 'defekt':
-                    query += " WHERE t.status = 'Defekt'"
-                    
-            query += " ORDER BY t.gegenstand"
-            
-            tools = tools_conn.execute(query).fetchall()
-            
-            return render_template('index.html', tools=tools, active_filter=filter_status)
-            
-    except sqlite3.Error as e:
-        logging.error(f"Datenbankfehler: {str(e)}")
-        flash('Fehler beim Laden der Werkzeuge', 'error')
-        return redirect(url_for('index'))
+            # Lade die Typen und Orte für Filter
+            typen = conn.execute('SELECT DISTINCT typ FROM tools WHERE typ IS NOT NULL').fetchall()
+            orte = conn.execute('SELECT DISTINCT ort FROM tools WHERE ort IS NOT NULL').fetchall()
 
-@app.route('/admin')
-@admin_required
-def admin_panel():
+        # Hole Ausleih-Informationen für ausgeliehene Werkzeuge
+        with get_db_connection(DBConfig.LENDINGS_DB) as lending_conn:
+            lending_conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            
+            for tool in tools:
+                if tool['status'] == 'Ausgeliehen':
+                    lending = lending_conn.execute('''
+                        SELECT l.checkout_time, 
+                               w.name || ' ' || w.lastname as borrower_name
+                        FROM lendings l
+                        JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                        WHERE l.item_barcode = ? 
+                        AND l.item_type = 'tool'
+                        AND l.return_time IS NULL
+                    ''', (tool['barcode'],)).fetchone()
+                    
+                    if lending:
+                        tool['lending_date'] = lending['checkout_time']
+                        tool['borrower_name'] = lending['borrower_name']
+                    else:
+                        # Falls keine Ausleihe gefunden wurde, aber Status ausgeliehen ist
+                        tool['lending_date'] = None
+                        tool['borrower_name'] = 'Unbekannt'
+                else:
+                    tool['lending_date'] = None
+                    tool['borrower_name'] = None
+
+        # Debug-Ausgaben
+        logging.info(f"Anzahl geladener Werkzeuge: {len(tools)}")
+        if tools:
+            logging.info(f"Beispiel-Werkzeug: {tools[0]}")
+            
+        return render_template('index.html', 
+                             tools=tools, 
+                             active_filter=filter_status,
+                             typen=[t[0] for t in typen],
+                             orte=[o[0] for o in orte])
+                             
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Werkzeuge: {str(e)}")
+        traceback.print_exc()
+        return render_template('index.html', 
+                             tools=[], 
+                             active_filter='Alle',
+                             typen=[],
+                             orte=[])
+
+def get_admin_stats():
+    """Sammelt Statistiken für das Admin-Dashboard basierend auf den vorhandenen Tabellen"""
     try:
         stats = {}
         
         # Werkzeug-Statistiken
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            # Gesamt
-            stats['total_tools'] = conn.execute(
-                'SELECT COUNT(*) FROM tools'
-            ).fetchone()[0]
+            stats['total_tools'] = conn.execute('SELECT COUNT(*) FROM tools').fetchone()[0]
+            stats['borrowed_tools'] = conn.execute('SELECT COUNT(*) FROM tools WHERE status = "Ausgeliehen"').fetchone()[0]
+            stats['defect_tools'] = conn.execute('SELECT COUNT(*) FROM tools WHERE status = "Defekt"').fetchone()[0]
             
-            # Ausgeliehen
-            stats['borrowed_tools'] = conn.execute(
-                "SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'"
-            ).fetchone()[0]
-            
-            # Defekt
-            stats['defect_tools'] = conn.execute(
-                "SELECT COUNT(*) FROM tools WHERE status = 'Defekt'"
-            ).fetchone()[0]
-            
-            # Im Papierkorb
-            stats['deleted_tools'] = conn.execute(
-                'SELECT COUNT(*) FROM deleted_tools'
-            ).fetchone()[0]
-        
-        # Mitarbeiter-Statistiken
-        with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            # Gesamt
-            stats['total_workers'] = conn.execute(
-                'SELECT COUNT(*) FROM workers'
-            ).fetchone()[0]
-            
-            # Im Papierkorb
-            stats['deleted_workers'] = conn.execute(
-                'SELECT COUNT(*) FROM deleted_workers'
-            ).fetchone()[0]
-            
-            # Nach Bereich
-            stats['workers_by_area'] = conn.execute('''
-                SELECT bereich, COUNT(*) as count 
-                FROM workers 
-                WHERE bereich IS NOT NULL 
-                GROUP BY bereich
-            ''').fetchall()
-        
-        # Ausleih-Statistiken
-        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
-            # Aktive Ausleihen
-            stats['active_lendings'] = conn.execute('''
-                SELECT COUNT(*) 
-                FROM lendings 
-                WHERE return_time IS NULL
-            ''').fetchone()[0]
-            
-            # Ausleihen heute
-            stats['todays_lendings'] = conn.execute('''
-                SELECT COUNT(*) 
-                FROM lendings 
-                WHERE date(checkout_time) = date('now', 'localtime')
-            ''').fetchone()[0]
-            
-            # Rückgaben heute
-            stats['todays_returns'] = conn.execute('''
-                SELECT COUNT(*) 
-                FROM lendings 
-                WHERE date(return_time) = date('now', 'localtime')
-            ''').fetchone()[0]
+            # Prüfe ob die Tabelle tool_history existiert für gelöschte Werkzeuge
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='tool_history'")
+            if cursor.fetchone():
+                stats['deleted_tools'] = conn.execute('SELECT COUNT(*) FROM tool_history WHERE action = "Gelöscht"').fetchone()[0]
+            else:
+                stats['deleted_tools'] = 0
         
         # Verbrauchsmaterial-Statistiken
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            # Gesamt
-            stats['total_consumables'] = conn.execute(
-                'SELECT COUNT(*) FROM consumables'
-            ).fetchone()[0]
+            stats['total_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables').fetchone()[0]
+            stats['reorder_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables WHERE status = "Nachbestellen"').fetchone()[0]
+            stats['empty_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables WHERE status = "Leer"').fetchone()[0]
             
-            # Nachzubestellen
-            stats['reorder_consumables'] = conn.execute('''
-                SELECT COUNT(*) 
-                FROM consumables 
-                WHERE aktueller_bestand <= mindestbestand 
-                AND aktueller_bestand > 0
-            ''').fetchone()[0]
-            
-            # Leer
-            stats['empty_consumables'] = conn.execute('''
-                SELECT COUNT(*) 
-                FROM consumables 
-                WHERE aktueller_bestand = 0
-            ''').fetchone()[0]
-            
-            # Im Papierkorb
-            stats['deleted_consumables'] = conn.execute(
-                'SELECT COUNT(*) FROM deleted_consumables'
-            ).fetchone()[0]
+            # Prüfe ob die Tabelle consumables_history existiert
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='consumables_history'")
+            if cursor.fetchone():
+                stats['deleted_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables_history WHERE action = "Gelöscht"').fetchone()[0]
+            else:
+                stats['deleted_consumables'] = 0
         
-        return render_template('admin/dashboard.html', stats=stats)
+        # Mitarbeiter-Statistiken
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            stats['total_workers'] = conn.execute('SELECT COUNT(*) FROM workers').fetchone()[0]
+            
+            # Prüfe ob die Tabelle workers_history existiert
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='workers_history'")
+            if cursor.fetchone():
+                stats['deleted_workers'] = conn.execute('SELECT COUNT(*) FROM workers_history WHERE action = "Gelöscht"').fetchone()[0]
+            else:
+                stats['deleted_workers'] = 0
+            
+            # Mitarbeiter nach Bereich
+            stats['workers_by_area'] = conn.execute('''
+                SELECT bereich, COUNT(*) 
+                FROM workers 
+                GROUP BY bereich
+                ORDER BY bereich
+            ''').fetchall()
         
+        return stats
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Admin-Statistiken: {str(e)}")
+        return {
+            'total_tools': 0,
+            'borrowed_tools': 0,
+            'defect_tools': 0,
+            'deleted_tools': 0,
+            'total_consumables': 0,
+            'reorder_consumables': 0,
+            'empty_consumables': 0,
+            'deleted_consumables': 0,
+            'total_workers': 0,
+            'deleted_workers': 0,
+            'workers_by_area': []
+        }
+
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    """Zeigt das Admin-Dashboard an"""
+    try:
+        # Hole Statistiken für Werkzeuge
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            total_tools = conn.execute('SELECT COUNT(*) as count FROM tools').fetchone()['count']
+            borrowed_tools = conn.execute(
+                "SELECT COUNT(*) as count FROM tools WHERE status = 'Ausgeliehen'"
+            ).fetchone()['count']
+            
+        # Hole Statistiken für Verbrauchsmaterialien
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            total_consumables = conn.execute(
+                'SELECT COUNT(*) as count FROM consumables'
+            ).fetchone()['count']
+            low_stock = conn.execute('''
+                SELECT COUNT(*) as count 
+                FROM consumables 
+                WHERE aktueller_bestand <= mindestbestand
+            ''').fetchone()['count']
+            
+        # Hole aktive Ausleihen
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            conn.execute(f"ATTACH DATABASE '{DBConfig.WORKERS_DB}' AS workers_db")
+            active_lendings = conn.execute('''
+                SELECT l.*, w.name || ' ' || w.lastname as worker_name
+                FROM lendings l
+                JOIN workers_db.workers w ON l.worker_barcode = w.barcode
+                WHERE l.return_time IS NULL
+                ORDER BY l.checkout_time DESC
+                LIMIT 5
+            ''').fetchall()
+            
+        # Hole Kategorien
+        categories = []
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            tool_types = conn.execute(
+                'SELECT DISTINCT typ FROM tools WHERE typ IS NOT NULL'
+            ).fetchall()
+            categories.extend([t[0] for t in tool_types])
+            
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            cons_types = conn.execute(
+                'SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL'
+            ).fetchall()
+            categories.extend([t[0] for t in cons_types if t[0] not in categories])
+            
+        return render_template('admin/dashboard.html',
+                             total_tools=total_tools,
+                             borrowed_tools=borrowed_tools,
+                             total_consumables=total_consumables,
+                             low_stock=low_stock,
+                             active_lendings=active_lendings,
+                             categories=categories)
     except Exception as e:
         logging.error(f"Fehler beim Laden des Dashboards: {str(e)}")
-        traceback.print_exc()
         flash('Fehler beim Laden des Dashboards', 'error')
         return redirect(url_for('index'))
 
@@ -713,62 +766,54 @@ def workers():
 @app.route('/consumables')
 def consumables():
     try:
-        filter_status = request.args.get('filter')
-        
+        # Hole Verbrauchsmaterialien aus der consumables.db
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            # Zuerst alle Status aktualisieren
-            conn.execute('''
-                UPDATE consumables 
-                SET status = CASE 
-                    WHEN aktueller_bestand = 0 THEN 'Leer'
-                    WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
-                    ELSE 'Verfügbar'
-                END
-            ''')
-            conn.commit()
+            consumables = conn.execute('''
+                SELECT c.*, 
+                       COALESCE(c.aktueller_bestand, 0) as aktueller_bestand,
+                       CASE 
+                           WHEN c.aktueller_bestand <= 0 THEN 'Leer'
+                           WHEN c.aktueller_bestand <= c.mindestbestand THEN 'Nachbestellen'
+                           ELSE 'Verfügbar'
+                       END as status
+                FROM consumables c
+            ''').fetchall()
             
-            # Dann die Daten abrufen
-            query = '''
-                SELECT *, 
-                    CASE 
-                        WHEN aktueller_bestand = 0 THEN 'Leer'
-                        WHEN aktueller_bestand <= mindestbestand THEN 'Nachbestellen'
-                        ELSE 'Verfügbar'
-                    END as status
-                FROM consumables
-            '''
+            # Lade die Typen und Orte für Filter
+            typen = conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL').fetchall()
+            orte = conn.execute('SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL').fetchall()
+
+        # Hole Ausleih-Informationen aus der lendings.db
+        with get_db_connection(DBConfig.LENDINGS_DB) as lending_conn:
+            for item in consumables:
+                used_amount = lending_conn.execute('''
+                    SELECT COALESCE(SUM(amount), 0) as total_used
+                    FROM lendings 
+                    WHERE item_barcode = ? 
+                    AND item_type = 'consumable'
+                    AND return_time IS NULL
+                ''', (item['barcode'],)).fetchone()['total_used']
+                
+                # Aktualisiere den Bestand direkt in der Datenbank
+                with get_db_connection(DBConfig.CONSUMABLES_DB) as update_conn:
+                    update_conn.execute('''
+                        UPDATE consumables 
+                        SET aktueller_bestand = aktueller_bestand - ?
+                        WHERE barcode = ?
+                    ''', (used_amount, item['barcode']))
+                    update_conn.commit()
             
-            if filter_status:
-                query += ' WHERE status = ?'
-                consumables = conn.execute(query, (filter_status,)).fetchall()
-            else:
-                consumables = conn.execute(query).fetchall()
-            
-            # Hole unique Orte und Typen für Filter
-            orte = [row[0] for row in conn.execute('SELECT DISTINCT ort FROM consumables WHERE ort IS NOT NULL').fetchall()]
-            typen = [row[0] for row in conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL').fetchall()]
-            
-        return render_template('consumables.html', 
+        return render_template('consumables.html',
                              consumables=consumables,
-                             orte=orte,
-                             typen=typen,
-                             active_filter=filter_status)
-                             
+                             typen=[t[0] for t in typen],
+                             orte=[o[0] for o in orte])
     except Exception as e:
         logging.error(f"Fehler beim Laden der Verbrauchsmaterialien: {str(e)}")
-        logging.error(traceback.format_exc())
-        flash('Fehler beim Laden der Verbrauchsmaterialien', 'error')
-        return redirect(url_for('index'))
-
-# Neue Decorator-Funktion für Login-Erfordernis
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('is_admin'):
-            flash('Bitte melden Sie sich an, um diese Funktion zu nutzen.', 'error')
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
+        traceback.print_exc()
+        return render_template('consumables.html', 
+                             consumables=[],
+                             typen=[],
+                             orte=[])
 
 @app.route('/consumables/<barcode>')
 @admin_required  # Sicherstellen, dass nur Admins Zugriff haben
@@ -817,6 +862,13 @@ def consumable_details(barcode):
                                 consumable=consumable,
                                 lendings=lendings,
                                 is_admin=session.get('is_admin', False))
+            
+            
+            
+            
+            
+            
+            
             
     except sqlite3.Error as e:
         logging.error(f"Datenbankfehler in consumable_details: {str(e)}")
@@ -897,6 +949,10 @@ def edit_consumable(barcode):
                                 consumable=consumable,
                                 lendings=lendings,
                                 is_admin=session.get('is_admin', False))
+            
+            
+            
+
             
     except sqlite3.Error as e:
         logging.error(f"Datenbankfehler in edit_consumable: {str(e)}")
@@ -1868,7 +1924,6 @@ def checkout_consumable(barcode):
                 SELECT aktueller_bestand FROM consumables 
                 WHERE barcode = ?
             ''', (barcode,)).fetchone()
-            
             if current['aktueller_bestand'] < amount:
                 flash('Nicht genügend Bestand verfügbar', 'error')
                 return redirect(url_for('consumable_details', barcode=barcode))
@@ -1945,7 +2000,7 @@ def get_worker(barcode):
                 FROM workers 
                 WHERE barcode = ?
             ''', (barcode,)).fetchone()
-            
+        
             if worker:
                 return jsonify(dict(worker))
             return jsonify({'error': 'Mitarbeiter nicht gefunden'})
@@ -2430,3 +2485,284 @@ def process_return(tool_barcode):
     except Exception as e:
         logging.error(f"Fehler bei Werkzeugrückgabe: {str(e)}")
         return jsonify({'error': 'Datenbankfehler'})
+
+def get_custom_categories():
+    """Holt alle benutzerdefinierten Kategorien aus der Datenbank"""
+    conn = sqlite3.connect('inventory.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name, description FROM categories')
+    categories = [{'id': row[0], 'name': row[1], 'description': row[2]} 
+                 for row in cursor.fetchall()]
+    conn.close()
+    return categories
+
+def get_category_fields(category_name):
+    """Holt die Struktur (Felder) einer Kategorie"""
+    conn = sqlite3.connect('inventory.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT cf.field_name, cf.field_type, cf.is_required 
+        FROM categories c 
+        JOIN category_fields cf ON c.id = cf.category_id 
+        WHERE c.name = ?
+    ''', (category_name,))
+    fields = [{'name': row[0], 'type': row[1], 'required': row[2]} 
+             for row in cursor.fetchall()]
+    conn.close()
+    return fields
+
+def create_category_table(category_name, fields):
+    """Erstellt eine neue Tabelle für eine Kategorie"""
+    try:
+        conn = sqlite3.connect(f'inventar/{category_name.lower()}.db')
+        cursor = conn.cursor()
+        
+        # Basis-Felder für jede Kategorie
+        base_fields = '''
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            barcode TEXT UNIQUE NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+            deleted_at DATETIME,
+            status TEXT DEFAULT 'Verfügbar'
+        '''
+        
+        # Benutzerdefinierte Felder hinzufügen
+        custom_fields = ', '.join([
+            f"{field['name']} {field['type']}" 
+            for field in fields
+        ])
+        
+        # Tabelle erstellen
+        create_table_sql = f'''
+            CREATE TABLE IF NOT EXISTS {category_name.lower()} (
+                {base_fields},
+                {custom_fields}
+            )
+        '''
+        cursor.execute(create_table_sql)
+        
+        # Papierkorb-Tabelle erstellen
+        create_deleted_table_sql = f'''
+            CREATE TABLE IF NOT EXISTS deleted_{category_name.lower()} (
+                {base_fields},
+                {custom_fields}
+            )
+        '''
+        cursor.execute(create_deleted_table_sql)
+        
+        conn.commit()
+        conn.close()
+        logging.info(f"Tabellen für Kategorie {category_name} erstellt")
+        return True
+        
+    except Exception as e:
+        logging.error(f"Fehler beim Erstellen der Tabellen für {category_name}: {str(e)}")
+        return False
+
+# Diese Funktion im Kontext verfügbar machen
+app.jinja_env.globals.update(get_custom_categories=get_custom_categories)
+
+@app.route('/category/<category_name>/add', methods=['GET', 'POST'])
+@admin_required
+def add_category_item(category_name):
+    """Fügt einen neuen Eintrag zu einer Kategorie hinzu"""
+    fields = get_category_fields(category_name)
+    
+    if request.method == 'POST':
+        try:
+            data = {field['name']: request.form[field['name']] for field in fields}
+            data['barcode'] = request.form['barcode']
+            
+            conn = sqlite3.connect(f'inventar/{category_name.lower()}.db')
+            cursor = conn.cursor()
+            
+            field_names = ', '.join(data.keys())
+            placeholders = ', '.join(['?' for _ in data])
+            
+            cursor.execute(f'''
+                INSERT INTO {category_name.lower()} ({field_names})
+                VALUES ({placeholders})
+            ''', list(data.values()))
+            
+            conn.commit()
+            conn.close()
+                
+            flash(f'Neuer Eintrag zu {category_name} hinzugefügt', 'success')
+            return redirect(url_for('view_category', category_name=category_name))
+            
+        except sqlite3.IntegrityError:
+            flash('Barcode existiert bereits', 'error')
+        except Exception as e:
+            logging.error(f"Fehler beim Hinzufügen: {str(e)}")
+            flash('Fehler beim Hinzufügen des Eintrags', 'error')
+    
+    return render_template('category_add.html', 
+                         category_name=category_name,
+                         fields=fields)
+
+# Neue Imports (falls noch nicht vorhanden)
+import os
+import json
+from datetime import datetime
+
+# Hilfsfunktionen für die Kategorieverwaltung
+def get_db_connection(db_path):
+    """Erstellt eine Datenbankverbindung"""
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+@app.route('/admin/categories')
+@admin_required
+def manage_categories():
+    """Zeigt die Kategorieverwaltung an"""
+    try:
+        conn = get_db_connection('inventory.db')
+        categories = conn.execute('''
+            SELECT c.*, COUNT(cf.id) as field_count 
+            FROM categories c 
+            LEFT JOIN category_fields cf ON c.id = cf.category_id 
+            GROUP BY c.id
+        ''').fetchall()
+        conn.close()
+        return render_template('admin/categories.html', categories=categories)
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Kategorien: {str(e)}")
+        flash('Fehler beim Laden der Kategorien', 'error')
+        return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/categories/new', methods=['GET', 'POST'])
+@admin_required
+def new_category():
+    """Erstellt eine neue Kategorie"""
+    if request.method == 'POST':
+        try:
+            name = request.form['name']
+            description = request.form.get('description', '')
+            
+            # Kategorie in der Hauptdatenbank speichern
+            conn = get_db_connection('inventory.db')
+            cursor = conn.execute('''
+                INSERT INTO categories (name, description)
+                VALUES (?, ?)
+            ''', (name, description))
+            category_id = cursor.lastrowid
+            
+            # Felder speichern
+            fields = json.loads(request.form['fields'])
+            for field in fields:
+                conn.execute('''
+                    INSERT INTO category_fields 
+                    (category_id, field_name, field_type, is_required)
+                    VALUES (?, ?, ?, ?)
+                ''', (category_id, 
+                      field['name'], 
+                      field['type'], 
+                      field.get('required', False)))
+            
+            conn.commit()
+            conn.close()
+            
+            # Kategorie-spezifische Datenbank erstellen
+            if create_category_table(name, fields):
+                flash(f'Kategorie {name} wurde erfolgreich erstellt', 'success')
+                return redirect(url_for('manage_categories'))
+            else:
+                flash('Fehler beim Erstellen der Kategorie-Tabellen', 'error')
+                
+        except sqlite3.IntegrityError:
+            flash('Eine Kategorie mit diesem Namen existiert bereits', 'error')
+        except Exception as e:
+            logging.error(f"Fehler beim Erstellen der Kategorie: {str(e)}")
+            flash('Fehler beim Erstellen der Kategorie', 'error')
+            
+    return render_template('admin/new_category.html')
+
+@app.route('/admin/settings')
+@admin_required
+def admin_settings():
+    """Route für die Verwaltung der Systemeinstellungen und Kategorien"""
+    try:
+        # Kategorien mit Anzahl der Felder laden
+        conn = sqlite3.connect('inventory.db')
+        cursor = conn.cursor()
+        categories = cursor.execute('''
+            SELECT 
+                c.id, 
+                c.name, 
+                c.description,
+                COUNT(cf.id) as field_count
+            FROM categories c
+            LEFT JOIN category_fields cf ON c.id = cf.category_id
+            GROUP BY c.id
+        ''').fetchall()
+        
+        # In Dictionary-Format umwandeln
+        categories = [{
+            'id': row[0],
+            'name': row[1],
+            'description': row[2],
+            'field_count': row[3]}
+        for row in categories]
+        
+        conn.close()
+        
+        return render_template('admin/settings.html', 
+                             categories=categories)
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Einstellungen: {str(e)}")
+        flash('Fehler beim Laden der Einstellungen', 'error')
+        return redirect(url_for('admin_panel'))
+
+@app.route('/category/<string:category_name>')
+def view_category(category_name):
+    """Zeigt alle Werkzeuge und Verbrauchsmaterialien eines bestimmten Typs an"""
+    try:
+        tools = []
+        consumables = []
+        
+        # Hole alle Werkzeuge dieses Typs
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            tools = conn.execute('''
+                SELECT * FROM tools 
+                WHERE typ = ?
+                ORDER BY gegenstand
+            ''', (category_name,)).fetchall()
+        
+        # Hole alle Verbrauchsmaterialien dieses Typs
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            consumables = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE typ = ?
+                ORDER BY bezeichnung
+            ''', (category_name,)).fetchall()
+            
+        return render_template('category_view.html',
+                             category_name=category_name,
+                             tools=tools,
+                             consumables=consumables)
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Kategorie {category_name}: {str(e)}")
+        flash('Fehler beim Laden der Kategorie', 'error')
+        return redirect(url_for('index'))
+
+def load_categories():
+    """Lädt alle verfügbaren Kategorien"""
+    try:
+        categories = []
+        # Hole Typen aus der Werkzeug-Datenbank
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            types = conn.execute('SELECT DISTINCT typ FROM tools WHERE typ IS NOT NULL').fetchall()
+            categories.extend([{'name': t[0]} for t in types])
+            
+        # Hole Typen aus der Verbrauchsmaterial-Datenbank
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            types = conn.execute('SELECT DISTINCT typ FROM consumables WHERE typ IS NOT NULL').fetchall()
+            categories.extend([{'name': t[0]} for t in types if {'name': t[0]} not in categories])
+            
+        return categories
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Kategorien: {str(e)}")
+        return []
+

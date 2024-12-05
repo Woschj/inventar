@@ -80,11 +80,13 @@
                            class="btn btn-ghost {% if request.endpoint == 'consumables' %}bg-[#5b69a7] text-white{% endif %}">
                             <i class="fas fa-box-open mr-2"></i>Verbrauchsmaterial
                         </a>
-                        {% if session.get('is_admin') %}
-                        <a href="{{ url_for('manual_lending') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}bg-[#5b69a7] text-white{% endif %}">
-                            <i class="fas fa-hand-holding mr-2"></i>Manuell
-                        </a>
+                        {% if categories is defined %}
+                            {% for category in categories %}
+                            <a href="{{ url_for('view_category', category_name=category.name.lower()) }}" 
+                               class="btn btn-ghost {% if request.endpoint == 'view_category' and category_name == category.name.lower() %}bg-[#5b69a7] text-white{% endif %}">
+                                <i class="fas fa-archive mr-2"></i>{{ category.name }}
+                            </a>
+                            {% endfor %}
                         {% endif %}
                     </div>
 
@@ -97,8 +99,8 @@
                         </a>
                         {% endif %}
                         {% if session.get('is_admin') %}
-                        <a href="{{ url_for('admin_panel') }}"
-                           class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
+                        <a href="{{ url_for('admin_dashboard') }}"
+                           class="btn btn-ghost {% if request.endpoint == 'admin_dashboard' %}btn-active{% endif %}">
                             <i class="fas fa-tachometer-alt mr-2"></i>Admin
                         </a>
                         {% endif %}
@@ -186,8 +188,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('admin_panel') }}"
-                       class="{% if request.endpoint == 'admin_panel' %}active{% endif %}">
+                    <a href="{{ url_for('admin_dashboard') }}"
+                       class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
                         <i class="fas fa-tachometer-alt"></i>Dashboard
                     </a>
                 </li>

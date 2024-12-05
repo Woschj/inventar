@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">{{ type_name }}</h1>
+    
+    {% if tools %}
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Werkzeuge</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for tool in tools %}
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h3 class="card-title">{{ tool.gegenstand }}</h3>
+                    <p>Ort: {{ tool.ort }}</p>
+                    <p>Status: {{ tool.status }}</p>
+                    <p>Barcode: {{ tool.barcode }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if consumables %}
+    <div>
+        <h2 class="text-xl font-semibold mb-4">Verbrauchsmaterialien</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for item in consumables %}
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h3 class="card-title">{{ item.bezeichnung }}</h3>
+                    <p>Ort: {{ item.ort }}</p>
+                    <p>Bestand: {{ item.aktueller_bestand }} {{ item.einheit }}</p>
+                    <p>Mindestbestand: {{ item.mindestbestand }} {{ item.einheit }}</p>
+                    <p>Barcode: {{ item.barcode }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

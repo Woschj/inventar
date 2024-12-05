@@ -65,6 +65,15 @@
                     </tr>
                 </thead>
                 <tbody class="bg-base-100 divide-y divide-base-200">
+                    <!-- Debug-Ausgabe -->
+                    {% if not consumables %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                Keine Verbrauchsmaterialien gefunden
+                            </td>
+                        </tr>
+                    {% endif %}
+                    
                     {% for item in consumables %}
                     <tr class="consumable-row hover:bg-base-200">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
