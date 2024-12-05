@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    
     <script>
         // Theme-Persistenz
         (function() {
@@ -63,10 +65,14 @@
             <div class="navbar bg-base-100 shadow-lg px-4 relative">
                 <div class="flex items-center justify-between w-full">
                     <!-- Linke Seite mit Logo -->
-                    <div class="flex-none">
+                    <div class="flex items-center">
+                        <label for="drawer-toggle" class="btn btn-ghost drawer-button lg:hidden">
+                            <i class="fas fa-bars"></i>
+                        </label>
                         <a href="{{ url_for('index') }}" class="flex items-center">
                             <img src="{{ url_for('static', filename='images/Logo-BTZ-WEISS.svg') }}" 
-                                 alt="BTZ Logo" style="height: 62px;" class="logo-light">
+                                 alt="BTZ Logo" 
+                                 class="logo-light">
                         </a>
                     </div>
 
@@ -124,14 +130,13 @@
                 </div>
 
                 <!-- Zentrierter Quick Scan Button -->
-                <div class="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">
-                    <a href="{{ url_for('quick_scan') }}" 
-                       class="flex items-center justify-center w-full max-w-xs mx-auto py-4 px-6 
-                              bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-bold 
-                              rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200">
-                        <i class="fas fa-qrcode text-2xl mr-3"></i>
-                        Quick-Scan
-                    </a>
+                <div class="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center">
+                    <button id="quickScanBtn" 
+                            onclick="showQuickScan()" 
+                            class="w-32 h-32 bg-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center p-4 transition-transform transform hover:scale-110">
+                        <div id="quickScanQR" class="w-24 h-24"></div>
+                    </button>
+                    <span class="block text-center mt-2 text-sm text-base-content/70">Scan Now</span>
                 </div>
             </div>
 
@@ -307,9 +312,24 @@
         </div>
     </dialog>
 
+    <!-- QR-Code Modal -->
+    <div id="qrModal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">QuickScan QR-Code</h3>
+            <div class="flex justify-center mb-4">
+                <div id="qrcode"></div>
+            </div>
+            <p class="text-center text-sm mb-4">Scannen Sie diesen Code mit dem Barcodescanner, um den QuickScan zu starten</p>
+            <div class="modal-action">
+                <button class="btn" onclick="closeQRModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
     <script>
         let currentStep = 'tool';
         let scannedTool = null;
@@ -594,6 +614,160 @@
                     document.documentElement.setAttribute('data-theme', theme);
                     localStorage.setItem('theme', theme);
                 });
+            }
+        });
+
+        function showQuickScanQR() {
+            const modal = document.getElementById('qrModal');
+            modal.classList.add('modal-open');
+            
+            // QR-Code generieren
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = ''; // Clear previous QR code
+            
+            // Erstelle einen speziellen Command-Code f��r QuickScan
+            const quickScanCommand = 'QUICKSCAN_OPEN';
+            
+            // Generiere QR-Code
+            new QRCode(qrContainer, {
+                text: quickScanCommand,
+                width: 200,
+                height: 200
+            });
+        }
+
+        function closeQRModal() {
+            const modal = document.getElementById('qrModal');
+            modal.classList.remove('modal-open');
+        }
+
+        // Modifiziere die bestehende QuickScan-Funktion
+        function showQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            modal.classList.add('modal-open');
+            startScanning();
+        }
+
+        // Erweitere den Barcode-Handler
+        function handleBarcode(barcode) {
+            if (barcode === 'QUICKSCAN_OPEN') {
+                showQuickScan();
+                return;
+            }
+
+            // Existierende Barcode-Logik
+            if (!scannedWorker) {
+                // Mitarbeiter-Barcode wurde gescannt
+                checkWorker(barcode);
+            } else if (!scannedTool) {
+                // Werkzeug-Barcode wurde gescannt
+                checkTool(barcode);
+            }
+        }
+
+        // Modifiziere die Scanner-Konfiguration
+        function startScanning() {
+            const video = document.getElementById('scanner');
+            const scannerOverlay = document.querySelector('.scanner-overlay');
+
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                        video.setAttribute("playsinline", true);
+                        video.play();
+                        requestAnimationFrame(scan);
+                    });
+            }
+        }
+
+        // Verbesserte Scan-Funktion
+        function scan() {
+            const video = document.getElementById('scanner');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            if (video.videoWidth === 0) {
+                requestAnimationFrame(scan);
+                return;
+            }
+
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+
+            if (code) {
+                handleBarcode(code.data);
+            }
+
+            requestAnimationFrame(scan);
+        }
+    </script>
+
+    <style>
+        #qrcode img {
+            margin: 0 auto;
+        }
+        
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #5b69a7;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        }
+
+        #quickScanBtn {
+            background-color: #5b69a7; /* BTZ Blau */
+            border: 4px solid #ffffff; /* Weißer Rand */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #quickScanBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(91, 105, 167, 0.5);
+        }
+
+        #quickScanQR {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #quickScanQR canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const qrContainer = document.getElementById('quickScanQR');
+            qrContainer.innerHTML = ''; // Clear existing content
+            
+            try {
+                new QRCode(qrContainer, {
+                    text: 'QUICKSCAN_OPEN',
+                    width: 96,
+                    height: 96,
+                    colorDark: '#ffffff', // Weißer QR-Code
+                    colorLight: '#5b69a7', // BTZ Blau als Hintergrund
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                console.log('QR Code generated successfully');
+            } catch (error) {
+                console.error('Error generating QR code:', error);
             }
         });
     </script>

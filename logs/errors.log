@@ -1,0 +1,32 @@
+2024-12-05 09:48:04 - ERROR - Fehler in index: Could not build url for endpoint 'admin_panel'. Did you mean 'admin_dashboard' instead?
+Traceback (most recent call last):
+  File "/Users/woschj/Downloads/technik/inventar/app.py", line 81, in decorated_function
+    result = f(*args, **kwargs)
+  File "/Users/woschj/Downloads/technik/inventar/app.py", line 686, in index
+    return render_template('index.html', tools=tools, active_filter=filter_status)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/templating.py", line 152, in render_template
+    return _render(app, template, context)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/templating.py", line 133, in _render
+    rv = template.render(context)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/woschj/Downloads/technik/inventar/templates/index.html", line 2, in top-level template code
+    {% extends "base.html" %}
+  File "/Users/woschj/Downloads/technik/inventar/templates/base.html", line 100, in top-level template code
+    <a href="{{ url_for('admin_panel') }}"
+    ^
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+        endpoint,
+    ...<3 lines>...
+        force_external=_external,
+    )
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/werkzeug/routing/map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_panel'. Did you mean 'admin_dashboard' instead?
