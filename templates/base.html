@@ -12,9 +12,7 @@
     <!-- Icons und Scanner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/@zxing/library@latest"></script>
-    
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>    
     <script>
         // Theme-Persistenz
         (function() {
@@ -132,8 +130,7 @@
                 <!-- Zentrierter Quick Scan Button -->
                 <div class="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center">
                     <button id="quickScanBtn" 
-                            onclick="showQuickScan()" 
-                            class="w-32 h-32 bg-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center p-4 transition-transform transform hover:scale-110">
+                            class="w-32 h-32 bg-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center p-4 transition-transform transform hover:scale-110 cursor-pointer">
                         <div id="quickScanQR" class="w-24 h-24"></div>
                     </button>
                     <span class="block text-center mt-2 text-sm text-base-content/70">Scan Now</span>
@@ -205,7 +202,7 @@
     <dialog id="quickScanModal" class="modal">
         <div class="modal-box max-w-2xl">
             <div class="flex flex-col">
-                <!-- Header mit Kamera-Reset-Button -->
+                <!-- Header -->
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h3 class="text-2xl font-bold" id="scan-title">Werkzeug scannen</h3>
@@ -215,8 +212,7 @@
                     </div>
                     <div class="flex gap-2">
                         <button onclick="resetCamera()" 
-                                class="btn btn-ghost btn-circle"
-                                title="Kamera neu starten">
+                                class="btn btn-ghost btn-circle">
                             <i class="fas fa-camera-rotate"></i>
                         </button>
                         <button onclick="closeQuickScan()" 
@@ -226,87 +222,35 @@
                     </div>
                 </div>
                 
-                <!-- Scan-Bereich -->
+                <!-- Scanner -->
                 <div class="space-y-6">
-                    <!-- Video Preview mit Overlay -->
                     <div class="relative aspect-video bg-base-200 rounded-box overflow-hidden">
-                        <video id="video" 
-                               class="w-full h-full object-cover hidden"
-                               autoplay playsinline></video>
-                        <div id="scanner-overlay" 
-                             class="absolute inset-0 flex items-center justify-center">
-                            <div class="relative w-64 h-64">
-                                <!-- Scan-Bereich -->
-                                <div class="absolute inset-0 border-2 border-primary rounded-lg"></div>
-                                
-                                <!-- Scanning-Linie -->
-                                <div class="absolute inset-x-0 h-0.5 bg-primary opacity-75 animate-scan"></div>
-                                
-                                <!-- Eckmarkierungen -->
-                                <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary"></div>
-                                <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary"></div>
-                                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary"></div>
-                                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary"></div>
-                            </div>
-                        </div>
-                        <!-- Status-Anzeige -->
-                        <div id="camera-status" 
-                             class="alert alert-info absolute bottom-4 left-4 right-4">
+                        <video id="video" class="w-full h-full object-cover hidden" autoplay playsinline></video>
+                        <div id="camera-status" class="absolute inset-0 flex items-center justify-center">
                             Kamera wird initialisiert...
                         </div>
                     </div>
 
-                    <!-- Barcode Input -->
+                    <!-- Manueller Input -->
                     <div class="join w-full">
-                        <div class="flex-1 relative join-item">
-                            <input type="text" 
-                                   id="barcode-input" 
-                                   class="input input-bordered w-full pl-10 join-item" 
-                                   placeholder="Barcode manuell eingeben"
-                                   autocomplete="off">
-                            <i class="fas fa-barcode absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50"></i>
-                        </div>
+                        <input type="text" 
+                               id="barcode-input" 
+                               class="input input-bordered w-full pl-10 join-item" 
+                               placeholder="Barcode manuell eingeben">
                         <button onclick="submitManualBarcode()" 
                                 class="btn btn-primary join-item">
-                            <i class="fas fa-check"></i>
-                            <span class="hidden sm:inline">Bestätigen</span>
+                            Bestätigen
                         </button>
                     </div>
 
-                    <!-- Preview-Bereich -->
-                    <div id="scan-preview" class="space-y-4">
-                        <!-- Werkzeug Preview -->
-                        <div id="tool-preview" class="hidden">
-                            <div class="card bg-base-200">
-                                <div class="card-body">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-tools text-2xl text-base-content/50"></i>
-                                        </div>
-                                        <div class="flex-1" id="tool-details">
-                                            <!-- Wird dynamisch gefüllt -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mitarbeiter Preview -->
-                        <div id="worker-preview" class="hidden">
-                            <div class="card bg-base-200">
-                                <div class="card-body">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-user text-2xl text-base-content/50"></i>
-                                        </div>
-                                        <div class="flex-1" id="worker-details">
-                                            <!-- Wird dynamisch gefüllt -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Previews -->
+                    <div id="tool-preview" class="hidden">
+                        <div id="tool-details"></div>
                     </div>
+                    <div id="worker-preview" class="hidden">
+                        <div id="worker-details"></div>
+                    </div>
+                    <div id="final-barcode" class="hidden"></div>
                 </div>
             </div>
         </div>
@@ -331,122 +275,75 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
     <script>
+        // Globale Variablen
+        let videoStream = null;
+        let codeReader = new ZXing.BrowserMultiFormatReader();
         let currentStep = 'tool';
         let scannedTool = null;
         let scannedWorker = null;
-        let codeReader = new ZXing.BrowserMultiFormatReader();
-        let isVideoActive = false;
-        let isScanning = false;
 
-        async function openQuickScan(event) {
-            event.preventDefault();
-            document.getElementById('quickScanModal').showModal();
-            resetScan();
-            await startCamera();
-        }
+        // QR Code für den Button generieren
+        document.addEventListener('DOMContentLoaded', function() {
+            const quickScanBtn = document.getElementById('quickScanBtn');
+            quickScanBtn.addEventListener('click', showQuickScan);
 
-        function closeQuickScan() {
-            document.getElementById('quickScanModal').close();
-            stopScanning();
-            resetScan();
-        }
-
-        async function resetCamera() {
-            stopScanning();
-            isScanning = false;
-            await startCamera();
-        }
-
-        async function startCamera() {
-            if (isVideoActive) return;
-            
-            try {
-                const video = document.getElementById('video');
-                const cameraStatus = document.getElementById('camera-status');
-                
-                cameraStatus.textContent = 'Kamera wird initialisiert...';
-                cameraStatus.classList.remove('hidden');
-                
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                
-                if (videoDevices.length === 0) {
-                    showError('Keine Kamera gefunden');
-                    return;
-                }
-
-                const preferredDevice = videoDevices.find(device => 
-                    device.label.toLowerCase().includes('back') || 
-                    device.label.toLowerCase().includes('rück')
-                ) || videoDevices[0];
-
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        deviceId: preferredDevice.deviceId,
-                        facingMode: "environment",
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    }
+            // QR Code generieren
+            const qrContainer = document.getElementById('quickScanQR');
+            if (qrContainer) {
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: 'QUICKSCAN_OPEN',
+                    width: 96,
+                    height: 96,
+                    colorDark: '#ffffff',
+                    colorLight: '#5b69a7',
+                    correctLevel: QRCode.CorrectLevel.H
                 });
+            }
+        });
 
-                video.srcObject = stream;
-                video.classList.remove('hidden');
-                await video.play();
-
-                isVideoActive = true;
-                await startScanning();
-                
-                cameraStatus.textContent = 'Kamera aktiv - Barcode in den Rahmen halten';
-                setTimeout(() => cameraStatus.classList.add('hidden'), 2000);
-
-            } catch (err) {
-                console.error('Kamera-Fehler:', err);
-                showError('Kamera konnte nicht aktiviert werden: ' + err.message);
+        // Modal öffnen und Scanner starten
+        function showQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            if (modal) {
+                resetScanState();
+                modal.showModal();
+                startScanning();
             }
         }
 
-        async function startScanning() {
-            if (isScanning) return;
+        // Scan-Status zurücksetzen
+        function resetScanState() {
+            currentStep = 'tool';
+            scannedTool = null;
+            scannedWorker = null;
             
-            try {
-                isScanning = true;
-                let lastScanTime = 0;
-                const SCAN_DELAY = 2000;
-                
-                await codeReader.decodeFromVideoDevice(
-                    null,
-                    'video',
-                    async (result, err) => {
-                        const currentTime = Date.now();
-                        if (result && isScanning && (currentTime - lastScanTime > SCAN_DELAY)) {
-                            lastScanTime = currentTime;
-                            
-                            const overlay = document.querySelector('#scanner-overlay');
-                            overlay.classList.add('bg-warning', 'bg-opacity-30');
-                            
-                            const cameraStatus = document.getElementById('camera-status');
-                            cameraStatus.textContent = 'Barcode erkannt - halte still...';
-                            cameraStatus.classList.remove('hidden');
-                            
-                            setTimeout(async () => {
-                                if (isScanning) {
-                                    isScanning = false;
-                                    overlay.classList.remove('bg-warning', 'bg-opacity-30');
-                                    showScanEffect();
-                                    await processBarcode(result.text);
-                                    stopScanning();
-                                }
-                            }, 1500);
-                        }
-                    }
-                );
-            } catch (err) {
-                console.error('Scanning-Fehler:', err);
-                showError('Scanning konnte nicht gestartet werden');
+            // UI zurücksetzen
+            const toolPreview = document.getElementById('tool-preview');
+            const workerPreview = document.getElementById('worker-preview');
+            if (toolPreview) toolPreview.classList.add('hidden');
+            if (workerPreview) workerPreview.classList.add('hidden');
+            
+            // Titel aktualisieren
+            updateScanTitle();
+        }
+
+        // Scan-Titel aktualisieren
+        function updateScanTitle() {
+            const title = document.getElementById('scan-title');
+            const subtitle = document.getElementById('scan-subtitle');
+            
+            if (currentStep === 'tool') {
+                title.textContent = 'Werkzeug scannen';
+                subtitle.textContent = 'Scannen Sie den Barcode des Werkzeugs';
+            } else {
+                title.textContent = 'Mitarbeiter scannen';
+                subtitle.textContent = 'Scannen Sie den Mitarbeiter-Barcode';
             }
         }
 
-        async function processBarcode(barcode) {
+        // Barcode verarbeiten
+        async function handleBarcode(barcode) {
             try {
                 if (currentStep === 'tool') {
                     const response = await fetch(`/api/get_item/${barcode}`);
@@ -457,128 +354,123 @@
                         return;
                     }
 
-                    const toolPreview = document.getElementById('tool-preview');
-                    const toolDetails = document.getElementById('tool-details');
-                    
-                    toolPreview.classList.remove('hidden');
-                    toolDetails.innerHTML = `
-                        <div class="space-y-2">
-                            <p class="font-bold">${data.gegenstand}</p>
-                            <p class="text-sm opacity-70">Barcode: ${data.barcode}</p>
-                            <p class="text-sm opacity-70">Status: ${data.status}</p>
-                        </div>
-                        <button onclick="confirmToolAndProceed()" 
-                                class="btn btn-primary w-full mt-3">
-                            Bestätigen und Mitarbeiter scannen
-                        </button>
-                    `;
-                    
+                    displayToolDetails(data);
                     scannedTool = data;
+                    currentStep = 'worker';
+                    updateScanTitle();
                     
                 } else if (currentStep === 'worker') {
-                    const response = await fetch(`/api/search_worker/${encodeURIComponent(barcode)}`);
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        showError(data.error);
-                        return;
-                    }
-
-                    if (data.multiple) {
-                        showWorkerSelection(data.workers);
-                    } else {
-                        displayWorkerDetails(data.worker);
-                    }
+                    await processWorkerBarcode(barcode);
                 }
-            } catch (err) {
-                console.error('Verarbeitungsfehler:', err);
-                showError('Fehler bei der Verarbeitung');
+            } catch (error) {
+                console.error('Fehler bei der Barcode-Verarbeitung:', error);
+                showError('Fehler bei der Verarbeitung des Barcodes');
             }
         }
 
-        function showWorkerSelection(workers) {
-            const workerPreview = document.getElementById('worker-preview');
-            const workerDetails = document.getElementById('worker-details');
+        // Werkzeugdetails anzeigen
+        function displayToolDetails(tool) {
+            const toolPreview = document.getElementById('tool-preview');
+            const toolDetails = document.getElementById('tool-details');
             
-            workerPreview.classList.remove('hidden');
-            workerDetails.innerHTML = `
-                <div class="space-y-2">
-                    <p class="font-bold">Bitte Mitarbeiter auswählen:</p>
-                    <div class="space-y-2">
-                        ${workers.map(worker => `
-                            <button onclick="selectWorker('${worker.barcode}')" 
-                                    class="btn btn-ghost w-full justify-start">
-                                <div class="text-left">
-                                    <p class="font-medium">${worker.name} ${worker.lastname}</p>
-                                    <p class="text-sm opacity-70">${worker.bereich || '-'}</p>
-                                </div>
-                            </button>
-                        `).join('')}
+            if (!toolPreview || !toolDetails) return;
+            
+            toolPreview.classList.remove('hidden');
+            toolDetails.innerHTML = `
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-tools text-2xl text-base-content/50"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-bold">${tool.gegenstand}</p>
+                                <p class="text-sm opacity-70">Barcode: ${tool.barcode}</p>
+                                <p class="text-sm opacity-70">Status: ${tool.status}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
-        function displayWorkerDetails(worker) {
-            const workerPreview = document.getElementById('worker-preview');
-            const workerDetails = document.getElementById('worker-details');
-            
-            workerPreview.classList.remove('hidden');
-            workerDetails.innerHTML = `
-                <div class="space-y-2">
-                    <p class="font-bold">${worker.name} ${worker.lastname}</p>
-                    <p class="text-sm opacity-70">Barcode: ${worker.barcode}</p>
-                    <p class="text-sm opacity-70">Bereich: ${worker.bereich || '-'}</p>
-                </div>
-                <button onclick="confirmAndFinish()" 
-                        class="btn btn-success w-full mt-3">
-                    Vorgang abschließen
-                </button>
-            `;
-            
-            scannedWorker = worker;
-        }
-
-        async function confirmAndFinish() {
-            if (!scannedTool || !scannedWorker) {
-                showError('Unvollständige Scan-Daten');
-                return;
-            }
-            
+        // Scanner starten
+        async function startScanning() {
             try {
-                const response = await fetch('/api/process_lending', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        worker_barcode: scannedWorker.barcode,
-                        item_barcode: scannedTool.barcode,
-                        item_type: 'tool',
-                        action: 'lend'
-                    })
+                const video = document.getElementById('video');
+                const cameraStatus = document.getElementById('camera-status');
+                
+                if (!video || !cameraStatus) return;
+                
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
+
+                video.classList.add('hidden');
+                cameraStatus.textContent = 'Kamera wird initialisiert...';
+                cameraStatus.classList.remove('hidden');
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
                 });
                 
-                const result = await response.json();
-                
-                if (result.error) {
-                    showError(result.error);
-                    return;
-                }
-                
-                showSuccess('Vorgang erfolgreich abgeschlossen');
-                setTimeout(() => {
-                    closeQuickScan();
-                    window.location.reload();
-                }, 1500);
-                
-            } catch (err) {
-                console.error('Fehler beim Abschließen:', err);
-                showError('Fehler beim Speichern des Vorgangs');
+                videoStream = stream;
+                video.srcObject = stream;
+                video.classList.remove('hidden');
+                cameraStatus.classList.add('hidden');
+
+                // Start scanning
+                codeReader.decodeFromVideoDevice(null, video, (result, err) => {
+                    if (result) {
+                        handleBarcode(result.text);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Kamera-Fehler:', error);
+                showError('Kamera konnte nicht initialisiert werden');
             }
         }
 
+        // Scanner stoppen
+        function stopScanning() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+            if (codeReader) {
+                codeReader.reset();
+            }
+        }
+
+        // Modal schließen
+        function closeQuickScan() {
+            stopScanning();
+            const modal = document.getElementById('quickScanModal');
+            if (modal) modal.close();
+        }
+
+        // Kamera neu starten
+        function resetCamera() {
+            stopScanning();
+            startScanning();
+        }
+
+        // Barcode manuell eingeben
+        function submitManualBarcode() {
+            const input = document.getElementById('barcode-input');
+            if (!input) return;
+            
+            const barcode = input.value.trim();
+            if (barcode) {
+                handleBarcode(barcode);
+                input.value = '';
+            }
+        }
+
+        // Hilfsfunktion für Fehlermeldungen
         function showError(message) {
+            console.error('Fehler:', message);
             const toast = document.createElement('div');
             toast.className = 'toast toast-end';
             toast.innerHTML = `
@@ -591,6 +483,7 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
+        // Hilfsfunktion für Erfolgsmeldungen
         function showSuccess(message) {
             const toast = document.createElement('div');
             toast.className = 'toast toast-end';
@@ -604,109 +497,153 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Theme Controller
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeController = document.querySelector('.theme-controller');
-            if (themeController) {
-                themeController.checked = document.documentElement.getAttribute('data-theme') === 'dark';
-                themeController.addEventListener('change', function(e) {
-                    const theme = e.target.checked ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', theme);
-                    localStorage.setItem('theme', theme);
-                });
-            }
-        });
+        // Mitarbeiter-Barcode verarbeiten
+        async function processWorkerBarcode(barcode) {
+            try {
+                console.log('Verarbeite Mitarbeiter-Barcode:', barcode);
+                const response = await fetch(`/api/get_worker/${barcode}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
 
-        function showQuickScanQR() {
-            const modal = document.getElementById('qrModal');
-            modal.classList.add('modal-open');
+                displayWorkerDetails(data);
+                scannedWorker = data;
+                showFinalBarcode();
+            } catch (error) {
+                console.error('Fehler bei der Mitarbeitersuche:', error);
+                showError('Fehler bei der Mitarbeitersuche');
+            }
+        }
+
+        // Mitarbeiterdetails anzeigen
+        function displayWorkerDetails(worker) {
+            const workerPreview = document.getElementById('worker-preview');
+            const workerDetails = document.getElementById('worker-details');
+            
+            if (!workerPreview || !workerDetails) return;
+            
+            workerPreview.classList.remove('hidden');
+            workerDetails.innerHTML = `
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-user text-2xl text-base-content/50"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-bold">${worker.name} ${worker.lastname}</p>
+                                <p class="text-sm opacity-70">Barcode: ${worker.barcode}</p>
+                                <p class="text-sm opacity-70">Bereich: ${worker.bereich || '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Finalen Barcode anzeigen
+        function showFinalBarcode() {
+            const finalBarcodeContainer = document.getElementById('final-barcode');
+            const videoElement = document.getElementById('video');
+            const cameraStatus = document.getElementById('camera-status');
+            
+            if (!finalBarcodeContainer) return;
+            
+            // Video und Kamera-Status ausblenden
+            if (videoElement) videoElement.classList.add('hidden');
+            if (cameraStatus) cameraStatus.classList.add('hidden');
+            
+            // Container für den finalen Barcode vorbereiten
+            finalBarcodeContainer.innerHTML = '';
+            finalBarcodeContainer.classList.remove('hidden');
+            finalBarcodeContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-6');
+            
+            // QR-Code Container erstellen
+            const qrWrapper = document.createElement('div');
+            qrWrapper.className = 'bg-[#5b69a7] p-4 rounded-lg shadow-lg mb-4';
+            finalBarcodeContainer.appendChild(qrWrapper);
             
             // QR-Code generieren
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = ''; // Clear previous QR code
-            
-            // Erstelle einen speziellen Command-Code f��r QuickScan
-            const quickScanCommand = 'QUICKSCAN_OPEN';
-            
-            // Generiere QR-Code
-            new QRCode(qrContainer, {
-                text: quickScanCommand,
+            new QRCode(qrWrapper, {
+                text: `FINALIZE:${scannedTool.barcode}:${scannedWorker.barcode}`,
                 width: 200,
-                height: 200
+                height: 200,
+                colorDark: '#ffffff',     // Weiß für den QR-Code
+                colorLight: '#5b69a7',    // BTZ-Blau für den Hintergrund
+                correctLevel: QRCode.CorrectLevel.H
             });
+            
+            // Beschreibungstext hinzufügen
+            const description = document.createElement('p');
+            description.className = 'text-center text-base-content/70 mb-4';
+            description.textContent = 'Scannen Sie diesen Code, um den Vorgang abzuschließen';
+            finalBarcodeContainer.appendChild(description);
+
+            // Abschluss-Button hinzufügen
+            const finalizeButton = document.createElement('button');
+            finalizeButton.className = 'btn btn-primary w-full';
+            finalizeButton.textContent = 'Vorgang abschließen';
+            finalizeButton.onclick = finalizeProcess;
+            finalBarcodeContainer.appendChild(finalizeButton);
+            
+            // Optional: Manuelle Schließen-Option
+            const closeButton = document.createElement('button');
+            closeButton.className = 'btn btn-ghost w-full mt-2';
+            closeButton.textContent = 'Abbrechen';
+            closeButton.onclick = closeQuickScan;
+            finalBarcodeContainer.appendChild(closeButton);
         }
 
-        function closeQRModal() {
-            const modal = document.getElementById('qrModal');
-            modal.classList.remove('modal-open');
-        }
+        // Vorgang abschließen
+        async function finalizeProcess() {
+            try {
+                // Bestimme die Aktion basierend auf dem aktuellen Status
+                const action = scannedTool.status === 'ausgeliehen' ? 'return' : 'lend';
+                const newStatus = action === 'return' ? 'verfügbar' : 'ausgeliehen';
+                
+                console.log('Aktueller Status:', scannedTool.status);
+                console.log('Gewählte Aktion:', action);
+                console.log('Neuer Status:', newStatus);
 
-        // Modifiziere die bestehende QuickScan-Funktion
-        function showQuickScan() {
-            const modal = document.getElementById('quickScanModal');
-            modal.classList.add('modal-open');
-            startScanning();
-        }
-
-        // Erweitere den Barcode-Handler
-        function handleBarcode(barcode) {
-            if (barcode === 'QUICKSCAN_OPEN') {
-                showQuickScan();
-                return;
+                const response = await fetch('/api/process_lending', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        worker_barcode: scannedWorker.barcode,
+                        item_barcode: scannedTool.barcode,
+                        item_type: scannedTool.type || 'tool',
+                        action: action,
+                        new_status: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    showError(result.error);
+                    return;
+                }
+                
+                // Erfolgsmeldung basierend auf der Aktion
+                const successMessage = action === 'return' 
+                    ? 'Rückgabe erfolgreich abgeschlossen' 
+                    : 'Ausgabe erfolgreich abgeschlossen';
+                
+                showSuccess(successMessage);
+                setTimeout(() => {
+                    closeQuickScan();
+                    window.location.reload();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Fehler beim Abschließen:', error);
+                showError('Fehler beim Speichern des Vorgangs');
             }
-
-            // Existierende Barcode-Logik
-            if (!scannedWorker) {
-                // Mitarbeiter-Barcode wurde gescannt
-                checkWorker(barcode);
-            } else if (!scannedTool) {
-                // Werkzeug-Barcode wurde gescannt
-                checkTool(barcode);
-            }
-        }
-
-        // Modifiziere die Scanner-Konfiguration
-        function startScanning() {
-            const video = document.getElementById('scanner');
-            const scannerOverlay = document.querySelector('.scanner-overlay');
-
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                    .then(function(stream) {
-                        video.srcObject = stream;
-                        video.setAttribute("playsinline", true);
-                        video.play();
-                        requestAnimationFrame(scan);
-                    });
-            }
-        }
-
-        // Verbesserte Scan-Funktion
-        function scan() {
-            const video = document.getElementById('scanner');
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            if (video.videoWidth === 0) {
-                requestAnimationFrame(scan);
-                return;
-            }
-
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-            const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                inversionAttempts: "dontInvert",
-            });
-
-            if (code) {
-                handleBarcode(code.data);
-            }
-
-            requestAnimationFrame(scan);
         }
     </script>
 
@@ -753,6 +690,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const quickScanBtn = document.getElementById('quickScanBtn');
+            quickScanBtn.addEventListener('click', function() {
+                showQuickScan();
+            });
+
+            // QR Code generieren
             const qrContainer = document.getElementById('quickScanQR');
             qrContainer.innerHTML = ''; // Clear existing content
             
@@ -770,6 +713,16 @@
                 console.error('Error generating QR code:', error);
             }
         });
+
+        function showQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            if (modal) {
+                modal.showModal();
+                startScanning();
+            } else {
+                console.error('Modal nicht gefunden');
+            }
+        }
     </script>
 </body>
 </html>

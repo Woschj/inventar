@@ -267,12 +267,9 @@ class DBConfig:
                 CREATE TABLE IF NOT EXISTS tool_status_history (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     tool_barcode TEXT NOT NULL,
-                    old_status TEXT,
-                    new_status TEXT,
-                    comment TEXT,
-                    changed_by TEXT,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (tool_barcode) REFERENCES tools(barcode)
+                    action TEXT NOT NULL,
+                    worker_barcode TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 );
             ''',
         },
@@ -690,35 +687,22 @@ def index():
         flash('Fehler beim Laden der Werkzeuge', 'error')
         return redirect(url_for('index'))
 
-@app.route('/admin')
-@admin_required
-@log_route
-def admin_panel():  # Zurück zu admin_panel statt admin_dashboard
+@app.route('/admin_panel')
+def admin_panel():
     try:
-        # Statistiken laden
-        stats = {}
-        
-        # Werkzeug-Statistiken
-        with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            stats['total_tools'] = conn.execute(
-                'SELECT COUNT(*) as count FROM tools'
-            ).fetchone()['count']
-            
-            stats['borrowed_tools'] = conn.execute(
-                "SELECT COUNT(*) as count FROM tools WHERE status = 'Ausgeliehen'"
-            ).fetchone()['count']
-            
-            stats['defect_tools'] = conn.execute(
-                "SELECT COUNT(*) as count FROM tools WHERE status = 'Defekt'"
-            ).fetchone()['count']
-            
-            # ... Rest des Codes bleibt unverändert ...
-        
+        # Hier sollte die Logik für das Admin-Panel stehen
+        # Zum Beispiel das Abrufen von Daten aus der Datenbank
+        # und das Rendern eines Templates
+
+        # Beispiel: Daten abrufen
+        # data = get_admin_data()
+
+        # Beispiel: Template rendern
+        return render_template('admin_panel.html', data=data)
     except Exception as e:
-        logging.error(f"Fehler beim Laden des Dashboards: {str(e)}")
-        traceback.print_exc()
-        flash('Fehler beim Laden des Dashboards', 'error')
-        return redirect(url_for('index'))
+        # Fehlerbehandlung
+        logging.error(f"Fehler im Admin-Panel: {str(e)}")
+        return render_template('error.html', error_message=str(e))
 
 @app.route('/workers')
 @admin_required
@@ -1730,48 +1714,75 @@ def get_recent_lendings():
         })
 
 @app.route('/api/process_lending', methods=['POST'])
-@log_route
 def process_lending():
     try:
-        data = request.get_json()
-        logging.info(f"Process lending: action={data.get('action')}, "
-                    f"barcode={data.get('item_barcode')}, "
-                    f"worker={data.get('worker_barcode')}, "
-                    f"amount={data.get('amount', 1)}")
-
-        if not data.get('worker_barcode'):
-            return jsonify({'success': False, 'message': 'Kein Mitarbeiter ausgewählt'})
+        data = request.json
+        item_barcode = data.get('item_barcode')
+        worker_barcode = data.get('worker_barcode')
+        item_type = data.get('item_type', 'tool')
+        action = data.get('action')
+        new_status = data.get('new_status')
         
-        if not data.get('item_barcode'):
-            return jsonify({'success': False, 'message': 'Kein Werkzeug/Material ausgewählt'})
-
-        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
-            conn.execute(f"ATTACH DATABASE '{DBConfig.TOOLS_DB}' AS tools_db")
-            conn.execute(f"ATTACH DATABASE '{DBConfig.CONSUMABLES_DB}' AS consumables_db")
+        # Debug-Ausgabe
+        print(f"Verarbeite {action} für {item_type} {item_barcode} von Mitarbeiter {worker_barcode}")
+        
+        # Wähle die richtige Datenbank
+        db_name = DBConfig.TOOLS_DB if item_type == 'tool' else DBConfig.CONSUMABLES_DB
+        
+        with get_db_connection(db_name) as conn:
+            # Status aktualisieren
+            table_name = 'tools' if item_type == 'tool' else 'consumables'
+            conn.execute(f'''
+                UPDATE {table_name}
+                SET status = ?
+                WHERE barcode = ?
+            ''', (new_status, item_barcode))
             
-            # Füge neue Ausleihe hinzu
-            conn.execute('''
-                INSERT INTO lendings 
-                (worker_barcode, item_barcode, item_type, amount)
-                VALUES (?, ?, ?, ?)
-            ''', (data['worker_barcode'], data['item_barcode'], 
-                  data['item_type'], data.get('amount', 1)))
-            
-            # Aktualisiere Status des Werkzeugs
-            if data['item_type'] == 'tool':
+            # Historie eintragen - Unterscheide zwischen Tool und Consumable
+            if item_type == 'tool':
                 conn.execute('''
-                    UPDATE tools_db.tools 
-                    SET status = 'Ausgeliehen' 
-                    WHERE barcode = ?
-                ''', (data['item_barcode'],))
+                    INSERT INTO tool_status_history 
+                    (tool_barcode, action, worker_barcode, timestamp)
+                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                ''', (item_barcode, action, worker_barcode))
+            else:
+                conn.execute('''
+                    INSERT INTO consumables_history
+                    (consumable_barcode, action, worker_barcode, timestamp)
+                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                ''', (item_barcode, action, worker_barcode))
+            
+            # Lending-Tabelle aktualisieren
+            with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
+                if action == 'return':
+                    lendings_conn.execute('''
+                        UPDATE lendings 
+                        SET return_time = CURRENT_TIMESTAMP
+                        WHERE item_barcode = ? 
+                        AND worker_barcode = ?
+                        AND return_time IS NULL
+                    ''', (item_barcode, worker_barcode))
+                else:
+                    lendings_conn.execute('''
+                        INSERT INTO lendings 
+                        (item_barcode, worker_barcode, item_type, checkout_time)
+                        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                    ''', (item_barcode, worker_barcode, item_type))
+                lendings_conn.commit()
             
             conn.commit()
             
-        return jsonify({'success': True, 'message': 'Ausleihe erfolgreich'})
-            
+        return jsonify({
+            'success': True, 
+            'message': f'Vorgang erfolgreich abgeschlossen ({action})',
+            'action': action,
+            'new_status': new_status
+        })
+        
     except Exception as e:
-        logging.error(f"Fehler bei der Ausleihe: {str(e)}")
-        return jsonify({'success': False, 'message': str(e)})
+        print(f"Fehler beim Verarbeiten: {str(e)}")
+        traceback.print_exc()  # Fügt detailliertere Fehlerinformationen hinzu
+        return jsonify({'error': str(e)})
 
 @app.route('/manual_lending')
 @admin_required  # oder @login_required, je nachdem welchen Decorator du verwendest
@@ -2000,48 +2011,31 @@ def process_scan():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route('/api/search_worker/<query>')
-def search_worker(query):
+@app.route('/api/search_worker/<barcode>')
+def search_worker(barcode):
     try:
-        with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            # Suche nach Barcode
-            if query.isdigit():
-                worker = conn.execute('''
-                    SELECT * FROM workers 
-                    WHERE barcode = ?
-                ''', (query,)).fetchone()
-                
-                if worker:
-                    return jsonify({
-                        'multiple': False,
-                        'worker': dict(worker)
-                    })
+        # Debug-Ausgabe
+        print(f"Suche Mitarbeiter mit Barcode: {barcode}")
+        
+        # Mitarbeiter in der Datenbank suchen
+        worker = Worker.query.filter_by(barcode=barcode).first()
+        
+        if worker:
+            return jsonify({
+                'worker': {
+                    'id': worker.id,
+                    'name': worker.name,
+                    'lastname': worker.lastname,
+                    'barcode': worker.barcode,
+                    'bereich': worker.bereich
+                }
+            })
+        else:
+            return jsonify({'error': 'Mitarbeiter nicht gefunden'})
             
-            # Suche nach Name
-            workers = conn.execute('''
-                SELECT * FROM workers 
-                WHERE name || ' ' || lastname LIKE ? 
-                OR lastname || ' ' || name LIKE ?
-                OR name LIKE ? 
-                OR lastname LIKE ?
-            ''', (f'%{query}%', f'%{query}%', f'%{query}%', f'%{query}%')).fetchall()
-            
-            if len(workers) == 0:
-                return jsonify({'error': 'Kein Mitarbeiter gefunden'})
-            elif len(workers) == 1:
-                return jsonify({
-                    'multiple': False,
-                    'worker': dict(workers[0])
-                })
-            else:
-                return jsonify({
-                    'multiple': True,
-                    'workers': [dict(w) for w in workers]
-                })
-                
     except Exception as e:
-        logging.error(f"Fehler bei Mitarbeitersuche: {str(e)}")
-        return jsonify({'error': 'Datenbankfehler'})
+        print(f"Fehler bei der Mitarbeitersuche: {str(e)}")  # Debug-Ausgabe
+        return jsonify({'error': 'Fehler bei der Suche nach dem Mitarbeiter'})
 
 @app.route('/admin/permanent_delete/tool/<int:id>')
 @admin_required
@@ -2665,3 +2659,40 @@ def delete_worker(barcode):
         return jsonify({'error': 'Datenbankfehler'})
 
 app.logger.info("Test-Logeintrag: Überprüfung des Loggings")
+
+def create_history_tables():
+    try:
+        # Tools History
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS tool_status_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tool_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    worker_barcode TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            conn.commit()
+            print("Tool History Tabelle erstellt/aktualisiert")
+            
+        # Consumables History
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS consumables_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    consumable_barcode TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    worker_barcode TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            conn.commit()
+            print("Consumables History Tabelle erstellt/aktualisiert")
+            
+    except Exception as e:
+        print(f"Fehler beim Erstellen der History-Tabellen: {str(e)}")
+
+if __name__ == '__main__':
+    create_history_tables()  # Tabellen erstellen/aktualisieren
+    app.run(debug=True)
