@@ -78,8 +78,7 @@
 
                 <!-- Speichern Button -->
                 <div class="flex justify-end">
-                    <button type="submit" 
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                    <button type="submit" class="btn btn-primary">
                         Änderungen speichern
                     </button>
                 </div>
@@ -130,7 +129,7 @@
     {% if is_admin %}
         <div class="mt-4 flex justify-end">
             <a href="{{ url_for('delete_consumable', barcode=consumable.barcode) }}"
-               class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+               class="btn btn-error"
                onclick="return confirm('Wirklich löschen?')">
                 Löschen
             </a>

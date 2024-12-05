@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, g, session
 from werkzeug.exceptions import BadRequest
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import traceback
 from functools import wraps
 import logging
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 import json
 from routes import export_bp
 import sys
@@ -14,6 +14,37 @@ import sys
 app = Flask(__name__)
 app.secret_key = 'dein_geheimer_schlüssel'  # Muss gesetzt sein, damit Sessions funktionieren
 app.config['ADMIN_PASSWORD'] = 'admin'  # Hier das gewünschte Admin-Passwort eintragen
+
+# Stelle sicher, dass das Logs-Verzeichnis existiert
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Logging-Konfiguration
+logging.basicConfig(
+    # Handler für Datei und Konsole
+    handlers=[
+        # RotatingFileHandler begrenzt die Dateigröße und behält alte Logs
+        RotatingFileHandler(
+            'logs/errors.log',
+            maxBytes=1024 * 1024,  # 1MB pro Datei
+            backupCount=10,        # Behalte 10 alte Dateien
+            encoding='utf-8'
+        ),
+        logging.StreamHandler()    # Ausgabe auch in der Konsole
+    ],
+    # Log-Format
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    # Zeitformat
+    datefmt='%Y-%m-%d %H:%M:%S',
+    # Log-Level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    level=logging.INFO
+)
+
+# Optional: Fehlerbehandlung für das Logging selbst
+try:
+    logging.info("Logging-System initialisiert")
+except Exception as e:
+    print(f"Fehler beim Initialisieren des Logging-Systems: {str(e)}")
 
 # Logging Setup
 def setup_logging():
@@ -54,6 +85,77 @@ def setup_logger(name, log_file):
 # Erstelle die Logger
 loggers = setup_logging()
 
+
+def log_value_changes(table_name):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            try:
+                # Hole alte Werte vor der Änderung
+                barcode = kwargs.get('barcode')
+                if barcode:
+                    with get_db_connection(getattr(DBConfig, f"{table_name.upper()}_DB")) as conn:
+                        old_values = conn.execute(f'SELECT * FROM {table_name} WHERE barcode = ?', 
+                                               (barcode,)).fetchone()
+                        old_dict = dict(old_values) if old_values else {}
+
+                # Führe die eigentliche Funktion aus
+                result = f(*args, **kwargs)
+
+                # Hole neue Werte nach der Änderung
+                if barcode:
+                    with get_db_connection(getattr(DBConfig, f"{table_name.upper()}_DB")) as conn:
+                        new_values = conn.execute(f'SELECT * FROM {table_name} WHERE barcode = ?', 
+                                               (barcode,)).fetchone()
+                        new_dict = dict(new_values) if new_values else {}
+
+                    # Vergleiche alte und neue Werte
+                    changes = []
+                    for key in old_dict:
+                        if key in new_dict and old_dict[key] != new_dict[key]:
+                            changes.append(f"{key}: {old_dict[key]} → {new_dict[key]}")
+
+                    # Wenn es Änderungen gab, logge sie
+                    if changes:
+                        with get_db_connection(DBConfig.SYSTEM_LOGS_DB) as log_conn:
+                            log_conn.execute('''
+                                INSERT INTO system_logs 
+                                (timestamp, user, operation_type, item_barcode, details, status)
+                                VALUES (?, ?, ?, ?, ?, ?)
+                            ''', (
+                                datetime.now(),
+                                session.get('username', 'System'),
+                                f"{table_name} Werte geändert",
+                                barcode,
+                                " | ".join(changes),
+                                'success'
+                            ))
+                            log_conn.commit()
+
+                return result
+
+            except Exception as e:
+                logging.error(f"Fehler bei Wertänderung in {table_name}: {str(e)}")
+                with get_db_connection(DBConfig.SYSTEM_LOGS_DB) as log_conn:
+                    log_conn.execute('''
+                        INSERT INTO system_logs 
+                        (timestamp, user, operation_type, item_barcode, error_message, status)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (
+                        datetime.now(),
+                        session.get('username', 'System'),
+                        f"{table_name} Wertänderung fehlgeschlagen",
+                        kwargs.get('barcode', 'N/A'),
+                        str(e),
+                        'error'
+                    ))
+                    log_conn.commit()
+                raise
+
+        return decorated_function
+    return decorator
+
+
 # Decorator für Route-Logging
 def log_route(f):
     @wraps(f)
@@ -90,29 +192,52 @@ def log_route(f):
     return decorated_function
 
 # Decorator für DB-Operationen
-def log_db_operation(operation):
+def log_db_operation(operation_type):
     def decorator(f):
         @wraps(f)
-        def wrapper(*args, **kwargs):
-            start_time = datetime.now()
+        def decorated_function(*args, **kwargs):
             try:
+                start_time = datetime.now()
                 result = f(*args, **kwargs)
-                duration = (datetime.now() - start_time).total_seconds()
-                loggers['database'].info(
-                    f"DB Operation: {operation} - "
-                    f"Dauer: {duration:.2f}s - "
-                    f"Erfolgreich: Ja"
-                )
+                end_time = datetime.now()
+                duration = (end_time - start_time).total_seconds()
+                
+                with get_db_connection(DBConfig.SYSTEM_LOGS_DB) as conn:
+                    conn.execute('''
+                        INSERT INTO system_logs 
+                        (timestamp, user, operation_type, item_barcode, duration, status)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (
+                        start_time,
+                        session.get('username', 'System'),
+                        operation_type,  # Stelle sicher, dass operation_type übergeben wird
+                        kwargs.get('barcode', 'N/A'),
+                        duration,
+                        'success'
+                    ))
+                    conn.commit()
+                
                 return result
+                
             except Exception as e:
-                duration = (datetime.now() - start_time).total_seconds()
-                loggers['database'].error(
-                    f"DB Operation: {operation} - "
-                    f"Dauer: {duration:.2f}s - "
-                    f"Fehler: {str(e)}"
-                )
+                logging.error(f"Fehler bei {operation_type}: {str(e)}")
+                with get_db_connection(DBConfig.SYSTEM_LOGS_DB) as conn:
+                    conn.execute('''
+                        INSERT INTO system_logs 
+                        (timestamp, user, operation_type, item_barcode, error_message, status)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (
+                        datetime.now(),
+                        session.get('username', 'System'),
+                        operation_type,  # Stelle sicher, dass operation_type übergeben wird
+                        kwargs.get('barcode', 'N/A'),
+                        str(e),
+                        'error'
+                    ))
+                    conn.commit()
                 raise
-        return wrapper
+                
+        return decorated_function
     return decorator
 
 def get_tool_lendings(barcode):
@@ -196,7 +321,7 @@ class DBConfig:
     TOOLS_DB = os.path.join(DB_DIR, 'lager.db')
     LENDINGS_DB = os.path.join(DB_DIR, 'lendings.db')
     CONSUMABLES_DB = os.path.join(DB_DIR, 'consumables.db')
-    SYSTEM_DB = os.path.join(DB_DIR, 'system_logs.db')
+    SYSTEM_LOGS_DB = os.path.join(DB_DIR, 'system_logs.db')  # Hier hinzugefügt
     
     # Schema Definitionen
     SCHEMAS = {
@@ -317,18 +442,19 @@ class DBConfig:
                 );
             '''
         },
-        SYSTEM_DB: {
+        SYSTEM_LOGS_DB: {  # Neues Schema für System Logs
             'system_logs': '''
                 CREATE TABLE IF NOT EXISTS system_logs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    action_type TEXT NOT NULL,
-                    description TEXT NOT NULL,
                     user TEXT,
-                    affected_item TEXT,
-                    item_type TEXT,
+                    operation_type TEXT NOT NULL,
+                    item_barcode TEXT,
+                    duration REAL,
+                    status TEXT,
+                    error_message TEXT,
                     details TEXT
-                );
+                )
             '''
         }
     }
@@ -407,7 +533,7 @@ class DBConfig:
                 cls.TOOLS_DB,
                 cls.LENDINGS_DB,
                 cls.CONSUMABLES_DB,
-                cls.SYSTEM_DB
+                cls.SYSTEM_LOGS_DB
             ]
             
             for db_path in all_dbs:
@@ -688,21 +814,38 @@ def index():
         return redirect(url_for('index'))
 
 @app.route('/admin_panel')
+@admin_required
 def admin_panel():
     try:
-        # Hier sollte die Logik für das Admin-Panel stehen
-        # Zum Beispiel das Abrufen von Daten aus der Datenbank
-        # und das Rendern eines Templates
-
-        # Beispiel: Daten abrufen
-        # data = get_admin_data()
-
-        # Beispiel: Template rendern
-        return render_template('admin_panel.html', data=data)
+        # Statistiken sammeln
+        stats = {}
+        
+        # Werkzeug-Statistiken
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            stats['total_tools'] = conn.execute('SELECT COUNT(*) FROM tools').fetchone()[0]
+            stats['borrowed_tools'] = conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'").fetchone()[0]
+            stats['defect_tools'] = conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Defekt'").fetchone()[0]
+            stats['deleted_tools'] = conn.execute('SELECT COUNT(*) FROM deleted_tools').fetchone()[0]
+        
+        # Verbrauchsmaterial-Statistiken
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            stats['total_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables').fetchone()[0]
+            stats['reorder_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables WHERE aktueller_bestand <= mindestbestand').fetchone()[0]
+            stats['empty_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables WHERE aktueller_bestand = 0').fetchone()[0]
+            stats['deleted_consumables'] = conn.execute('SELECT COUNT(*) FROM deleted_consumables').fetchone()[0]
+        
+        # Mitarbeiter-Statistiken
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            stats['total_workers'] = conn.execute('SELECT COUNT(*) FROM workers').fetchone()[0]
+            stats['workers_by_area'] = conn.execute('SELECT bereich, COUNT(*) FROM workers GROUP BY bereich').fetchall()
+            stats['deleted_workers'] = conn.execute('SELECT COUNT(*) FROM deleted_workers').fetchone()[0]
+        
+        return render_template('admin/dashboard.html', stats=stats)
+        
     except Exception as e:
-        # Fehlerbehandlung
         logging.error(f"Fehler im Admin-Panel: {str(e)}")
-        return render_template('error.html', error_message=str(e))
+        flash('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/workers')
 @admin_required
@@ -833,6 +976,9 @@ def consumable_details(barcode):
         return redirect(url_for('consumables'))
 
 @app.route('/consumables/<barcode>/edit', methods=['GET', 'POST'])
+@admin_required
+@log_value_changes('consumables')
+@log_db_operation("Verbrauchsmaterial bearbeitet")
 def edit_consumable(barcode):
     logging.info(f"Bearbeite Verbrauchsmaterial {barcode}, Methode: {request.method}")
     try:
@@ -913,6 +1059,7 @@ def edit_consumable(barcode):
         return redirect(url_for('consumables'))
 
 @app.route('/login', methods=['GET', 'POST'])
+@log_route
 def login():
     if request.method == 'POST':
         if request.form.get('password') == "1234":  # Sicheres Abrufen des Passworts
@@ -925,6 +1072,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
+@log_route
 def logout():
     session.pop('is_admin', None)  # Entfernt die is_admin Variable aus der Session
     flash('Erfolgreich ausgeloggt', 'success')
@@ -986,52 +1134,51 @@ def add_consumable():
     return render_template('add_consumable.html')
 
 
-@app.route('/consumable/delete/<string:barcode>')
+@app.route('/consumable/delete/<string:barcode>', methods=['POST', 'GET'])
 @admin_required
+@log_db_operation("Verbrauchsmaterial in Papierkorb verschoben")
 def delete_consumable(barcode):
-    logging.info(f"Lösche Verbrauchsmaterial {barcode}")
     try:
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            consumable = conn.execute(
-                'SELECT * FROM consumables WHERE barcode=?', (barcode,)
-            ).fetchone()
-            
+            # Hole zuerst die Informationen für das Logging
+            consumable = conn.execute('SELECT * FROM consumables WHERE barcode = ?', (barcode,)).fetchone()
             if not consumable:
                 flash('Verbrauchsmaterial nicht gefunden', 'error')
                 return redirect(url_for('consumables'))
-                
-            # Prüfen ob bereits im Papierkorb
-            existing = conn.execute(
-                'SELECT 1 FROM deleted_consumables WHERE barcode=?', (barcode,)
-            ).fetchone()
-            
-            if existing:
-                flash('Material bereits im Papierkorb', 'error')
-                return redirect(url_for('consumables'))
-            
+
+            # Verschiebe in deleted_consumables
             conn.execute('''
                 INSERT INTO deleted_consumables 
-                (barcode, bezeichnung, ort, typ, mindestbestand, aktueller_bestand, 
-                 einheit, deleted_by, deleted_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-            ''', (consumable['barcode'], consumable['bezeichnung'], 
-                  consumable['ort'], consumable['typ'],
-                  consumable['mindestbestand'], consumable['aktueller_bestand'],
-                  consumable['einheit'], session.get('username', 'admin')))
-            
-            conn.execute('DELETE FROM consumables WHERE barcode=?', (barcode,))
+                (barcode, bezeichnung, typ, ort, mindestbestand, aktueller_bestand, einheit, status, deleted_by, deleted_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (
+                consumable['barcode'],
+                consumable['bezeichnung'],
+                consumable['typ'],
+                consumable['ort'],
+                consumable['mindestbestand'],
+                consumable['aktueller_bestand'],
+                consumable['einheit'],
+                consumable['status'],
+                session.get('username', 'System')
+            ))
+
+            # Führe die Löschung durch
+            conn.execute('DELETE FROM consumables WHERE barcode = ?', (barcode,))
             conn.commit()
             
+            logging.info(f"Verbrauchsmaterial in Papierkorb verschoben: {consumable['bezeichnung']} (Barcode: {barcode})")
             flash('Verbrauchsmaterial in den Papierkorb verschoben', 'success')
             
     except Exception as e:
-        logging.error(f"Fehler beim Löschen: {str(e)}")
-        flash('Fehler beim Lschen des Verbrauchsmaterials', 'error')
+        logging.error(f"Fehler beim Löschen des Verbrauchsmaterials: {str(e)}")
+        flash('Fehler beim Löschen', 'error')
         
     return redirect(url_for('consumables'))
 
 @app.route('/consumables/<barcode>/adjust', methods=['POST'])
 @admin_required
+@log_value_changes('consumables')
 def adjust_quantity(barcode):
     adjustment = request.form.get('adjustment', type=int)
     logging.info(f"Passe Menge an für {barcode}: {adjustment}")
@@ -1054,6 +1201,7 @@ def adjust_quantity(barcode):
 
 @app.route('/admin/restore/consumable/<int:id>')
 @admin_required
+@log_db_operation("Verbrauchsmaterial wiederhergestellt")
 def restore_consumable(id):
     """Verbrauchsmaterial aus dem Papierkorb wiederherstellen"""
     try:
@@ -1114,6 +1262,7 @@ def add_tool():
                 ''', (barcode, gegenstand, ort, typ))
                 conn.commit()
                 
+            logging.info(f"Neues Werkzeug hinzugefügt: {gegenstand} (Barcode: {barcode})")
             flash('Werkzeug erfolgreich hinzugefügt', 'success')
             return redirect(url_for('index'))
             
@@ -1128,6 +1277,7 @@ def add_tool():
 
 @app.route('/tool/edit/<string:barcode>', methods=['GET', 'POST'])
 @admin_required
+@log_db_operation("Werkzeug bearbeitet")
 def edit_tool(barcode):
     """Werkzeug bearbeiten"""
     try:
@@ -1144,6 +1294,7 @@ def edit_tool(barcode):
                 ''', (gegenstand, ort, typ, barcode))
                 conn.commit()
                 
+                logging.info(f"Werkzeug bearbeitet: {gegenstand} (Barcode: {barcode})")
                 flash('Werkzeug erfolgreich aktualisiert', 'success')
                 return redirect(url_for('index'))
             
@@ -1163,8 +1314,9 @@ def edit_tool(barcode):
         flash('Fehler beim Bearbeiten des Werkzeugs', 'error')
         return redirect(url_for('index'))
 
-@app.route('/tool/delete/<string:barcode>')
+@app.route('/tool/delete/<string:barcode>', methods=['POST', 'GET'])
 @admin_required
+@log_db_operation("Werkzeug in Papierkorb verschoben")
 def delete_tool(barcode):
     """Werkzeug in den Papierkorb verschieben"""
     try:
@@ -1265,6 +1417,7 @@ def add_worker():
 
 @app.route('/worker/edit/<string:barcode>', methods=['GET', 'POST'])
 @admin_required
+@log_db_operation("Mitarbeiter bearbeitet")
 def edit_worker(barcode):
     """Mitarbeiter bearbeiten"""
     try:
@@ -1300,22 +1453,18 @@ def edit_worker(barcode):
         flash('Fehler beim Bearbeiten des Mitarbeiters', 'error')
         return redirect(url_for('workers'))
 
-@app.route('/worker/delete/<string:barcode>')
+@app.route('/worker/delete/<string:barcode>', methods=['POST', 'GET'])
 @admin_required
+@log_db_operation("Mitarbeiter in Papierkorb verschoben")
 def delete_worker(barcode):
-    """Mitarbeiter löschen"""
     try:
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            # Hole Mitarbeiterdaten
-            worker = conn.execute(
-                'SELECT * FROM workers WHERE barcode = ?', 
-                (barcode,)
-            ).fetchone()
-            
+            # Hole zuerst die Informationen für das Logging
+            worker = conn.execute('SELECT * FROM workers WHERE barcode = ?', (barcode,)).fetchone()
             if not worker:
                 flash('Mitarbeiter nicht gefunden', 'error')
                 return redirect(url_for('workers'))
-            
+
             # Prüfe auf aktive Ausleihen
             conn.execute(f"ATTACH DATABASE '{DBConfig.LENDINGS_DB}' AS lendings_db")
             active_lendings = conn.execute('''
@@ -1325,27 +1474,33 @@ def delete_worker(barcode):
             ''', (barcode,)).fetchone()['count']
             
             if active_lendings > 0:
-                flash('Mitarbeiter hat noch aktive Ausleihen', 'error')
+                flash('Mitarbeiter hat noch aktive Ausleihen und kann nicht gelöscht werden', 'error')
                 return redirect(url_for('workers'))
-            
+
             # Verschiebe in deleted_workers
             conn.execute('''
                 INSERT INTO deleted_workers 
-                (barcode, name, lastname, bereich, email, deleted_by)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (worker['barcode'], worker['name'], worker['lastname'],
-                 worker['bereich'], worker['email'], 
-                 session.get('username', 'System')))
-            
-            # Lösche Mitarbeiter
+                (barcode, name, lastname, bereich, email, deleted_by, deleted_at)
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (
+                worker['barcode'],
+                worker['name'],
+                worker['lastname'],
+                worker['bereich'],
+                worker['email'],
+                session.get('username', 'System')
+            ))
+
+            # Führe die Löschung durch
             conn.execute('DELETE FROM workers WHERE barcode = ?', (barcode,))
             conn.commit()
             
-            flash('Mitarbeiter erfolgreich gelöscht', 'success')
+            logging.info(f"Mitarbeiter in Papierkorb verschoben: {worker['name']} {worker['lastname']} (Barcode: {barcode})")
+            flash('Mitarbeiter in den Papierkorb verschoben', 'success')
             
     except Exception as e:
-        logging.error(f"Fehler beim Löschen: {str(e)}")
-        flash('Fehler beim Löschen des Mitarbeiters', 'error')
+        logging.error(f"Fehler beim Löschen des Mitarbeiters: {str(e)}")
+        flash('Fehler beim Löschen', 'error')
         
     return redirect(url_for('workers'))
 
@@ -1414,11 +1569,11 @@ def worker_details(barcode):
 
 @app.route('/admin/restore/tool/<int:id>')
 @admin_required
+@log_db_operation("Werkzeug wiederhergestellt")
 def restore_tool(id):
     """Werkzeug aus dem Papierkorb wiederherstellen"""
     try:
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            # Prüfen ob das Werkzeug im Papierkorb ist
             deleted_tool = conn.execute(
                 'SELECT * FROM deleted_tools WHERE id=?', (id,)
             ).fetchone()
@@ -1449,6 +1604,7 @@ def restore_tool(id):
             conn.execute('DELETE FROM deleted_tools WHERE id=?', (id,))
             conn.commit()
             
+            logging.info(f"Werkzeug wiederhergestellt: {deleted_tool['gegenstand']} (Barcode: {deleted_tool['barcode']})")
             flash('Werkzeug erfolgreich wiederhergestellt', 'success')
             
     except sqlite3.Error as e:
@@ -1462,6 +1618,7 @@ def restore_tool(id):
 
 @app.route('/admin/restore/worker/<int:id>')
 @admin_required
+@log_db_operation("Mitarbeiter wiederhergestellt")
 def restore_worker(id):
     """Mitarbeiter aus dem Papierkorb wiederherstellen"""
     try:
@@ -1526,6 +1683,7 @@ def empty_trash():
 
 @app.route('/admin/trash')
 @admin_required
+@log_route
 def trash():
     """Papierkorb mit gelöschten Items anzeigen"""
     deleted_items = {
@@ -1602,6 +1760,7 @@ def update_consumable(barcode):
     return redirect(url_for('consumable_details', barcode=barcode))
 
 @app.route('/tools/<barcode>/update', methods=['POST'])
+
 def update_tool(barcode):
     try:
         with get_db_connection(DBConfig.TOOLS_DB) as conn:
@@ -1925,7 +2084,7 @@ def checkout_consumable(barcode):
             conn.execute('''
                 INSERT INTO consumables_history 
                 (consumable_barcode, worker_barcode, action, amount, old_stock, new_stock, changed_by)
-                VALUES (?, ?, 'checkout', ?, ?, ?, ?)
+                VALUES (?, ?, 'checkout', ?, ?, ?, CURRENT_TIMESTAMP)
             ''', (
                 barcode,
                 worker_barcode,
@@ -2058,24 +2217,47 @@ def permanent_delete_tool(id):
     return redirect(url_for('trash'))
 
 @app.route('/admin/system_logs')
+@login_required
 @admin_required
 def system_logs():
-    """Systemlogs der letzten 14 Tage anzeigen"""
+    # Logs der letzten 14 Tage
+    two_weeks_ago = datetime.now() - timedelta(days=14)
+    
+    # Lese die error.log Datei
+    logs = []
     try:
-        with get_db_connection(DBConfig.SYSTEM_DB) as conn:
-            logs = conn.execute('''
-                SELECT *, datetime(timestamp, 'localtime') as local_time
-                FROM system_logs 
-                WHERE timestamp >= datetime('now', '-14 days')
-                ORDER BY timestamp DESC
-            ''').fetchall()
-            
-        return render_template('admin/logs.html', logs=logs)
-        
-    except Exception as e:
-        logging.error(f"Fehler beim Laden der Logs: {str(e)}")
-        flash('Fehler beim Laden der Systemlogs', 'error')
-        return redirect(url_for('admin'))
+        with open('logs/errors.log', 'r', encoding='utf-8') as file:
+            for line in file:
+                try:
+                    # Extrahiere Datum aus der Log-Zeile
+                    date_str = line.split(' - ')[0]
+                    log_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+                    
+                    # Filtere nach relevanten Aktionen und Datum
+                    if log_date >= two_weeks_ago and any(action in line for action in [
+                        "hinzugefügt", "gelöscht", "geändert", "modifiziert", 
+                        "importiert", "exportiert"
+                    ]):
+                        # Extrahiere wichtige Informationen
+                        parts = line.split(' - ')
+                        timestamp = parts[0]
+                        level = parts[1]
+                        message = ' - '.join(parts[2:]).strip()
+                        
+                        logs.append({
+                            'timestamp': log_date,
+                            'level': level,
+                            'message': message
+                        })
+                except Exception as e:
+                    continue
+    except FileNotFoundError:
+        logs = []
+    
+    # Sortiere Logs nach Datum (neueste zuerst)
+    logs.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    return render_template('admin/system_logs.html', logs=logs)
 
 def init_all_databases():
     try:
@@ -2642,11 +2824,16 @@ def delete_worker(barcode):
             # Verschiebe in deleted_workers
             conn.execute('''
                 INSERT INTO deleted_workers 
-                (barcode, name, lastname, bereich, email, deleted_by)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (worker['barcode'], worker['name'], worker['lastname'],
-                 worker['bereich'], worker['email'], 
-                 session.get('username', 'System')))
+                (barcode, name, lastname, bereich, email, deleted_by, deleted_at)
+                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (
+                worker['barcode'],
+                worker['name'],
+                worker['lastname'],
+                worker['bereich'],
+                worker['email'],
+                session.get('username', 'System')
+            ))
             
             # Lösche Mitarbeiter
             conn.execute('DELETE FROM workers WHERE barcode = ?', (barcode,))
@@ -2662,37 +2849,121 @@ app.logger.info("Test-Logeintrag: Überprüfung des Loggings")
 
 def create_history_tables():
     try:
-        # Tools History
-        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+        # Deleted Workers
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            # Lösche existierende Tabelle
+            conn.execute('DROP TABLE IF EXISTS deleted_workers')
+            
             conn.execute('''
-                CREATE TABLE IF NOT EXISTS tool_status_history (
+                CREATE TABLE deleted_workers (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tool_barcode TEXT NOT NULL,
-                    action TEXT NOT NULL,
-                    worker_barcode TEXT NOT NULL,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                    barcode TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    lastname TEXT NOT NULL,
+                    bereich TEXT,
+                    email TEXT,
+                    deleted_by TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
             conn.commit()
-            print("Tool History Tabelle erstellt/aktualisiert")
-            
-        # Consumables History
+            print("Deleted Workers Tabelle neu erstellt")
+
+        # Deleted Consumables
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Lösche existierende Tabelle
+            conn.execute('DROP TABLE IF EXISTS deleted_consumables')
+            
             conn.execute('''
-                CREATE TABLE IF NOT EXISTS consumables_history (
+                CREATE TABLE deleted_consumables (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    consumable_barcode TEXT NOT NULL,
-                    action TEXT NOT NULL,
-                    worker_barcode TEXT NOT NULL,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                    barcode TEXT NOT NULL,
+                    bezeichnung TEXT NOT NULL,
+                    typ TEXT,
+                    ort TEXT,
+                    mindestbestand INTEGER,
+                    aktueller_bestand INTEGER,
+                    einheit TEXT,
+                    status TEXT,
+                    deleted_by TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
             conn.commit()
-            print("Consumables History Tabelle erstellt/aktualisiert")
+            print("Deleted Consumables Tabelle neu erstellt")
+
+        # Deleted Tools
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            # Lösche existierende Tabelle
+            conn.execute('DROP TABLE IF EXISTS deleted_tools')
             
+            conn.execute('''
+                CREATE TABLE deleted_tools (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    barcode TEXT NOT NULL,
+                    gegenstand TEXT NOT NULL,
+                    typ TEXT,
+                    ort TEXT,
+                    status TEXT,
+                    deleted_by TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            conn.commit()
+            print("Deleted Tools Tabelle neu erstellt")
+
     except Exception as e:
         print(f"Fehler beim Erstellen der History-Tabellen: {str(e)}")
+        raise
+
+def get_total_tools():
+    with get_db_connection(DBConfig.TOOLS_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM tools').fetchone()[0]
+
+def get_borrowed_tools():
+    with get_db_connection(DBConfig.TOOLS_DB) as conn:
+        return conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'").fetchone()[0]
+
+def get_defect_tools():
+    with get_db_connection(DBConfig.TOOLS_DB) as conn:
+        return conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Defekt'").fetchone()[0]
+
+def get_deleted_tools():
+    with get_db_connection(DBConfig.TOOLS_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM deleted_tools').fetchone()[0]
+
+# Ähnliche Funktionen für Verbrauchsmaterial und Mitarbeiter
+
+def get_total_consumables():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM consumables').fetchone()[0]
+
+def get_reorder_consumables():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM consumables WHERE status = "Nachbestellen"').fetchone()[0]
+
+def get_empty_consumables():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM consumables WHERE status = "Leer"').fetchone()[0]
+
+def get_deleted_consumables():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM deleted_consumables').fetchone()[0]
+
+def get_total_workers():
+    with get_db_connection(DBConfig.WORKERS_DB) as conn:
+        return conn.execute('SELECT COUNT(*) FROM workers').fetchone()[0]
+
+def get_workers_by_area():
+    with get_db_connection(DBConfig.WORKERS_DB) as conn:
+        return conn.execute('''
+            SELECT bereich, COUNT(*) 
+            FROM workers 
+            GROUP BY bereich
+        ''').fetchall()
 
 if __name__ == '__main__':
     create_history_tables()  # Tabellen erstellen/aktualisieren
     app.run(debug=True)
+
+

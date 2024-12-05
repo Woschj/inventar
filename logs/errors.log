@@ -30,3 +30,1076 @@ Traceback (most recent call last):
   File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/werkzeug/routing/map.py", line 919, in build
     raise BuildError(endpoint, values, method, self)
 werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_panel'. Did you mean 'admin_dashboard' instead?
+2024-12-05 22:01:22 - INFO - Logging-System initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Registriere Export Blueprint...
+2024-12-05 22:01:22 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:01:22 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:01:22 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:01:22 - WARNING -  * Debugger is active!
+2024-12-05 22:01:22 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:01:29 - INFO - Initialisiere App...
+2024-12-05 22:01:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:29] "[35m[1mGET /admin/system_logs HTTP/1.1[0m" 500 -
+2024-12-05 22:01:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:29] "[36mGET /admin/system_logs?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-05 22:01:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:29] "[36mGET /admin/system_logs?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-05 22:01:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:29] "[36mGET /admin/system_logs?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-05 22:01:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:31] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:01:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:31] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:01:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:33] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:01:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:01:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:01:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:33] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:01:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:34] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:01:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:34] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:01:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:34] "[35m[1mGET /admin/system_logs HTTP/1.1[0m" 500 -
+2024-12-05 22:01:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:34] "[36mGET /admin/system_logs?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-05 22:01:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:34] "[36mGET /admin/system_logs?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-05 22:01:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:01:35] "GET /admin/system_logs?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-05 22:02:10 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:02:10 - INFO - Logging-System initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:02:10 - INFO - Registriere Export Blueprint...
+2024-12-05 22:02:10 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:02:11 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:02:11 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:02:11 - WARNING -  * Debugger is active!
+2024-12-05 22:02:11 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:02:14 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:02:14 - INFO - Logging-System initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Registriere Export Blueprint...
+2024-12-05 22:02:14 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:02:14 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:02:14 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:02:14 - WARNING -  * Debugger is active!
+2024-12-05 22:02:14 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:02:15 - INFO - Initialisiere App...
+2024-12-05 22:02:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:15] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:02:16 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:16] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:02:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:17] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:02:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:17] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:17] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:19] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:02:20 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:20] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:02:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:20] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:23] "[33mDELETE /api/consumables/V0001 HTTP/1.1[0m" 404 -
+2024-12-05 22:02:26 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:26] "[33mDELETE /api/consumables/V0001 HTTP/1.1[0m" 404 -
+2024-12-05 22:02:28 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:28] "GET / HTTP/1.1" 200 -
+2024-12-05 22:02:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:28] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:29] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:31] "[32mGET /tool/delete/W0142 HTTP/1.1[0m" 302 -
+2024-12-05 22:02:31 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:31] "GET / HTTP/1.1" 200 -
+2024-12-05 22:02:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:31] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:31] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:31] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:34 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:34] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:02:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:34] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:34] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:34] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:35] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:02:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:35] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:35] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:35] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:02:36 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:36] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:02:36 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:36] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:36 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:36] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:36 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:36] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:37 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:37] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:02:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:38] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:02:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:40] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:02:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:40] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:02:42 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:42] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:02:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:42] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:42] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:42] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:44 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:44] "[33mDELETE /api/consumables/V0003 HTTP/1.1[0m" 404 -
+2024-12-05 22:02:47 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:47] "GET / HTTP/1.1" 200 -
+2024-12-05 22:02:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:47] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:47] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:02:51 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:02:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:51] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:02:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:02:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:02:51] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:03:49 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:03:50 - INFO - Logging-System initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Registriere Export Blueprint...
+2024-12-05 22:03:50 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:03:50 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:03:50 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:03:50 - WARNING -  * Debugger is active!
+2024-12-05 22:03:50 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:03:59 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:04:00 - INFO - Logging-System initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Registriere Export Blueprint...
+2024-12-05 22:04:00 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:04:00 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:04:00 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:04:00 - WARNING -  * Debugger is active!
+2024-12-05 22:04:00 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:04:02 - INFO - Initialisiere App...
+2024-12-05 22:04:02 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:04:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:02] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:04:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:04:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:04:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:04:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:04] "[33mDELETE /api/consumables/V0001 HTTP/1.1[0m" 404 -
+2024-12-05 22:04:13 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:04:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:13] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:04:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:13] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:04:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:13] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:04:14 - INFO - 127.0.0.1 - - [05/Dec/2024 22:04:14] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:04:57 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:04:57 - INFO - Logging-System initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Registriere Export Blueprint...
+2024-12-05 22:04:57 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:04:57 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:04:57 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:04:57 - WARNING -  * Debugger is active!
+2024-12-05 22:04:57 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:05:00 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:05:00 - INFO - Logging-System initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Registriere Export Blueprint...
+2024-12-05 22:05:00 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:05:00 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:05:00 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:05:00 - WARNING -  * Debugger is active!
+2024-12-05 22:05:00 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:05:02 - INFO - Initialisiere App...
+2024-12-05 22:05:02 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:02 - ERROR - Fehler beim Laden der Mitarbeiter: Could not build url for endpoint 'delete_worker' with values ['id']. Did you forget to specify values ['barcode']?
+2024-12-05 22:05:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:02] "[32mGET /workers HTTP/1.1[0m" 302 -
+2024-12-05 22:05:02 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:02] "GET / HTTP/1.1" 200 -
+2024-12-05 22:05:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:02] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:05:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:05] "[32mGET /tool/delete/W0151 HTTP/1.1[0m" 302 -
+2024-12-05 22:05:05 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:05] "GET / HTTP/1.1" 200 -
+2024-12-05 22:05:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:05] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:05] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:05] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:07 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:07] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:05:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:07] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:07] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:07] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:10] "[33mDELETE /api/consumables/V0001 HTTP/1.1[0m" 404 -
+2024-12-05 22:05:11 - INFO - Starte Laden der Ausleihseite...
+2024-12-05 22:05:11 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:11] "GET /manual_lending HTTP/1.1" 200 -
+2024-12-05 22:05:11 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:11] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:12 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:12] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:12 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:12] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:15 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:15 - ERROR - Fehler beim Laden der Mitarbeiter: Could not build url for endpoint 'delete_worker' with values ['id']. Did you forget to specify values ['barcode']?
+2024-12-05 22:05:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:15] "[32mGET /workers HTTP/1.1[0m" 302 -
+2024-12-05 22:05:15 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:05:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:15] "GET / HTTP/1.1" 200 -
+2024-12-05 22:05:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:15] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:15] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:15 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:15] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:29] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:05:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:29] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:30] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:05:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:05:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:05:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:05:31] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:05:58 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:05:59 - INFO - Logging-System initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Registriere Export Blueprint...
+2024-12-05 22:05:59 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:05:59 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:05:59 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:05:59 - WARNING -  * Debugger is active!
+2024-12-05 22:05:59 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:06:50 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:06:51 - INFO - Logging-System initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Registriere Export Blueprint...
+2024-12-05 22:06:51 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:06:51 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:06:51 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:06:51 - WARNING -  * Debugger is active!
+2024-12-05 22:06:51 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:06:53 - INFO - Initialisiere App...
+2024-12-05 22:06:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:53] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:06:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:06:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:06:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:54] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:06:55 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:06:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:55] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:06:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:55] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:06:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:55] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:06:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:55] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:06:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:06:57] "[31m[1mPOST /consumable/delete/V0001 HTTP/1.1[0m" 405 -
+2024-12-05 22:07:04 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:07:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:04] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:07:06 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:07:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:06] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:07:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:07:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:07:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:07:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:09] "[31m[1mPOST /worker/delete/M0001 HTTP/1.1[0m" 405 -
+2024-12-05 22:07:10 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:07:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:07:10] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:08:00 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:08:01 - INFO - Logging-System initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Registriere Export Blueprint...
+2024-12-05 22:08:01 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:08:01 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:08:01 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:08:01 - WARNING -  * Debugger is active!
+2024-12-05 22:08:01 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:08:03 - INFO - Initialisiere App...
+2024-12-05 22:08:03 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:08:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:03] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:08:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:03] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:08:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:04] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:08:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:04] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:08:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-05 22:08:06 - INFO - Verbrauchsmaterial gelöscht: Holzschrauben Typ-4 (Barcode: V0001)
+2024-12-05 22:08:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:06] "[32mPOST /consumable/delete/V0001 HTTP/1.1[0m" 302 -
+2024-12-05 22:08:06 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:08:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:06] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:08:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:08:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:08:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:08:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:39 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:09:40 - INFO - Logging-System initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Registriere Export Blueprint...
+2024-12-05 22:09:40 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:09:40 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:09:40 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:09:40 - WARNING -  * Debugger is active!
+2024-12-05 22:09:40 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:09:41 - INFO - Initialisiere App...
+2024-12-05 22:09:41 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:09:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:41] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:09:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:41] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:41] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:41] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:09:43 - INFO - Mitarbeiter gelöscht: Elena Schmidt (Barcode: M0001)
+2024-12-05 22:09:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:43] "[32mPOST /worker/delete/M0001 HTTP/1.1[0m" 302 -
+2024-12-05 22:09:43 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:09:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:43] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:09:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:43] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:43] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:45] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:09:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:45] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:46 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:46] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:46 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:46] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:47] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:09:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:47] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:47] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:47] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:51 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:09:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:51] "GET / HTTP/1.1" 200 -
+2024-12-05 22:09:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:51] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:53] "[32mGET /tool/delete/W0152 HTTP/1.1[0m" 302 -
+2024-12-05 22:09:53 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:09:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:53] "GET / HTTP/1.1" 200 -
+2024-12-05 22:09:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:53] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:54] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:55] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:09:55 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:55] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:56] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:57] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:09:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:57] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:57] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:09:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:57] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:09:59 - INFO - 127.0.0.1 - - [05/Dec/2024 22:09:59] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:10:23 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:10:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:23] "GET / HTTP/1.1" 200 -
+2024-12-05 22:10:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:23] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:23] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:23] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:10:24 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:10:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:24] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:10:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:24] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:24] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:24] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:10:27 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:10:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:27] "GET / HTTP/1.1" 200 -
+2024-12-05 22:10:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:27] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:27] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:10:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:10:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:11:15 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:11:15 - INFO - Logging-System initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:11:15 - INFO - Registriere Export Blueprint...
+2024-12-05 22:11:15 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:11:16 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:11:16 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:11:16 - WARNING -  * Debugger is active!
+2024-12-05 22:11:16 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:11:19 - INFO - Initialisiere App...
+2024-12-05 22:11:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:19] "[32mGET /tool/delete/W0153 HTTP/1.1[0m" 302 -
+2024-12-05 22:11:19 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:11:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:19] "GET / HTTP/1.1" 200 -
+2024-12-05 22:11:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:19] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:19] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:19] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:11:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:20] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:11:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:20] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:20] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:20] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:11:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:21] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:11:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:22 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:22] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:22 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:22] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:11:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:23] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:11:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:24] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:11:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:24] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:24] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:11:24 - INFO - 127.0.0.1 - - [05/Dec/2024 22:11:24] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:34 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:14:34 - INFO - Logging-System initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Registriere Export Blueprint...
+2024-12-05 22:14:34 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:14:34 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:14:34 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:14:34 - WARNING -  * Debugger is active!
+2024-12-05 22:14:34 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:14:38 - INFO - Initialisiere App...
+2024-12-05 22:14:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:38] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:14:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:40 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:14:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:40] "GET / HTTP/1.1" 200 -
+2024-12-05 22:14:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:40] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:41] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:41] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:41 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:14:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:41] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:14:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:41] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:42] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:42] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:43 - ERROR - Fehler beim Löschen des Verbrauchsmaterials: table deleted_consumables has no column named barcode
+2024-12-05 22:14:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:43] "[32mPOST /consumable/delete/V0002 HTTP/1.1[0m" 302 -
+2024-12-05 22:14:43 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:14:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:43] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:14:44 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:44] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:44 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:44] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:44 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:44] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:51 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:14:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:51] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:14:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:51] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:51 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:51] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:53 - INFO - Mitarbeiter in Papierkorb verschoben: Marie Weber (Barcode: M0002)
+2024-12-05 22:14:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:53] "[32mPOST /worker/delete/M0002 HTTP/1.1[0m" 302 -
+2024-12-05 22:14:54 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:14:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:54] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:14:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:54] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:56] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:14:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:56] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:56] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:56 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:56] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:14:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:57] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:14:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:57] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:57] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:14:57 - INFO - 127.0.0.1 - - [05/Dec/2024 22:14:57] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:17:44 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:17:44 - INFO - Logging-System initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Registriere Export Blueprint...
+2024-12-05 22:17:44 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:17:44 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:17:44 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:17:44 - WARNING -  * Debugger is active!
+2024-12-05 22:17:44 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:18:28 - INFO - Test-Logeintrag: Überprüfung des Loggings
+2024-12-05 22:18:28 - WARNING -  * Debugger is active!
+2024-12-05 22:18:28 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:18:29 - INFO - Logging-System initialisiert
+2024-12-05 22:18:29 - INFO - Füge fehlende Spalte hinzu: deleted_workers.original_id
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Füge fehlende Spalte hinzu: deleted_tools.defect_date
+2024-12-05 22:18:29 - INFO - Füge fehlende Spalte hinzu: deleted_tools.image_path
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Füge fehlende Spalte hinzu: deleted_consumables.original_barcode
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Registriere Export Blueprint...
+2024-12-05 22:18:29 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:18:29 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:18:29 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:18:29 - WARNING -  * Debugger is active!
+2024-12-05 22:18:29 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:18:35 - INFO - Test-Logeintrag: Überprüfung des Loggings
+2024-12-05 22:18:35 - WARNING -  * Debugger is active!
+2024-12-05 22:18:35 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:18:52 - INFO - Logging-System initialisiert
+2024-12-05 22:18:52 - INFO - Füge fehlende Spalte hinzu: deleted_workers.original_id
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Füge fehlende Spalte hinzu: deleted_tools.defect_date
+2024-12-05 22:18:52 - INFO - Füge fehlende Spalte hinzu: deleted_tools.image_path
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Füge fehlende Spalte hinzu: deleted_consumables.original_barcode
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Datenbank C:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:18:52 - INFO - Registriere Export Blueprint...
+2024-12-05 22:18:52 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:18:52 - INFO - Test-Logeintrag: Überprüfung des Loggings
+2024-12-05 22:19:13 - INFO - Logging-System initialisiert
+2024-12-05 22:19:13 - INFO - Füge fehlende Spalte hinzu: deleted_workers.original_id
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Füge fehlende Spalte hinzu: deleted_tools.defect_date
+2024-12-05 22:19:13 - INFO - Füge fehlende Spalte hinzu: deleted_tools.image_path
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Füge fehlende Spalte hinzu: deleted_consumables.original_barcode
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Registriere Export Blueprint...
+2024-12-05 22:19:13 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:19:13 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-05 22:19:13 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-05 22:19:13 - INFO -  * Restarting with stat
+2024-12-05 22:19:13 - INFO - Logging-System initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Registriere Export Blueprint...
+2024-12-05 22:19:13 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:19:13 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:19:13 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:19:13 - WARNING -  * Debugger is active!
+2024-12-05 22:19:13 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:19:19 - INFO - Initialisiere App...
+2024-12-05 22:19:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:19] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:19:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:19] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:19] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:19] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:19:21 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:21] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:19:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:23 - INFO - Verbrauchsmaterial in Papierkorb verschoben: Holzschrauben Typ-2 (Barcode: V0002)
+2024-12-05 22:19:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:23] "[32mPOST /consumable/delete/V0002 HTTP/1.1[0m" 302 -
+2024-12-05 22:19:23 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:23] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:19:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:23] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:23] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:23 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:23] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:25 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:25] "GET / HTTP/1.1" 200 -
+2024-12-05 22:19:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:25] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:25] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:25] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:28] "[32mGET /tool/delete/W0154 HTTP/1.1[0m" 302 -
+2024-12-05 22:19:28 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:28] "GET / HTTP/1.1" 200 -
+2024-12-05 22:19:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:28] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:28] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:28] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:29 - INFO - Starte Laden der Ausleihseite...
+2024-12-05 22:19:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:29] "GET /manual_lending HTTP/1.1" 200 -
+2024-12-05 22:19:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:32 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:32 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:32] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:19:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:33] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:35 - INFO - Mitarbeiter in Papierkorb verschoben: Katharina Wolf (Barcode: M0003)
+2024-12-05 22:19:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:35] "[32mPOST /worker/delete/M0003 HTTP/1.1[0m" 302 -
+2024-12-05 22:19:35 - INFO - Route aufgerufen: workers - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:19:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:35] "GET /workers HTTP/1.1" 200 -
+2024-12-05 22:19:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:35] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:35] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:35] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:37 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:37] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:19:37 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:37] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:37 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:37] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:37 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:37] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:38] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:19:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:38] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:38 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:38] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:40] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:19:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:41] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:19:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:42] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:42] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:19:42 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:42] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:19:47 - INFO - 127.0.0.1 - - [05/Dec/2024 22:19:47] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:23:35 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:23:35 - INFO -  * Restarting with stat
+2024-12-05 22:23:35 - INFO - Logging-System initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Registriere Export Blueprint...
+2024-12-05 22:23:35 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:23:35 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:23:35 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:23:35 - WARNING -  * Debugger is active!
+2024-12-05 22:23:35 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:23:39 - INFO - Initialisiere App...
+2024-12-05 22:23:39 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:39] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:23:39 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:39] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:39 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:39] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:40] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:23:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:40] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:23:40 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:40] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:41] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:41] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:23:41 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:41] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:23:43 - INFO - Route aufgerufen: consumables - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:23:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:43] "GET /consumables HTTP/1.1" 200 -
+2024-12-05 22:23:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:43] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:43] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:43 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:43] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:23:45 - INFO - Route aufgerufen: consumable_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'V0003'}
+2024-12-05 22:23:45 - INFO - Lade Details für Verbrauchsmaterial V0003
+2024-12-05 22:23:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:45] "GET /consumables/V0003 HTTP/1.1" 200 -
+2024-12-05 22:23:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:45] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:45] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:45 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:45] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:23:49 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:49] "[32mPOST /update_consumable_stock HTTP/1.1[0m" 302 -
+2024-12-05 22:23:49 - INFO - Route aufgerufen: consumable_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'V0003'}
+2024-12-05 22:23:49 - INFO - Lade Details für Verbrauchsmaterial V0003
+2024-12-05 22:23:49 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:49] "GET /consumables/V0003 HTTP/1.1" 200 -
+2024-12-05 22:23:50 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:50] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:50 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:50] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:50 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:50] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:23:52 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:52] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:23:52 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:52] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:53] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:53 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:53] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:23:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:54] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:23:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:54] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:23:54 - INFO - 127.0.0.1 - - [05/Dec/2024 22:23:54] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:24:27 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:24:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:27] "GET / HTTP/1.1" 200 -
+2024-12-05 22:24:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:27] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:27] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:27] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:24:28 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:24:28 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:28] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:24:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:29] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:29] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:24:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:31] "[32mPOST /tools/W0155/update HTTP/1.1[0m" 302 -
+2024-12-05 22:24:31 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:24:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:31] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:24:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:31] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:32 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:32] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:32 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:32] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:24:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:33] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:24:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:33] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:33 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:33] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:24:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:34] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:24:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:34] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:34 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:34] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:24:35 - INFO - 127.0.0.1 - - [05/Dec/2024 22:24:35] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:30:31 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:30:31 - INFO -  * Restarting with stat
+2024-12-05 22:30:31 - INFO - Logging-System initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Registriere Export Blueprint...
+2024-12-05 22:30:31 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:30:31 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:30:31 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:30:31 - WARNING -  * Debugger is active!
+2024-12-05 22:30:31 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:30:55 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:30:55 - INFO -  * Restarting with stat
+2024-12-05 22:30:56 - INFO - Logging-System initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Registriere Export Blueprint...
+2024-12-05 22:30:56 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:30:56 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:30:56 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:30:56 - WARNING -  * Debugger is active!
+2024-12-05 22:30:56 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:30:59 - INFO - Initialisiere App...
+2024-12-05 22:30:59 - INFO - 127.0.0.1 - - [05/Dec/2024 22:30:59] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:30:59 - INFO - 127.0.0.1 - - [05/Dec/2024 22:30:59] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:00] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:00] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:31:02 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:31:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:02] "GET / HTTP/1.1" 200 -
+2024-12-05 22:31:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:02] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:02] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:31:04 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:31:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:04] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:31:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:04] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:04] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:04 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:04] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:31:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:06] "[32mPOST /tools/W0155/update HTTP/1.1[0m" 302 -
+2024-12-05 22:31:06 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:31:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:06] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:31:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:06] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:06 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:06] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:31:08 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:08] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:31:08 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:08] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:08 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:08] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:08 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:08] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:31:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:09] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:31:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:09] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:09] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:31:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:31:09] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:32:35 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:32:35 - INFO -  * Restarting with stat
+2024-12-05 22:32:35 - INFO - Logging-System initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:32:35 - INFO - Registriere Export Blueprint...
+2024-12-05 22:32:35 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:33:05 - INFO - Logging-System initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Registriere Export Blueprint...
+2024-12-05 22:33:05 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:33:05 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:33:05 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-05 22:33:05 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-05 22:33:05 - INFO -  * Restarting with stat
+2024-12-05 22:33:06 - INFO - Logging-System initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Registriere Export Blueprint...
+2024-12-05 22:33:06 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:33:06 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:33:06 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:33:06 - WARNING -  * Debugger is active!
+2024-12-05 22:33:06 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:33:09 - INFO - Initialisiere App...
+2024-12-05 22:33:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:09] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:33:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:09] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:33:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:09] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:33:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:09] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:33:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:10] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:33:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:10] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:33:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:10] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:33:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:33:10] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:34:43 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:34:43 - INFO -  * Restarting with stat
+2024-12-05 22:34:44 - INFO - Logging-System initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Registriere Export Blueprint...
+2024-12-05 22:34:44 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:34:44 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:34:44 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:34:44 - WARNING -  * Debugger is active!
+2024-12-05 22:34:44 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:37:05 - INFO - Initialisiere App...
+2024-12-05 22:37:05 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:37:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:05] "GET / HTTP/1.1" 200 -
+2024-12-05 22:37:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:05] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:05] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:05 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:05] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:07 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:37:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:07] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:37:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:07] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:07] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:07 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:07] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:09] "[32mPOST /tools/W0155/update HTTP/1.1[0m" 302 -
+2024-12-05 22:37:09 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:37:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:09] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:37:09 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:09] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:10] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:10 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:10] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:13] "[32mPOST /tools/W0155/update HTTP/1.1[0m" 302 -
+2024-12-05 22:37:13 - INFO - Route aufgerufen: tool_details - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {'barcode': 'W0155'}
+2024-12-05 22:37:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:13] "GET /tool/W0155 HTTP/1.1" 200 -
+2024-12-05 22:37:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:13] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:13] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:13 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:13] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:17] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:37:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:17] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:17] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:17 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:17] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:18 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:18] "GET /admin/system_logs HTTP/1.1" 200 -
+2024-12-05 22:37:18 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:18] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:19] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:19 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:19] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:20 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:20] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:37:21 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:37:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:21] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:37:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:21] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:37:21 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:21] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:37:25 - ERROR - Fehler bei Verbrauchsmaterial wiederhergestellt: type object 'DBConfig' has no attribute 'SYSTEM_LOGS_DB'
+2024-12-05 22:37:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:25] "[35m[1mGET /admin/restore/consumable/1 HTTP/1.1[0m" 500 -
+2024-12-05 22:37:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:25] "GET /admin/restore/consumable/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-05 22:37:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:25] "GET /admin/restore/consumable/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-05 22:37:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:25] "GET /admin/restore/consumable/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-05 22:37:27 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:37:27 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:27] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:37:29 - INFO - Werkzeug wiederhergestellt: Akkuschrauber 13 (Barcode: W0154)
+2024-12-05 22:37:29 - ERROR - Fehler bei Werkzeug wiederhergestellt: type object 'DBConfig' has no attribute 'SYSTEM_LOGS_DB'
+2024-12-05 22:37:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:29] "[35m[1mGET /admin/restore/tool/1 HTTP/1.1[0m" 500 -
+2024-12-05 22:37:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:29] "GET /admin/restore/tool/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-05 22:37:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:29] "GET /admin/restore/tool/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-05 22:37:29 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:29] "GET /admin/restore/tool/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-05 22:37:30 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:37:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:37:30] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:38:36 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:38:36 - INFO -  * Restarting with stat
+2024-12-05 22:38:37 - INFO - Logging-System initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Füge fehlende Spalte hinzu: system_logs.status
+2024-12-05 22:38:37 - INFO - Füge fehlende Spalte hinzu: system_logs.item_barcode
+2024-12-05 22:38:37 - INFO - Füge fehlende Spalte hinzu: system_logs.error_message
+2024-12-05 22:38:37 - INFO - Füge fehlende Spalte hinzu: system_logs.duration
+2024-12-05 22:38:37 - INFO - Füge fehlende Spalte hinzu: system_logs.operation_type
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Registriere Export Blueprint...
+2024-12-05 22:38:37 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:38:37 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:38:37 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:38:37 - WARNING -  * Debugger is active!
+2024-12-05 22:38:37 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:38:58 - INFO - Initialisiere App...
+2024-12-05 22:38:58 - INFO - 127.0.0.1 - - [05/Dec/2024 22:38:58] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:38:58 - INFO - 127.0.0.1 - - [05/Dec/2024 22:38:58] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:38:59 - INFO - 127.0.0.1 - - [05/Dec/2024 22:38:59] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:38:59 - INFO - 127.0.0.1 - - [05/Dec/2024 22:38:59] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:39:00 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:39:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:00] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:39:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:00] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:39:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:00] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:39:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:00] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:39:03 - ERROR - Fehler bei Mitarbeiter wiederhergestellt: NOT NULL constraint failed: system_logs.action_type
+2024-12-05 22:39:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:03] "[35m[1mGET /admin/restore/worker/1 HTTP/1.1[0m" 500 -
+2024-12-05 22:39:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:03] "GET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-05 22:39:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:03] "GET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-05 22:39:03 - INFO - 127.0.0.1 - - [05/Dec/2024 22:39:03] "GET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-05 22:40:09 - INFO -  * Detected change in 'c:\\Users\\wosch\\Documents\\GitHub\\inventar\\app.py', reloading
+2024-12-05 22:40:09 - INFO -  * Restarting with stat
+2024-12-05 22:40:09 - INFO - Logging-System initialisiert
+2024-12-05 22:40:09 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:09 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:09 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:09 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:09 - INFO - Füge fehlende Spalte hinzu: system_logs.#
+2024-12-05 22:40:09 - ERROR - Fehler bei der Strukturüberprüfung von c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db: unrecognized token: "#"
+2024-12-05 22:40:09 - ERROR - Fehler bei der Datenbankinitialisierung
+2024-12-05 22:40:16 - INFO - Logging-System initialisiert
+2024-12-05 22:40:16 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:16 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:16 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:16 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:16 - INFO - Füge fehlende Spalte hinzu: system_logs.#
+2024-12-05 22:40:16 - ERROR - Fehler bei der Strukturüberprüfung von c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db: unrecognized token: "#"
+2024-12-05 22:40:16 - ERROR - Fehler bei der Datenbankinitialisierung
+2024-12-05 22:40:55 - INFO - Logging-System initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Registriere Export Blueprint...
+2024-12-05 22:40:55 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:40:55 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:40:55 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-05 22:40:55 - INFO - [33mPress CTRL+C to quit[0m
+2024-12-05 22:40:55 - INFO -  * Restarting with stat
+2024-12-05 22:40:56 - INFO - Logging-System initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\workers.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lager.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\lendings.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\consumables.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbank c:\Users\wosch\Documents\GitHub\inventar\db\system_logs.db erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Registriere Export Blueprint...
+2024-12-05 22:40:56 - INFO - Export Blueprint 'export_tools_v1' registriert
+2024-12-05 22:40:56 - INFO - Alle Datenbanken erfolgreich initialisiert
+2024-12-05 22:40:56 - INFO - Datenbanken erfolgreich initialisiert
+2024-12-05 22:40:56 - WARNING -  * Debugger is active!
+2024-12-05 22:40:56 - INFO -  * Debugger PIN: 777-362-042
+2024-12-05 22:40:58 - INFO - Initialisiere App...
+2024-12-05 22:40:58 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:40:58 - INFO - 127.0.0.1 - - [05/Dec/2024 22:40:58] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:40:58 - INFO - 127.0.0.1 - - [05/Dec/2024 22:40:58] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:41:00 - ERROR - Fehler bei Mitarbeiter wiederhergestellt: NOT NULL constraint failed: system_logs.action_type
+2024-12-05 22:41:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:00] "[35m[1mGET /admin/restore/worker/1 HTTP/1.1[0m" 500 -
+2024-12-05 22:41:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:00] "[36mGET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-05 22:41:00 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:00] "[36mGET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-05 22:41:01 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:01] "GET /admin/restore/worker/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-05 22:41:02 - INFO - Route aufgerufen: trash - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:41:02 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:02] "GET /admin/trash HTTP/1.1" 200 -
+2024-12-05 22:41:25 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:25] "GET /admin_panel HTTP/1.1" 200 -
+2024-12-05 22:41:26 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:26] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:41:26 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:26] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:41:26 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:26] "GET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1" 200 -
+2024-12-05 22:41:30 - INFO - Route aufgerufen: index - Methode: GET - IP: 127.0.0.1 - User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0 - Args: {}
+2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "GET / HTTP/1.1" 200 -
+2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
+2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
+2024-12-05 22:41:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -

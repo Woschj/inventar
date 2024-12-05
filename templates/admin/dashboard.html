@@ -138,19 +138,19 @@
             <h3 class="text-lg font-medium text-base-content mb-3">Daten exportieren</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button onclick="exportDB('workers')" 
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
+                        class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
                     Mitarbeiter exportieren
                 </button>
                 <button onclick="exportDB('tools')" 
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
+                        class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
                     Werkzeuge exportieren
                 </button>
                 <button onclick="exportDB('consumables')" 
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
+                        class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
                     Verbrauchsmaterial exportieren
                 </button>
                 <button onclick="exportDB('lendings')" 
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary-focus">
+                        class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
                     Ausleihen exportieren
                 </button>
             </div>
@@ -160,24 +160,18 @@
         <div>
             <h3 class="text-lg font-medium text-base-content mb-3">Daten importieren</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex flex-col">
-                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
-                        Mitarbeiter importieren
-                        <input type="file" class="hidden" onchange="importDB(this, 'workers')" accept=".xlsx">
-                    </label>
-                </div>
-                <div class="flex flex-col">
-                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
-                        Werkzeuge importieren
-                        <input type="file" class="hidden" onchange="importDB(this, 'tools')" accept=".xlsx">
-                    </label>
-                </div>
-                <div class="flex flex-col">
-                    <label class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer text-center">
-                        Verbrauchsmaterial importieren
-                        <input type="file" class="hidden" onchange="importDB(this, 'consumables')" accept=".xlsx">
-                    </label>
-                </div>
+                <label class="btn bg-white hover:bg-gray-50 text-[#5b69a7] border-2 border-[#5b69a7] cursor-pointer text-center">
+                    Mitarbeiter importieren
+                    <input type="file" class="hidden" onchange="importDB(this, 'workers')" accept=".xlsx">
+                </label>
+                <label class="btn bg-white hover:bg-gray-50 text-[#5b69a7] border-2 border-[#5b69a7] cursor-pointer text-center">
+                    Werkzeuge importieren
+                    <input type="file" class="hidden" onchange="importDB(this, 'tools')" accept=".xlsx">
+                </label>
+                <label class="btn bg-white hover:bg-gray-50 text-[#5b69a7] border-2 border-[#5b69a7] cursor-pointer text-center">
+                    Verbrauchsmaterial importieren
+                    <input type="file" class="hidden" onchange="importDB(this, 'consumables')" accept=".xlsx">
+                </label>
             </div>
         </div>
     </div>
