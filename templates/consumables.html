@@ -111,13 +111,14 @@
                         </td>
                         {% if session.get('is_admin') %}
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <form action="{{ url_for('delete_consumable', barcode=item.barcode) }}" method="POST" class="inline">
-                                <button type="submit" 
-                                        class="btn btn-error btn-sm delete-button"
-                                        onclick="return confirm('Möchten Sie dieses Verbrauchsmaterial wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
+                            <button onclick="showDeleteModal('{{ item.barcode }}')" 
+                                    class="text-red-600 hover:text-red-800 cursor-pointer">
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" 
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" 
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </button>
                         </td>
                         {% endif %}
                     </tr>
@@ -223,11 +224,11 @@ document.querySelectorAll('select[id^="filter"]').forEach(filter => {
 
 <!-- Am Ende der Datei, vor dem endblock -->
 {% if session.get('is_admin') %}
-<!-- Delete Confirmation Modal -->
+<!-- Delete Modal -->
 <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-xl">
         <h3 class="text-lg font-bold mb-4">Löschen bestätigen</h3>
-        <p id="deleteModalText" class="mb-6">Möchten Sie diesen Artikel wirklich in den Papierkorb verschieben?</p>
+        <p class="mb-6">Möchten Sie dieses Verbrauchsmaterial wirklich löschen?</p>
         <div class="flex justify-end space-x-4">
             <button onclick="closeDeleteModal()" 
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
@@ -242,24 +243,60 @@ document.querySelectorAll('select[id^="filter"]').forEach(filter => {
 </div>
 
 <script>
-let currentDeleteUrl = '';
+let currentDeleteBarcode = '';
 
-function confirmDelete(type, id) {
+function showDeleteModal(barcode) {
+    console.log('showDeleteModal aufgerufen mit barcode:', barcode); // Debug-Log
+    currentDeleteBarcode = barcode;
     const modal = document.getElementById('deleteModal');
     modal.classList.remove('hidden');
-    currentDeleteUrl = `/consumable/delete/${id}`;
 }
 
 function closeDeleteModal() {
+    console.log('closeDeleteModal aufgerufen'); // Debug-Log
     const modal = document.getElementById('deleteModal');
     modal.classList.add('hidden');
 }
 
 function executeDelete() {
-    if (currentDeleteUrl) {
-        window.location.href = currentDeleteUrl;
+    console.log('executeDelete aufgerufen für barcode:', currentDeleteBarcode); // Debug-Log
+    if (!currentDeleteBarcode) {
+        console.error('Kein Barcode zum Löschen gefunden');
+        return;
     }
+
+    fetch(`/consumable/delete/${currentDeleteBarcode}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server Antwort:', data); // Debug-Log
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.error || 'Fehler beim Löschen');
+        }
+    })
+    .catch(error => {
+        console.error('Fehler:', error);
+        alert('Fehler beim Löschen');
+    })
+    .finally(() => {
+        closeDeleteModal();
+    });
 }
+
+// Event-Listener für Klicks außerhalb des Modals
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target === modal) {
+        closeDeleteModal();
+    }
+});
 </script>
 {% endif %}
 

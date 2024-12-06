@@ -67,9 +67,10 @@
                             <i class="fas fa-box-open mr-2"></i>Verbrauchsmaterial
                         </a>
                         {% if session.get('is_admin') %}
-                        <a href="{{ url_for('manual_lending') }}" 
-                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}bg-[#5b69a7] text-white{% endif %}">
-                            <i class="fas fa-hand-holding mr-2"></i>Manuell
+ 
+                        <a href="{{ url_for('workers') }}" 
+                           class="btn btn-ghost {% if request.endpoint == 'workers' %}bg-[#5b69a7] text-white{% endif %}">
+                            <i class="fas fa-users mr-2"></i>Mitarbeiter
                         </a>
                         {% endif %}
                     </div>
@@ -77,12 +78,10 @@
                     <!-- Rechte Navigation -->
                     <div class="hidden lg:flex items-center gap-4 flex-1 justify-end">
                         {% if session.get('is_admin') %}
-                        <a href="{{ url_for('workers') }}"
-                           class="btn btn-ghost {% if request.endpoint == 'workers' %}btn-active{% endif %}">
-                            <i class="fas fa-users mr-2"></i>Mitarbeiter
+                        <a href="{{ url_for('manual_lending') }}"
+                           class="btn btn-ghost {% if request.endpoint == 'manual_lending' %}btn-active{% endif %}">
+                            <i class="fas fa-hand-holding mr-2"></i>Manuell
                         </a>
-                        {% endif %}
-                        {% if session.get('is_admin') %}
                         <a href="{{ url_for('admin_panel') }}"
                            class="btn btn-ghost {% if request.endpoint == 'admin_panel' %}btn-active{% endif %}">
                             <i class="fas fa-tachometer-alt mr-2"></i>Admin
@@ -153,16 +152,7 @@
                         <i class="fas fa-box-open"></i>Verbrauchsmaterial
                     </a>
                 </li>
-                <li>
-                    <a href="{{ url_for('manual_lending') }}" 
-                       class="{% if request.endpoint == 'manual_lending' %}active{% endif %}">
-                        <i class="fas fa-hand-holding"></i>Manuell Ausleihen
-                    </a>
-                </li>
                 {% if session.get('is_admin') %}
-                <li class="menu-title">
-                    <span>Admin-Bereich</span>
-                </li>
                 <li>
                     <a href="{{ url_for('workers') }}"
                        class="{% if request.endpoint == 'workers' %}active{% endif %}">
@@ -170,9 +160,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('admin_panel') }}"
-                       class="{% if request.endpoint == 'admin_panel' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                    <a href="{{ url_for('manual_lending') }}" 
+                       class="{% if request.endpoint == 'manual_lending' %}active{% endif %}">
+                        <i class="fas fa-hand-holding"></i>Manuell Ausleihen
                     </a>
                 </li>
                 {% endif %}

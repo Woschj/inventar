@@ -10,10 +10,17 @@ from logging.handlers import TimedRotatingFileHandler
 import json
 from routes import export_bp
 import sys
+import sqlite3
+import logging
+import traceback
+from flask import jsonify, session
+
 
 app = Flask(__name__)
-app.secret_key = 'dein_geheimer_schlüssel'  # Muss gesetzt sein, damit Sessions funktionieren
-app.config['ADMIN_PASSWORD'] = 'admin'  # Hier das gewünschte Admin-Passwort eintragen
+app.secret_key = 'dein_geheimer_schlüssel'
+app.config['ADMIN_PASSWORD'] = 'admin'
+
+
 
 # Logging Setup
 def setup_logging():
@@ -997,49 +1004,59 @@ def add_consumable():
     return render_template('add_consumable.html')
 
 
-@app.route('/consumable/delete/<string:barcode>')
-@admin_required
+@app.route('/consumable/delete/<barcode>', methods=['POST'])
+@log_db_operation("Verbrauchsmaterial löschen")
 def delete_consumable(barcode):
-    logging.info(f"Lösche Verbrauchsmaterial {barcode}")
     try:
+        # Debug: Prüfe Tabellenstruktur
+        logging.info("Überprüfe Tabellenstruktur...")
+        deleted_columns = check_table_structure('deleted_consumables')
+        consumables_columns = check_table_structure('consumables')
+        
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            consumable = conn.execute(
-                'SELECT * FROM consumables WHERE barcode=?', (barcode,)
-            ).fetchone()
+            conn.row_factory = sqlite3.Row
+            
+            # Hole das zu löschende Verbrauchsmaterial
+            consumable = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
             
             if not consumable:
-                flash('Verbrauchsmaterial nicht gefunden', 'error')
-                return redirect(url_for('consumables'))
-                
-            # Prüfen ob bereits im Papierkorb
-            existing = conn.execute(
-                'SELECT 1 FROM deleted_consumables WHERE barcode=?', (barcode,)
-            ).fetchone()
+                logging.error(f"Verbrauchsmaterial mit Barcode {barcode} nicht gefunden")
+                return jsonify({'error': 'Verbrauchsmaterial nicht gefunden'})
             
-            if existing:
-                flash('Material bereits im Papierkorb', 'error')
-                return redirect(url_for('consumables'))
+            # Debug: Zeige gefundenes Verbrauchsmaterial
+            logging.info(f"Gefundenes Verbrauchsmaterial: {dict(consumable)}")
             
+            # Verschiebe in deleted_consumables
             conn.execute('''
                 INSERT INTO deleted_consumables 
-                (barcode, bezeichnung, ort, typ, mindestbestand, aktueller_bestand, 
-                 einheit, deleted_by, deleted_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-            ''', (consumable['barcode'], consumable['bezeichnung'], 
-                  consumable['ort'], consumable['typ'],
-                  consumable['mindestbestand'], consumable['aktueller_bestand'],
-                  consumable['einheit'], session.get('username', 'admin')))
+                (barcode, bezeichnung, ort, typ, mindestbestand, 
+                 letzter_bestand, einheit, deleted_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                consumable['barcode'],
+                consumable['bezeichnung'],
+                consumable['ort'],
+                consumable['typ'],
+                consumable['mindestbestand'],
+                consumable['aktueller_bestand'],
+                consumable['einheit'],
+                session.get('username', 'System')
+            ))
             
-            conn.execute('DELETE FROM consumables WHERE barcode=?', (barcode,))
+            # Lösche das Original
+            conn.execute('DELETE FROM consumables WHERE barcode = ?', (barcode,))
             conn.commit()
             
-            flash('Verbrauchsmaterial in den Papierkorb verschoben', 'success')
+            logging.info(f"Verbrauchsmaterial {barcode} erfolgreich gelöscht")
+            return jsonify({'success': True})
             
     except Exception as e:
         logging.error(f"Fehler beim Löschen: {str(e)}")
-        flash('Fehler beim Lschen des Verbrauchsmaterials', 'error')
-        
-    return redirect(url_for('consumables'))
+        logging.error(traceback.format_exc())  # Fügt Stack Trace hinzu
+        return jsonify({'error': 'Datenbankfehler'})
 
 @app.route('/consumables/<barcode>/adjust', methods=['POST'])
 @admin_required
@@ -1079,8 +1096,7 @@ def restore_consumable(id):
             
             # Prüfen ob Barcode bereits wieder existiert
             existing = conn.execute(
-                'SELECT 1 FROM consumables WHERE barcode=?', (item['barcode'],)
-            ).fetchone()
+                'SELECT 1 FROM consumables WHERE barcode=?', (item['barcode'],))
             
             if existing:
                 flash('Barcode bereits vergeben', 'error')
@@ -1311,7 +1327,7 @@ def edit_worker(barcode):
         flash('Fehler beim Bearbeiten des Mitarbeiters', 'error')
         return redirect(url_for('workers'))
 
-@app.route('/worker/delete/<string:barcode>')
+@app.route('/worker/delete/<string:barcode>', methods=['POST'])
 @admin_required
 def delete_worker(barcode):
     """Mitarbeiter löschen"""
@@ -2704,6 +2720,116 @@ def create_history_tables():
     except Exception as e:
         print(f"Fehler beim Erstellen der History-Tabellen: {str(e)}")
 
+def create_deleted_tables():
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Lösche existierende Tabelle (optional)
+            conn.execute('DROP TABLE IF EXISTS deleted_consumables')
+            
+            # Erstelle neue Tabelle mit korrekter Struktur
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS deleted_consumables (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    barcode TEXT NOT NULL,
+                    bezeichnung TEXT,
+                    typ TEXT,
+                    ort TEXT,
+                    aktueller_bestand INTEGER DEFAULT 0,
+                    mindestbestand INTEGER DEFAULT 0,
+                    einheit TEXT,
+                    deleted_by TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            conn.commit()
+            logging.info("deleted_consumables Tabelle erfolgreich erstellt/aktualisiert")
+            
+    except Exception as e:
+        logging.error(f"Fehler beim Erstellen der deleted_consumables Tabelle: {str(e)}")
+        raise e
+
+def reinitialize_deleted_consumables():
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Backup der existierenden Daten (falls vorhanden)
+            try:
+                backup_data = conn.execute('SELECT * FROM deleted_consumables').fetchall()
+                logging.info(f"Backup von {len(backup_data)} Einträgen erstellt")
+            except:
+                backup_data = []
+                logging.info("Keine existierenden Daten zum Backup gefunden")
+            
+            # Tabelle neu erstellen
+            conn.execute('DROP TABLE IF EXISTS deleted_consumables')
+            conn.execute('''
+                CREATE TABLE deleted_consumables (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    barcode TEXT NOT NULL,
+                    bezeichnung TEXT,
+                    typ TEXT,
+                    ort TEXT,
+                    aktueller_bestand INTEGER DEFAULT 0,
+                    mindestbestand INTEGER DEFAULT 0,
+                    einheit TEXT,
+                    deleted_by TEXT,
+                    deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # Backup-Daten wiederherstellen falls vorhanden
+            if backup_data:
+                for row in backup_data:
+                    try:
+                        conn.execute('''
+                            INSERT INTO deleted_consumables 
+                            (id, barcode, bezeichnung, typ, ort, aktueller_bestand, 
+                             mindestbestand, einheit, deleted_by, deleted_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ''', row)
+                    except Exception as e:
+                        logging.error(f"Fehler beim Wiederherstellen von Eintrag: {str(e)}")
+                        continue
+            
+            conn.commit()
+            logging.info("deleted_consumables Tabelle erfolgreich neu initialisiert")
+            return True
+            
+    except Exception as e:
+        logging.error(f"Fehler bei der Neuinitialisierung: {str(e)}")
+        return False
+
+# Fügen Sie dies am Ende der Datei hinzu:
 if __name__ == '__main__':
     create_history_tables()  # Tabellen erstellen/aktualisieren
-    app.run(debug=True)
+    if reinitialize_deleted_consumables():
+        logging.info("Datenbank erfolgreich aktualisiert")
+        app.run(debug=True)
+    else:
+        logging.error("Fehler bei der Datenbankaktualisierung")
+
+# Admin-Überprüfung Decorator
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_admin'):
+            flash('Admin-Rechte erforderlich', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Admin-Route für Datenbank-Reinitialisierung
+@app.route('/admin/reinitialize_db', methods=['GET'])
+@admin_required
+def reinitialize_database():
+    try:
+        if reinitialize_deleted_consumables():
+            flash('Datenbank erfolgreich aktualisiert', 'success')
+            logging.info("Datenbank wurde erfolgreich reinitialisiert")
+        else:
+            flash('Fehler bei der Datenbankaktualisierung', 'error')
+            logging.error("Fehler bei der Datenbank-Reinitialisierung")
+    except Exception as e:
+        logging.error(f"Fehler bei der Datenbank-Reinitialisierung: {str(e)}")
+        flash('Fehler bei der Datenbankaktualisierung', 'error')
+    
+    return redirect(url_for('index'))
