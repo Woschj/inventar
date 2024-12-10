@@ -11,7 +11,6 @@
     
     <!-- Icons und Scanner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>    
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     
@@ -173,60 +172,19 @@
         </div>
     </div>
 
-    <!-- Quick-Scan Modal -->
+    <!-- QuickScan Modal -->
     <dialog id="quickScanModal" class="modal">
-        <div class="modal-box max-w-2xl">
-            <div class="flex flex-col">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold" id="scan-title">Werkzeug scannen</h3>
-                        <p class="text-base-content/60 text-sm mt-1" id="scan-subtitle">
-                            Scannen Sie den Barcode des Werkzeugs
-                        </p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="resetCamera()" 
-                                class="btn btn-ghost btn-circle">
-                            <i class="fas fa-camera-rotate"></i>
-                        </button>
-                        <button onclick="closeQuickScan()" 
-                                class="btn btn-ghost btn-circle">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Scanner -->
-                <div class="space-y-6">
-                    <div class="relative aspect-video bg-base-200 rounded-box overflow-hidden">
-                        <video id="video" class="w-full h-full object-cover hidden" autoplay playsinline></video>
-                        <div id="camera-status" class="absolute inset-0 flex items-center justify-center">
-                            Kamera wird initialisiert...
-                        </div>
-                    </div>
-
-                    <!-- Manueller Input -->
-                    <div class="join w-full">
-                        <input type="text" 
-                               id="barcode-input" 
-                               class="input input-bordered w-full pl-10 join-item" 
-                               placeholder="Barcode manuell eingeben">
-                        <button onclick="submitManualBarcode()" 
-                                class="btn btn-primary join-item">
-                            Bestätigen
-                        </button>
-                    </div>
-
-                    <!-- Previews -->
-                    <div id="tool-preview" class="hidden">
-                        <div id="tool-details"></div>
-                    </div>
-                    <div id="worker-preview" class="hidden">
-                        <div id="worker-details"></div>
-                    </div>
-                    <div id="final-barcode" class="hidden"></div>
-                </div>
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">Quick Scan</h3>
+            <div class="form-control w-full">
+                <input type="text" 
+                       id="barcode-input" 
+                       class="input input-bordered w-full" 
+                       placeholder="Barcode scannen oder eingeben"
+                       autofocus>
+            </div>
+            <div class="modal-action">
+                <button onclick="closeQuickScan()" class="btn">Schließen</button>
             </div>
         </div>
     </dialog>
@@ -246,378 +204,72 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
     <script>
-        // Globale Variablen
-        let videoStream = null;
-        let codeReader = new ZXing.BrowserMultiFormatReader();
-        let currentStep = 'tool';
-        let scannedTool = null;
-        let scannedWorker = null;
+        let inputBuffer = '';
+        let lastScannedBarcode = '';
+        let lastKeyTime = Date.now();
+        let isProcessingBarcode = false;
 
-        // QR Code für den Button generieren
-        document.addEventListener('DOMContentLoaded', function() {
-            const quickScanBtn = document.getElementById('quickScanBtn');
-            quickScanBtn.addEventListener('click', showQuickScan);
+        // Event Listener für Barcode-Scans
+        document.addEventListener('keydown', function(event) {
+            const currentTime = Date.now();
+            const timeDiff = currentTime - lastKeyTime;
 
-            // QR Code generieren
-            const qrContainer = document.getElementById('quickScanQR');
-            if (qrContainer) {
-                qrContainer.innerHTML = '';
-                new QRCode(qrContainer, {
-                    text: 'QUICKSCAN_OPEN',
-                    width: 96,
-                    height: 96,
-                    colorDark: '#ffffff',
-                    colorLight: '#5b69a7',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+            // Reset buffer if time between keystrokes is too long
+            if (timeDiff > 100) {
+                inputBuffer = '';
+            }
+
+            inputBuffer += event.key;
+            lastKeyTime = currentTime;
+
+            if (event.key === 'Enter' && !isProcessingBarcode) {
+                event.preventDefault();
+                const scannedBarcode = inputBuffer.trim();
+                
+                if (!document.getElementById('quickScanModal').open) {
+                    document.getElementById('quickScanModal').showModal();
+                }
+
+                const barcodeInput = document.getElementById('barcode-input');
+                barcodeInput.value = scannedBarcode;
+
+                if (scannedBarcode === lastScannedBarcode) {
+                    isProcessingBarcode = true;
+                    handleBarcode(scannedBarcode);
+                } else {
+                    lastScannedBarcode = scannedBarcode;
+                }
+
+                inputBuffer = '';
             }
         });
-
-        // Modal öffnen und Scanner starten
-        function showQuickScan() {
-            const modal = document.getElementById('quickScanModal');
-            if (modal) {
-                resetScanState();
-                modal.showModal();
-                startScanning();
-            }
-        }
-
-        // Scan-Status zurücksetzen
-        function resetScanState() {
-            currentStep = 'tool';
-            scannedTool = null;
-            scannedWorker = null;
-            
-            // UI zurücksetzen
-            const toolPreview = document.getElementById('tool-preview');
-            const workerPreview = document.getElementById('worker-preview');
-            if (toolPreview) toolPreview.classList.add('hidden');
-            if (workerPreview) workerPreview.classList.add('hidden');
-            
-            // Titel aktualisieren
-            updateScanTitle();
-        }
-
-        // Scan-Titel aktualisieren
-        function updateScanTitle() {
-            const title = document.getElementById('scan-title');
-            const subtitle = document.getElementById('scan-subtitle');
-            
-            if (currentStep === 'tool') {
-                title.textContent = 'Werkzeug scannen';
-                subtitle.textContent = 'Scannen Sie den Barcode des Werkzeugs';
-            } else {
-                title.textContent = 'Mitarbeiter scannen';
-                subtitle.textContent = 'Scannen Sie den Mitarbeiter-Barcode';
-            }
-        }
 
         // Barcode verarbeiten
         async function handleBarcode(barcode) {
             try {
-                if (currentStep === 'tool') {
-                    const response = await fetch(`/api/get_item/${barcode}`);
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        showError(data.error);
-                        return;
-                    }
-
-                    displayToolDetails(data);
-                    scannedTool = data;
-                    currentStep = 'worker';
-                    updateScanTitle();
-                    
-                } else if (currentStep === 'worker') {
+                if (barcode.startsWith('MA')) {
                     await processWorkerBarcode(barcode);
+                } else {
+                    await processItemBarcode(barcode);
                 }
             } catch (error) {
                 console.error('Fehler bei der Barcode-Verarbeitung:', error);
-                showError('Fehler bei der Verarbeitung des Barcodes');
-            }
-        }
-
-        // Werkzeugdetails anzeigen
-        function displayToolDetails(tool) {
-            const toolPreview = document.getElementById('tool-preview');
-            const toolDetails = document.getElementById('tool-details');
-            
-            if (!toolPreview || !toolDetails) return;
-            
-            toolPreview.classList.remove('hidden');
-            toolDetails.innerHTML = `
-                <div class="card bg-base-200">
-                    <div class="card-body">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-tools text-2xl text-base-content/50"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-bold">${tool.gegenstand}</p>
-                                <p class="text-sm opacity-70">Barcode: ${tool.barcode}</p>
-                                <p class="text-sm opacity-70">Status: ${tool.status}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Scanner starten
-        async function startScanning() {
-            try {
-                const video = document.getElementById('video');
-                const cameraStatus = document.getElementById('camera-status');
-                
-                if (!video || !cameraStatus) return;
-                
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
-                }
-
-                video.classList.add('hidden');
-                cameraStatus.textContent = 'Kamera wird initialisiert...';
-                cameraStatus.classList.remove('hidden');
-
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
-                
-                videoStream = stream;
-                video.srcObject = stream;
-                video.classList.remove('hidden');
-                cameraStatus.classList.add('hidden');
-
-                // Start scanning
-                codeReader.decodeFromVideoDevice(null, video, (result, err) => {
-                    if (result) {
-                        handleBarcode(result.text);
-                    }
-                });
-
-            } catch (error) {
-                console.error('Kamera-Fehler:', error);
-                showError('Kamera konnte nicht initialisiert werden');
-            }
-        }
-
-        // Scanner stoppen
-        function stopScanning() {
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                videoStream = null;
-            }
-            if (codeReader) {
-                codeReader.reset();
+                showError('Fehler bei der Barcode-Verarbeitung');
+            } finally {
+                isProcessingBarcode = false;
             }
         }
 
         // Modal schließen
         function closeQuickScan() {
-            stopScanning();
             const modal = document.getElementById('quickScanModal');
-            if (modal) modal.close();
-        }
-
-        // Kamera neu starten
-        function resetCamera() {
-            stopScanning();
-            startScanning();
-        }
-
-        // Barcode manuell eingeben
-        function submitManualBarcode() {
-            const input = document.getElementById('barcode-input');
-            if (!input) return;
-            
-            const barcode = input.value.trim();
-            if (barcode) {
-                handleBarcode(barcode);
-                input.value = '';
-            }
-        }
-
-        // Hilfsfunktion für Fehlermeldungen
-        function showError(message) {
-            console.error('Fehler:', message);
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-end';
-            toast.innerHTML = `
-                <div class="alert alert-error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Hilfsfunktion für Erfolgsmeldungen
-        function showSuccess(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-end';
-            toast.innerHTML = `
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Mitarbeiter-Barcode verarbeiten
-        async function processWorkerBarcode(barcode) {
-            try {
-                console.log('Verarbeite Mitarbeiter-Barcode:', barcode);
-                const response = await fetch(`/api/get_worker/${barcode}`);
-                const data = await response.json();
-                
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-
-                displayWorkerDetails(data);
-                scannedWorker = data;
-                showFinalBarcode();
-            } catch (error) {
-                console.error('Fehler bei der Mitarbeitersuche:', error);
-                showError('Fehler bei der Mitarbeitersuche');
-            }
-        }
-
-        // Mitarbeiterdetails anzeigen
-        function displayWorkerDetails(worker) {
-            const workerPreview = document.getElementById('worker-preview');
-            const workerDetails = document.getElementById('worker-details');
-            
-            if (!workerPreview || !workerDetails) return;
-            
-            workerPreview.classList.remove('hidden');
-            workerDetails.innerHTML = `
-                <div class="card bg-base-200">
-                    <div class="card-body">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-user text-2xl text-base-content/50"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-bold">${worker.name} ${worker.lastname}</p>
-                                <p class="text-sm opacity-70">Barcode: ${worker.barcode}</p>
-                                <p class="text-sm opacity-70">Bereich: ${worker.bereich || '-'}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Finalen Barcode anzeigen
-        function showFinalBarcode() {
-            const finalBarcodeContainer = document.getElementById('final-barcode');
-            const videoElement = document.getElementById('video');
-            const cameraStatus = document.getElementById('camera-status');
-            
-            if (!finalBarcodeContainer) return;
-            
-            // Video und Kamera-Status ausblenden
-            if (videoElement) videoElement.classList.add('hidden');
-            if (cameraStatus) cameraStatus.classList.add('hidden');
-            
-            // Container für den finalen Barcode vorbereiten
-            finalBarcodeContainer.innerHTML = '';
-            finalBarcodeContainer.classList.remove('hidden');
-            finalBarcodeContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-6');
-            
-            // QR-Code Container erstellen
-            const qrWrapper = document.createElement('div');
-            qrWrapper.className = 'bg-[#5b69a7] p-4 rounded-lg shadow-lg mb-4';
-            finalBarcodeContainer.appendChild(qrWrapper);
-            
-            // QR-Code generieren
-            new QRCode(qrWrapper, {
-                text: `FINALIZE:${scannedTool.barcode}:${scannedWorker.barcode}`,
-                width: 200,
-                height: 200,
-                colorDark: '#ffffff',     // Weiß für den QR-Code
-                colorLight: '#5b69a7',    // BTZ-Blau für den Hintergrund
-                correctLevel: QRCode.CorrectLevel.H
-            });
-            
-            // Beschreibungstext hinzufügen
-            const description = document.createElement('p');
-            description.className = 'text-center text-base-content/70 mb-4';
-            description.textContent = 'Scannen Sie diesen Code, um den Vorgang abzuschließen';
-            finalBarcodeContainer.appendChild(description);
-
-            // Abschluss-Button hinzufügen
-            const finalizeButton = document.createElement('button');
-            finalizeButton.className = 'btn btn-primary w-full';
-            finalizeButton.textContent = 'Vorgang abschließen';
-            finalizeButton.onclick = finalizeProcess;
-            finalBarcodeContainer.appendChild(finalizeButton);
-            
-            // Optional: Manuelle Schließen-Option
-            const closeButton = document.createElement('button');
-            closeButton.className = 'btn btn-ghost w-full mt-2';
-            closeButton.textContent = 'Abbrechen';
-            closeButton.onclick = closeQuickScan;
-            finalBarcodeContainer.appendChild(closeButton);
-        }
-
-        // Vorgang abschließen
-        async function finalizeProcess() {
-            try {
-                // Bestimme die Aktion basierend auf dem aktuellen Status
-                const action = scannedTool.status === 'ausgeliehen' ? 'return' : 'lend';
-                const newStatus = action === 'return' ? 'verfügbar' : 'ausgeliehen';
-                
-                console.log('Aktueller Status:', scannedTool.status);
-                console.log('Gewählte Aktion:', action);
-                console.log('Neuer Status:', newStatus);
-
-                const response = await fetch('/api/process_lending', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        worker_barcode: scannedWorker.barcode,
-                        item_barcode: scannedTool.barcode,
-                        item_type: scannedTool.type || 'tool',
-                        action: action,
-                        new_status: newStatus
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.error) {
-                    showError(result.error);
-                    return;
-                }
-                
-                // Erfolgsmeldung basierend auf der Aktion
-                const successMessage = action === 'return' 
-                    ? 'Rückgabe erfolgreich abgeschlossen' 
-                    : 'Ausgabe erfolgreich abgeschlossen';
-                
-                showSuccess(successMessage);
-                setTimeout(() => {
-                    closeQuickScan();
-                    window.location.reload();
-                }, 1500);
-                
-            } catch (error) {
-                console.error('Fehler beim Abschließen:', error);
-                showError('Fehler beim Speichern des Vorgangs');
+            if (modal) {
+                modal.close();
+                lastScannedBarcode = '';
+                isProcessingBarcode = false;
             }
         }
     </script>
@@ -698,51 +350,6 @@
                 console.error('Modal nicht gefunden');
             }
         }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let inputBuffer = '';
-            let quickscanInput = document.getElementById('quickscan-input');
-            let lastKeyTime = Date.now();
-
-            document.addEventListener('keydown', function(event) {
-                const currentTime = Date.now();
-                const timeDiff = currentTime - lastKeyTime;
-
-                // Wenn die Zeitdifferenz zwischen den Tastenanschlägen zu groß ist, leere den Puffer
-                if (timeDiff > 100) {
-                    inputBuffer = '';
-                }
-
-                // Füge die gedrückte Taste zum Puffer hinzu
-                inputBuffer += event.key;
-                lastKeyTime = currentTime;
-
-                // Überprüfe, ob der Puffer ein Barcode-Endezeichen enthält (z.B. Enter)
-                if (event.key === 'Enter') {
-                    // Zeige das Quickscan-Eingabefeld an
-                    quickscanInput.classList.remove('hidden');
-                    quickscanInput.focus();
-
-                    // Setze den Wert des Eingabefelds auf den gescannten Barcode
-                    quickscanInput.value = inputBuffer.trim();
-
-                    // Leere den Puffer
-                    inputBuffer = '';
-
-                    // Optional: Führe eine Aktion mit dem gescannten Barcode aus
-                    handleBarcodeScan(quickscanInput.value);
-                }
-            });
-
-            function handleBarcodeScan(barcode) {
-                // Hier kannst du den Barcode verarbeiten, z.B. eine Suche durchführen
-                console.log('Gescannt:', barcode);
-                // Beispiel: Weiterleitung zu einer Seite mit dem Barcode
-                // window.location.href = `/search?barcode=${encodeURIComponent(barcode)}`;
-            }
-        });
     </script>
 
     <script>
