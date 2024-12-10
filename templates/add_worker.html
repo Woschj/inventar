@@ -8,10 +8,15 @@
     
     <form method="post" class="space-y-4">
         <div class="mb-4">
-            <label class="block text-sm font-medium text-base-content">Barcode</label>
+            <label class="block text-sm font-medium">Barcode</label>
             <div class="relative">
-                <input type="text" name="barcode" id="barcodeInput" required
-                       class="input input-bordered w-full pr-16">
+                <input type="text" 
+                       name="barcode" 
+                       id="barcodeInput" 
+                       required
+                       readonly
+                       class="input input-bordered w-full pr-16"
+                       placeholder="Barcode scannen...">
                 <button type="button" onclick="startBarcodeScanner()"
                         class="btn btn-primary absolute right-0 top-0">
                     <i class="fas fa-camera"></i>
@@ -101,6 +106,10 @@
 <script>
 let scannerCodeReader;
 let isScannerActive = false;
+let inputBuffer = '';
+let lastKeyTime = Date.now();
+let isProcessingBarcode = false;
+let activeInput = null;
 
 window.addEventListener('load', () => {
     scannerCodeReader = new ZXing.BrowserMultiFormatReader();
@@ -201,5 +210,77 @@ function showScannerSuccess(message) {
         setTimeout(() => successDiv.remove(), 500);
     }, 2000);
 }
+
+// Fokussiere das Barcode-Eingabefeld beim Laden
+document.addEventListener('DOMContentLoaded', function() {
+    const barcodeInput = document.getElementById('barcodeInput');
+    if (barcodeInput) {
+        barcodeInput.focus();
+        activeInput = barcodeInput;
+        // Setze readonly Attribut
+        barcodeInput.setAttribute('readonly', true);
+    }
+});
+
+// Event Listener für Barcode-Scans
+document.addEventListener('keydown', function(event) {
+    const currentTime = Date.now();
+    const timeDiff = currentTime - lastKeyTime;
+
+    // Reset buffer if time between keystrokes is too long
+    if (timeDiff > 100) {
+        inputBuffer = '';
+    }
+
+    // Ignoriere Shift-Taste
+    if (event.key === 'Shift') {
+        lastKeyTime = currentTime;
+        return;
+    }
+
+    // Wenn Enter gedrückt wird
+    if (event.key === 'Enter' && !isProcessingBarcode) {
+        event.preventDefault();
+        
+        // Entferne "Shift" und "Enter" aus dem Buffer und trimme Leerzeichen
+        const scannedBarcode = inputBuffer.replace(/Shift|Enter/g, '').trim();
+        
+        if (scannedBarcode) {
+            const barcodeInput = document.getElementById('barcodeInput');
+            
+            // Setze den Barcode ins Eingabefeld
+            barcodeInput.value = scannedBarcode;
+            
+            // Verhindere weitere Scans für kurze Zeit
+            isProcessingBarcode = true;
+            setTimeout(() => {
+                isProcessingBarcode = false;
+            }, 1000);
+            
+            // Fokussiere das nächste Eingabefeld
+            const nextInput = barcodeInput.closest('div').nextElementSibling?.querySelector('input');
+            if (nextInput) {
+                nextInput.focus();
+                activeInput = nextInput;
+            }
+
+            // Optional: Zeige Erfolgsmeldung
+            showScannerSuccess('Barcode erfolgreich gescannt: ' + scannedBarcode);
+        }
+        
+        inputBuffer = '';
+        return;
+    }
+
+    inputBuffer += event.key;
+    lastKeyTime = currentTime;
+});
+
+// Event Listener für Fokus auf Eingabefeldern
+document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"]').forEach(input => {
+    input.addEventListener('focus', function() {
+        activeInput = this;
+    });
+});
 </script>
 {% endblock %}

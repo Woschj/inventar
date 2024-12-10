@@ -182,8 +182,10 @@
                        class="input input-bordered w-full" 
                        placeholder="Barcode scannen oder eingeben"
                        autofocus>
+                <p id="confirmation-message" class="text-sm mt-2 text-base-content/70"></p>
             </div>
             <div class="modal-action">
+                <button onclick="confirmBarcode()" class="btn btn-primary">Bestätigen</button>
                 <button onclick="closeQuickScan()" class="btn">Schließen</button>
             </div>
         </div>
@@ -207,6 +209,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
     <script>
+        // Globale Variablen
         let inputBuffer = '';
         let lastScannedBarcode = '';
         let lastKeyTime = Date.now();
@@ -222,12 +225,17 @@
                 inputBuffer = '';
             }
 
-            inputBuffer += event.key;
-            lastKeyTime = currentTime;
+            // Ignoriere Shift-Taste
+            if (event.key === 'Shift') {
+                lastKeyTime = currentTime;
+                return;
+            }
 
+            // Wenn Enter gedrückt wird
             if (event.key === 'Enter' && !isProcessingBarcode) {
                 event.preventDefault();
-                const scannedBarcode = inputBuffer.trim();
+                // Entferne "Shift" und "Enter" aus dem Buffer und trimme Leerzeichen
+                const scannedBarcode = inputBuffer.replace(/Shift|Enter/g, '').trim();
                 
                 if (!document.getElementById('quickScanModal').open) {
                     document.getElementById('quickScanModal').showModal();
@@ -238,28 +246,43 @@
 
                 if (scannedBarcode === lastScannedBarcode) {
                     isProcessingBarcode = true;
-                    handleBarcode(scannedBarcode);
+                    if (scannedBarcode.startsWith('MA')) {
+                        processWorkerBarcode(scannedBarcode);
+                    } else {
+                        processItemBarcode(scannedBarcode);
+                    }
+                    lastScannedBarcode = ''; // Reset nach erfolgreicher Verarbeitung
                 } else {
                     lastScannedBarcode = scannedBarcode;
+                    // Zeige Bestätigungsaufforderung
+                    document.getElementById('confirmation-message').textContent = 
+                        'Scannen Sie den Barcode erneut zur Bestätigung oder nutzen Sie den Button.';
                 }
 
                 inputBuffer = '';
+                return;
             }
+
+            inputBuffer += event.key;
+            lastKeyTime = currentTime;
         });
 
-        // Barcode verarbeiten
-        async function handleBarcode(barcode) {
-            try {
+        // Manuelle Bestätigung
+        function confirmBarcode() {
+            const barcodeInput = document.getElementById('barcode-input');
+            const barcode = barcodeInput.value.trim();
+            
+            if (barcode) {
+                isProcessingBarcode = true;
                 if (barcode.startsWith('MA')) {
-                    await processWorkerBarcode(barcode);
+                    processWorkerBarcode(barcode);
                 } else {
-                    await processItemBarcode(barcode);
+                    processItemBarcode(barcode);
                 }
-            } catch (error) {
-                console.error('Fehler bei der Barcode-Verarbeitung:', error);
-                showError('Fehler bei der Barcode-Verarbeitung');
-            } finally {
-                isProcessingBarcode = false;
+                lastScannedBarcode = ''; // Reset nach erfolgreicher Verarbeitung
+                
+                // Optional: Schließe das Modal nach erfolgreicher Verarbeitung
+                // closeQuickScan();
             }
         }
 
@@ -270,6 +293,8 @@
                 modal.close();
                 lastScannedBarcode = '';
                 isProcessingBarcode = false;
+                document.getElementById('confirmation-message').textContent = '';
+                document.getElementById('barcode-input').value = '';
             }
         }
     </script>

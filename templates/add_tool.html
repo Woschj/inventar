@@ -12,8 +12,13 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium">Barcode</label>
                 <div class="relative">
-                    <input type="text" name="barcode" id="barcodeInput" required
-                           class="input input-bordered w-full pr-16">
+                    <input type="text" 
+                           name="barcode" 
+                           id="barcodeInput" 
+                           required
+                           readonly
+                           class="input input-bordered w-full pr-16"
+                           placeholder="Barcode scannen...">
                     <button type="button" onclick="startBarcodeScanner()"
                             class="btn btn-primary absolute right-0 top-0">
                         <i class="fas fa-camera"></i>
@@ -34,11 +39,6 @@
                 <label class="block text-sm font-medium">Typ</label>
                 <input type="text" name="typ"
                        class="input input-bordered w-full">
-            </div>
-            <div>
-                <label class="block text-sm font-medium">Bild</label>
-                <input type="file" name="image" accept="image/*"
-                       class="file-input file-input-bordered w-full">
             </div>
             <button type="submit" 
                     class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
@@ -116,6 +116,10 @@
 <script>
 let scannerCodeReader;
 let isScannerActive = false;
+let inputBuffer = '';
+let lastKeyTime = Date.now();
+let isProcessingBarcode = false;
+let activeInput = null;
 
 // Initialisiere den CodeReader beim Laden der Seite
 window.addEventListener('load', () => {
@@ -214,10 +218,90 @@ function closeScannerModal() {
 
 function showScannerSuccess(message) {
     const successDiv = document.createElement('div');
-    successDiv.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4';
-    successDiv.textContent = message;
+    successDiv.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-lg flex items-center space-x-2';
+    successDiv.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+    `;
     document.body.appendChild(successDiv);
-    setTimeout(() => successDiv.remove(), 3000);
+    
+    setTimeout(() => {
+        successDiv.style.transition = 'opacity 0.5s ease-out';
+        successDiv.style.opacity = '0';
+        setTimeout(() => successDiv.remove(), 500);
+    }, 2000);
 }
+
+// Fokussiere das Barcode-Eingabefeld beim Laden
+document.addEventListener('DOMContentLoaded', function() {
+    const barcodeInput = document.getElementById('barcodeInput');
+    if (barcodeInput) {
+        barcodeInput.focus();
+        activeInput = barcodeInput;
+        // Setze readonly Attribut
+        barcodeInput.setAttribute('readonly', true);
+    }
+});
+
+// Event Listener für Barcode-Scans
+document.addEventListener('keydown', function(event) {
+    const currentTime = Date.now();
+    const timeDiff = currentTime - lastKeyTime;
+
+    // Reset buffer if time between keystrokes is too long
+    if (timeDiff > 100) {
+        inputBuffer = '';
+    }
+
+    // Ignoriere Shift-Taste
+    if (event.key === 'Shift') {
+        lastKeyTime = currentTime;
+        return;
+    }
+
+    // Wenn Enter gedrückt wird
+    if (event.key === 'Enter' && !isProcessingBarcode) {
+        event.preventDefault();
+        
+        // Entferne "Shift" und "Enter" aus dem Buffer und trimme Leerzeichen
+        const scannedBarcode = inputBuffer.replace(/Shift|Enter/g, '').trim();
+        
+        if (scannedBarcode) {
+            const barcodeInput = document.getElementById('barcodeInput');
+            
+            // Setze den Barcode ins Eingabefeld
+            barcodeInput.value = scannedBarcode;
+            
+            // Verhindere weitere Scans für kurze Zeit
+            isProcessingBarcode = true;
+            setTimeout(() => {
+                isProcessingBarcode = false;
+            }, 1000);
+            
+            // Fokussiere das nächste Eingabefeld
+            const nextInput = barcodeInput.closest('div').nextElementSibling?.querySelector('input');
+            if (nextInput) {
+                nextInput.focus();
+                activeInput = nextInput;
+            }
+
+            // Optional: Zeige Erfolgsmeldung
+            showScannerSuccess('Barcode erfolgreich gescannt: ' + scannedBarcode);
+        }
+        
+        inputBuffer = '';
+        return;
+    }
+
+    inputBuffer += event.key;
+    lastKeyTime = currentTime;
+});
+
+// Event Listener für Fokus auf Eingabefeldern
+document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"]').forEach(input => {
+    input.addEventListener('focus', function() {
+        activeInput = this;
+    });
+});
 </script>
 {% endblock %}
