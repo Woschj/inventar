@@ -89,11 +89,14 @@
                         {% endif %}
 
                         <!-- Theme Toggle -->
-                        <label class="swap swap-rotate btn btn-ghost btn-circle">
-                            <input type="checkbox" class="theme-controller" value="dark" />
-                            <i class="fas fa-sun swap-on"></i>
-                            <i class="fas fa-moon swap-off"></i>
-                        </label>
+                        <button id="theme-toggle" class="btn btn-ghost btn-circle">
+                            <svg id="theme-toggle-moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                            <svg id="theme-toggle-sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </button>
 
                         <!-- Login/Logout -->
                         {% if session.get('is_admin') %}
@@ -695,6 +698,111 @@
                 console.error('Modal nicht gefunden');
             }
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let inputBuffer = '';
+            let quickscanInput = document.getElementById('quickscan-input');
+            let lastKeyTime = Date.now();
+
+            document.addEventListener('keydown', function(event) {
+                const currentTime = Date.now();
+                const timeDiff = currentTime - lastKeyTime;
+
+                // Wenn die Zeitdifferenz zwischen den Tastenanschlägen zu groß ist, leere den Puffer
+                if (timeDiff > 100) {
+                    inputBuffer = '';
+                }
+
+                // Füge die gedrückte Taste zum Puffer hinzu
+                inputBuffer += event.key;
+                lastKeyTime = currentTime;
+
+                // Überprüfe, ob der Puffer ein Barcode-Endezeichen enthält (z.B. Enter)
+                if (event.key === 'Enter') {
+                    // Zeige das Quickscan-Eingabefeld an
+                    quickscanInput.classList.remove('hidden');
+                    quickscanInput.focus();
+
+                    // Setze den Wert des Eingabefelds auf den gescannten Barcode
+                    quickscanInput.value = inputBuffer.trim();
+
+                    // Leere den Puffer
+                    inputBuffer = '';
+
+                    // Optional: Führe eine Aktion mit dem gescannten Barcode aus
+                    handleBarcodeScan(quickscanInput.value);
+                }
+            });
+
+            function handleBarcodeScan(barcode) {
+                // Hier kannst du den Barcode verarbeiten, z.B. eine Suche durchführen
+                console.log('Gescannt:', barcode);
+                // Beispiel: Weiterleitung zu einer Seite mit dem Barcode
+                // window.location.href = `/search?barcode=${encodeURIComponent(barcode)}`;
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lade den gespeicherten Theme-Status
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+
+            // Theme Toggle Funktion
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                // Setze das neue Theme
+                document.documentElement.setAttribute('data-theme', newTheme);
+                
+                // Speichere die Auswahl im localStorage
+                localStorage.setItem('theme', newTheme);
+            }
+
+            // Event Listener für den Theme-Toggle-Button
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+                
+                // Aktualisiere das Icon basierend auf dem aktuellen Theme
+                updateThemeIcon();
+            }
+
+            // Funktion zum Aktualisieren des Theme-Icons
+            function updateThemeIcon() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const moonIcon = document.getElementById('theme-toggle-moon-icon');
+                const sunIcon = document.getElementById('theme-toggle-sun-icon');
+                
+                if (currentTheme === 'dark') {
+                    moonIcon.classList.add('hidden');
+                    sunIcon.classList.remove('hidden');
+                } else {
+                    moonIcon.classList.remove('hidden');
+                    sunIcon.classList.add('hidden');
+                }
+            }
+
+            // Beobachte Änderungen am data-theme Attribut
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'data-theme') {
+                        updateThemeIcon();
+                    }
+                });
+            });
+
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
+        });
     </script>
 </body>
 </html>

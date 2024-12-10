@@ -61,6 +61,9 @@ def setup_logger(name, log_file):
 # Erstelle die Logger
 loggers = setup_logging()
 
+
+
+
 # Decorator für Route-Logging
 def log_route(f):
     @wraps(f)
@@ -707,20 +710,57 @@ def admin_panel():
         return render_template('error.html', error_message=str(e))
 
 def load_admin_data():
-    # Beispiel für das Laden von Statistiken oder anderen Daten
-    stats = {
-        'total_tools': 100,
-        'borrowed_tools': 20,
-        'defect_tools': 5,
-        'deleted_tools': 10,
-        'total_consumables': 50,
-        'reorder_consumables': 5,
-        'empty_consumables': 2,
-        'total_workers': 30,
-        'deleted_workers': 3,
-        'workers_by_area': [('IT', 10), ('HR', 5), ('Sales', 15)]
-    }
-    return stats
+    stats = {}
+    try:
+        # Werkzeug-Statistiken
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            stats['total_tools'] = conn.execute('SELECT COUNT(*) FROM tools').fetchone()[0]
+            stats['borrowed_tools'] = conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'").fetchone()[0]
+            stats['defect_tools'] = conn.execute("SELECT COUNT(*) FROM tools WHERE status = 'Defekt'").fetchone()[0]
+            stats['deleted_tools'] = conn.execute('SELECT COUNT(*) FROM deleted_tools').fetchone()[0]
+
+        # Verbrauchsmaterial-Statistiken
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            stats['total_consumables'] = conn.execute('SELECT COUNT(*) FROM consumables').fetchone()[0]
+            stats['reorder_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables WHERE aktueller_bestand <= mindestbestand AND aktueller_bestand > 0'
+            ).fetchone()[0]
+            stats['empty_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables WHERE aktueller_bestand = 0'
+            ).fetchone()[0]
+            stats['deleted_consumables'] = conn.execute('SELECT COUNT(*) FROM deleted_consumables').fetchone()[0]
+
+        # Mitarbeiter-Statistiken
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            stats['total_workers'] = conn.execute('SELECT COUNT(*) FROM workers').fetchone()[0]
+            stats['deleted_workers'] = conn.execute('SELECT COUNT(*) FROM deleted_workers').fetchone()[0]
+            
+            # Mitarbeiter nach Bereich
+            workers_by_area = conn.execute('''
+                SELECT bereich, COUNT(*) as count 
+                FROM workers 
+                WHERE bereich IS NOT NULL 
+                GROUP BY bereich
+                ORDER BY count DESC
+            ''').fetchall()
+            stats['workers_by_area'] = [(area, count) for area, count in workers_by_area]
+
+        return stats
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Admin-Statistiken: {str(e)}")
+        return {
+            'total_tools': 0,
+            'borrowed_tools': 0,
+            'defect_tools': 0,
+            'deleted_tools': 0,
+            'total_consumables': 0,
+            'reorder_consumables': 0,
+            'empty_consumables': 0,
+            'deleted_consumables': 0,
+            'total_workers': 0,
+            'deleted_workers': 0,
+            'workers_by_area': []
+        }
 
 @app.route('/workers')
 @admin_required
@@ -849,6 +889,27 @@ def consumable_details(barcode):
         logging.error(f"Datenbankfehler in consumable_details: {str(e)}")
         flash('Fehler beim Laden der Details', 'error')
         return redirect(url_for('consumables'))
+
+def update_deleted_consumables_table():
+    try:
+        with sqlite3.connect(DBConfig.CONSUMABLES_DB) as conn:
+            # Prüfe, ob die Spalte 'letzter_bestand' bereits existiert
+            cursor = conn.execute("PRAGMA table_info(deleted_consumables)")
+            columns = [info[1] for info in cursor.fetchall()]
+            
+            if 'letzter_bestand' not in columns:
+                conn.execute('''
+                    ALTER TABLE deleted_consumables 
+                    ADD COLUMN letzter_bestand INTEGER
+                ''')
+                logging.info("Spalte 'letzter_bestand' erfolgreich hinzugefügt")
+                
+    except Exception as e:
+        logging.error(f"Fehler beim Hinzufügen der Spalte 'letzter_bestand': {str(e)}")
+
+# Rufe die Funktion auf, um die Tabelle zu aktualisieren
+update_deleted_consumables_table()
+
 
 @app.route('/consumables/<barcode>/edit', methods=['GET', 'POST'])
 def edit_consumable(barcode):
@@ -1009,9 +1070,6 @@ def add_consumable():
 def delete_consumable(barcode):
     try:
         # Debug: Prüfe Tabellenstruktur
-        logging.info("Überprüfe Tabellenstruktur...")
-        deleted_columns = check_table_structure('deleted_consumables')
-        consumables_columns = check_table_structure('consumables')
         
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
             conn.row_factory = sqlite3.Row
@@ -1456,8 +1514,7 @@ def restore_tool(id):
             
             # Prüfen ob die Barcode-Nummer bereits wieder vergeben ist
             existing = conn.execute(
-                'SELECT 1 FROM tools WHERE barcode=?', (deleted_tool['barcode'],)
-            ).fetchone()
+                'SELECT 1 FROM tools WHERE barcode=?', (deleted_tool['barcode'],))
             
             if existing:
                 flash('Barcode bereits vergeben. Wiederherstellung nicht möglich.', 'error')
@@ -1500,7 +1557,7 @@ def restore_worker(id):
             if item:
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
-                    'SELECT 1 FROM workers WHERE barcode=?', (item['barcode'],)
+                    'SELECT 1 FROM workers WHERE barcode=?', ((item['barcode'],))
                 ).fetchone()
                 
                 if existing:
@@ -2833,3 +2890,6 @@ def reinitialize_database():
         flash('Fehler bei der Datenbankaktualisierung', 'error')
     
     return redirect(url_for('index'))
+
+
+
