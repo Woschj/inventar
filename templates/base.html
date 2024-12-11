@@ -211,14 +211,26 @@
 
                     <!-- Info Grid -->
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Werkzeug Info -->
+                        <!-- Artikel Info -->
                         <div id="tool-card" class="card shadow-lg transition-all duration-300" style="background-color: #f0f0f0;">
                             <div class="card-body">
-                                <h3 class="card-title text-lg">Werkzeug</h3>
+                                <h3 class="card-title text-lg">Artikel</h3>
                                 <div id="tool-preview" class="min-h-[100px] flex items-center justify-center text-base-content/50">
                                     <div id="tool-details">
                                         <i class="fas fa-tools text-4xl"></i>
-                                        <p class="mt-2">Warten auf Werkzeug-Scan...</p>
+                                        <p class="mt-2">Warten auf Scan...</p>
+                                    </div>
+                                </div>
+                                <!-- Mengenfeld -->
+                                <div id="quantity-container" class="hidden mt-4">
+                                    <label class="label">Menge:</label>
+                                    <div class="join">
+                                        <input type="number" 
+                                               id="quantity-input" 
+                                               class="input input-bordered w-24 join-item" 
+                                               min="1" 
+                                               value="1">
+                                        <span id="unit-label" class="join-item btn btn-disabled">Stk</span>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +252,7 @@
 
                     <!-- Bestätigungsbutton -->
                     <div class="flex justify-end">
-                        <button onclick="submitProcess()" 
+                        <button id="confirm-button" 
                                 class="btn"
                                 style="background-color: #005CA9; color: white;">
                             Vorgang bestätigen
@@ -674,88 +686,118 @@
 
         async function processBarcode(barcode) {
             try {
-                const response = await fetch(`/api/validate_barcode/${barcode}`);
-                const data = await response.json();
+                // Zuerst prüfen ob es ein Mitarbeiter ist
+                const workerResponse = await fetch(`/api/get_worker/${barcode}`);
+                const workerData = await workerResponse.json();
                 
-                if (data.valid) {
-                    if (data.type === 'worker') {
-                        scannedWorker = data.data;
-                        updateWorkerPreview(data.data);
-                        document.getElementById('worker-card').style.backgroundColor = '#fff3cd'; // Gelb
-                    } else if (data.type === 'tool') {
-                        scannedTool = data.data;
-                        updateToolPreview(data.data);
-                        document.getElementById('tool-card').style.backgroundColor = '#fff3cd'; // Gelb
-                    }
-                    
-                    checkIfComplete();
+                if (workerData.valid) {
+                    console.log('Verarbeite Mitarbeiter-Barcode:', barcode);
+                    scannedWorker = workerData.data;
+                    updateWorkerPreview(workerData.data);
+                    document.getElementById('worker-card').style.backgroundColor = '#fff3cd';
+                    return;
                 }
+
+                // Dann prüfen ob es ein Verbrauchsmaterial ist
+                const consumableResponse = await fetch(`/api/get_consumable/${barcode}`);
+                const consumableData = await consumableResponse.json();
+                
+                if (consumableData.valid) {
+                    console.log('Verarbeite Verbrauchsmaterial-Barcode:', barcode);
+                    scannedTool = {
+                        ...consumableData.data,
+                        source: 'consumables',
+                        isConsumable: true
+                    };
+                    console.log('Gescanntes Verbrauchsmaterial:', scannedTool);
+                    updateToolPreview(scannedTool);
+                    document.getElementById('tool-card').style.backgroundColor = '#fff3cd';
+                    return;
+                }
+
+                // Zuletzt prüfen ob es ein Werkzeug ist
+                const toolResponse = await fetch(`/api/get_tool/${barcode}`);
+                const toolData = await toolResponse.json();
+                
+                if (toolData.valid) {
+                    console.log('Verarbeite Werkzeug-Barcode:', barcode);
+                    scannedTool = {
+                        ...toolData.data,
+                        source: 'tools',
+                        isConsumable: false
+                    };
+                    updateToolPreview(scannedTool);
+                    document.getElementById('tool-card').style.backgroundColor = '#fff3cd';
+                    return;
+                }
+
+                showError('Ungültiger Barcode');
             } catch (error) {
                 console.error('Fehler:', error);
+                showError('Fehler beim Scannen');
             }
         }
 
-        function checkIfComplete() {
-            if (scannedWorker && scannedTool) {
-                document.getElementById('worker-card').style.backgroundColor = '#d4edda'; // Grün
-                document.getElementById('tool-card').style.backgroundColor = '#d4edda'; // Grün
+        // Event-Listener erst hinzufügen, wenn das DOM geladen ist
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmButton = document.getElementById('confirm-button');
+            if (confirmButton) {
+                confirmButton.addEventListener('click', submitProcess);
             }
-        }
+        });
 
-        function updateWorkerPreview(worker) {
-            const preview = document.getElementById('worker-preview');
-            preview.innerHTML = `
-                <div class="p-4 rounded-lg">
-                    <h3 class="font-bold">${worker.name} ${worker.lastname}</h3>
-                    <p class="text-sm">Barcode: ${worker.barcode}</p>
-                    <p class="text-sm">Bereich: ${worker.bereich}</p>
-                </div>
-            `;
-        }
-
-        function updateToolPreview(tool) {
-            const preview = document.getElementById('tool-preview');
-            preview.innerHTML = `
-                <div class="p-4 rounded-lg">
-                    <h3 class="font-bold">${tool.bezeichnung}</h3>
-                    <p class="text-sm">Barcode: ${tool.barcode}</p>
-                    <p class="text-sm">Status: ${tool.status}</p>
-                </div>
-            `;
-        }
-
-        // Die ursprüngliche submitProcess Funktion beibehalten und erweitern
         async function submitProcess() {
             if (!scannedWorker || !scannedTool) {
                 showError('Bitte erst Artikel und Mitarbeiter scannen');
                 return;
             }
 
-            const isConsumable = scannedTool.typ === 'consumable';
-            const action = isConsumable ? 'entnehmen' : 
-                          (scannedTool.status === 'Verfügbar' ? 'ausleihen' : 'zurückgeben');
-
             try {
+                console.log('ScannedTool:', scannedTool); // Debug-Ausgabe
+
+                let requestData = {
+                    worker_barcode: scannedWorker.barcode,
+                    item_barcode: scannedTool.barcode,
+                    is_consumable: scannedTool.type === 'consumable'
+                };
+
+                if (scannedTool.type === 'consumable') {
+                    const quantityInput = document.getElementById('quantity-input');
+                    if (!quantityInput) {
+                        showError('Mengenfeld nicht gefunden');
+                        return;
+                    }
+
+                    const quantity = parseInt(quantityInput.value);
+                    if (!quantity || quantity < 1) {
+                        showError('Bitte geben Sie eine gültige Menge ein');
+                        return;
+                    }
+                    if (quantity > scannedTool.bestand) {
+                        showError('Nicht genügend Bestand verfügbar');
+                        return;
+                    }
+                    requestData.quantity = quantity;
+                } else {
+                    requestData.action = scannedTool.status === 'Verfügbar' ? 'ausleihen' : 'zurückgeben';
+                }
+
+                console.log('Sende Daten:', requestData);
+
                 const response = await fetch('/api/process_lending', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        worker_barcode: scannedWorker.barcode,
-                        item_barcode: scannedTool.barcode,
-                        action: action,
-                        is_consumable: isConsumable
-                    })
+                    body: JSON.stringify(requestData)
                 });
 
                 const data = await response.json();
+                console.log('Server Antwort:', data);
+
                 if (data.success) {
-                    const successMessage = isConsumable ? 
-                        `${scannedTool.gegenstand || scannedTool.bezeichnung} wurde erfolgreich entnommen` :
-                        `${scannedTool.gegenstand || scannedTool.bezeichnung} wurde erfolgreich ${action}`;
-                    
-                    showSuccess(successMessage);
+                    showSuccess(data.message);
                     setTimeout(() => {
                         resetScanState();
                         const modal = document.getElementById('quickScanModal');
@@ -766,8 +808,41 @@
                     showError(data.error || 'Fehler beim Speichern');
                 }
             } catch (error) {
-                console.error('Fehler:', error);
-                showError('Fehler beim Speichern des Vorgangs');
+                console.error('Detaillierter Fehler:', error);
+                showError(`Fehler bei der Verarbeitung: ${error.message}`);
+            }
+        }
+
+        function updateToolPreview(tool) {
+            const preview = document.getElementById('tool-preview');
+            const quantityContainer = document.getElementById('quantity-container');
+            
+            if (!preview) return;
+            
+            console.log('Update Tool Preview:', tool); // Debug-Ausgabe
+            
+            preview.innerHTML = `
+                <div class="p-4 rounded-lg">
+                    <h3 class="font-bold">${tool.source === 'consumables' ? tool.bezeichnung : tool.gegenstand}</h3>
+                    <p class="text-sm">Barcode: ${tool.barcode}</p>
+                    ${tool.source === 'consumables' 
+                        ? `<p class="text-sm">Bestand: ${tool.bestand} ${tool.einheit || 'Stk'}</p>`
+                        : `<p class="text-sm">Status: ${tool.status}</p>`
+                    }
+                </div>
+            `;
+
+            // Mengenfeld für Verbrauchsmaterial
+            if (quantityContainer) {
+                if (tool.source === 'consumables') {
+                    quantityContainer.classList.remove('hidden');
+                    const unitLabel = document.getElementById('unit-label');
+                    if (unitLabel) {
+                        unitLabel.textContent = tool.einheit || 'Stk';
+                    }
+                } else {
+                    quantityContainer.classList.add('hidden');
+                }
             }
         }
     </script>

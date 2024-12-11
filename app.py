@@ -16,9 +16,11 @@ import traceback
 from flask import jsonify, session
 
 
+
 app = Flask(__name__)
 app.secret_key = 'dein_geheimer_schlüssel'
 app.config['ADMIN_PASSWORD'] = 'admin'
+
 
 
 
@@ -1284,7 +1286,7 @@ def add_worker():
         except sqlite3.IntegrityError:
             flash('Barcode existiert bereits', 'error')
         except Exception as e:
-            print(f"Fehler beim Hinzufügen: {str(e)}")
+            print(f"Fehler beim Hinzufgen: {str(e)}")
             traceback.print_exc()
             flash('Fehler beim Hinzufügen des Mitarbeiters', 'error')
             
@@ -1456,7 +1458,7 @@ def restore_tool(id):
             
             # Prüfen ob die Barcode-Nummer bereits wieder vergeben ist
             existing = conn.execute(
-                'SELECT 1 FROM tools WHERE barcode=?', (deleted_tool['barcode'],)
+                'SELECT 1 FROM tools WHERE barcode=?', ((deleted_tool['barcode'],))
             ).fetchone()
             
             if existing:
@@ -1500,7 +1502,7 @@ def restore_worker(id):
             if item:
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
-                    'SELECT 1 FROM workers WHERE barcode=?', (item['barcode'],)
+                    'SELECT 1 FROM workers WHERE barcode=?', ((item['barcode'],))
                 ).fetchone()
                 
                 if existing:
@@ -1744,64 +1746,105 @@ def get_recent_lendings():
 def process_lending():
     try:
         data = request.get_json()
+        print(f"Empfangene Daten: {data}")
+        
         worker_barcode = data.get('worker_barcode')
         item_barcode = data.get('item_barcode')
-        action = data.get('action')
         is_consumable = data.get('is_consumable', False)
+        quantity = data.get('quantity')
 
-        # Tools DB für Status-Updates
-        with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            if is_consumable:
-                # Verbrauchsmaterial Logik bleibt gleich
-                pass
-            else:
-                # Werkzeug verarbeiten
-                if action == 'ausleihen':
-                    conn.execute('''
-                        UPDATE tools 
-                        SET status = 'Ausgeliehen'
-                        WHERE barcode = ?
-                    ''', (item_barcode,))
-                else:
-                    conn.execute('''
-                        UPDATE tools 
-                        SET status = 'Verfügbar'
-                        WHERE barcode = ?
-                    ''', (item_barcode,))
+        if is_consumable:
+            with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+                conn.row_factory = sqlite3.Row
+                
+                item = conn.execute('''
+                    SELECT * FROM consumables 
+                    WHERE barcode = ?
+                ''', (item_barcode,)).fetchone()
 
-                # Status-Historie eintragen
+                if not item:
+                    return jsonify({
+                        'success': False,
+                        'error': f'Verbrauchsmaterial mit Barcode {item_barcode} nicht gefunden'
+                    })
+
+                item_dict = dict(item)
+
+                if not quantity or quantity < 1:
+                    return jsonify({
+                        'success': False,
+                        'error': 'Ungültige Menge'
+                    })
+
+                if item_dict['aktueller_bestand'] < quantity:
+                    return jsonify({
+                        'success': False,
+                        'error': 'Nicht genügend Bestand verfügbar'
+                    })
+
+                # Bestand reduzieren
+                conn.execute('''
+                    UPDATE consumables 
+                    SET aktueller_bestand = aktueller_bestand - ? 
+                    WHERE barcode = ?
+                ''', (quantity, item_barcode))
+
+                # Historie eintragen - OHNE amount Spalte
+                conn.execute('''
+                    INSERT INTO consumables_history
+                    (consumable_barcode, worker_barcode, action, timestamp)
+                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                ''', (item_barcode, worker_barcode, f'entnahme: {quantity}'))
+
+                conn.commit()
+
+                return jsonify({
+                    'success': True,
+                    'message': f"{quantity} {item_dict.get('einheit', 'Stück')} {item_dict['bezeichnung']} entnommen"
+                })
+
+        else:
+            with get_db_connection(DBConfig.TOOLS_DB) as conn:
+                item = conn.execute('''
+                    SELECT * FROM tools 
+                    WHERE barcode = ?
+                ''', (item_barcode,)).fetchone()
+
+                if not item:
+                    return jsonify({
+                        'success': False,
+                        'error': 'Werkzeug nicht gefunden'
+                    })
+
+                action = data.get('action', 'ausleihen')
+                new_status = 'Ausgeliehen' if action == 'ausleihen' else 'Verfügbar'
+
+                conn.execute('''
+                    UPDATE tools 
+                    SET status = ? 
+                    WHERE barcode = ?
+                ''', (new_status, item_barcode))
+
                 conn.execute('''
                     INSERT INTO tool_status_history
                     (tool_barcode, action, worker_barcode, timestamp)
                     VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 ''', (item_barcode, action, worker_barcode))
 
-        # Lendings DB für Ausleihhistorie
-        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
-            if not is_consumable:
-                if action == 'ausleihen':
-                    conn.execute('''
-                        INSERT INTO lendings 
-                        (item_barcode, worker_barcode, item_type, checkout_time)
-                        VALUES (?, ?, 'tool', CURRENT_TIMESTAMP)
-                    ''', (item_barcode, worker_barcode))
-                else:
-                    conn.execute('''
-                        UPDATE lendings 
-                        SET return_time = CURRENT_TIMESTAMP
-                        WHERE item_barcode = ? 
-                        AND worker_barcode = ? 
-                        AND return_time IS NULL
-                    ''', (item_barcode, worker_barcode))
+                conn.commit()
 
-            conn.commit()
-
-        return jsonify({'success': True, 'message': 'Vorgang erfolgreich abgeschlossen'})
+                return jsonify({
+                    'success': True,
+                    'message': f"{item['gegenstand']} wurde {action}"
+                })
 
     except Exception as e:
         print(f"Fehler beim Verarbeiten: {str(e)}")
         traceback.print_exc()
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
 
 @app.route('/manual_lending')
 @admin_required  # oder @login_required, je nachdem welchen Decorator du verwendest
@@ -1944,7 +1987,7 @@ def checkout_consumable(barcode):
             conn.execute('''
                 INSERT INTO consumables_history 
                 (consumable_barcode, worker_barcode, action, amount, old_stock, new_stock, changed_by)
-                VALUES (?, ?, 'checkout', ?, ?, ?)
+                VALUES (?, ?, 'checkout', ?, ?, ?, ?)
             ''', (
                 barcode,
                 worker_barcode,
@@ -2776,7 +2819,7 @@ def reinitialize_deleted_consumables():
                             INSERT INTO deleted_consumables 
                             (id, barcode, bezeichnung, typ, ort, aktueller_bestand, 
                              mindestbestand, einheit, deleted_by, deleted_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ''', row)
                     except Exception as e:
                         logging.error(f"Fehler beim Wiederherstellen von Eintrag: {str(e)}")
@@ -2825,3 +2868,184 @@ def reinitialize_database():
         flash('Fehler bei der Datenbankaktualisierung', 'error')
     
     return redirect(url_for('index'))
+
+@app.route('/api/get_consumable/<barcode>', methods=['GET'])
+def get_consumable(barcode):
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            item = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if item:
+                return jsonify({
+                    'valid': True,
+                    'data': dict(item)
+                })
+            return jsonify({'valid': False})
+    except Exception as e:
+        print(f"Fehler: {str(e)}")
+        return jsonify({'valid': False, 'error': str(e)})
+
+@app.route('/api/get_tool/<barcode>', methods=['GET'])
+def get_tool(barcode):
+    try:
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            item = conn.execute('''
+                SELECT * FROM tools 
+                WHERE barcode = ?
+            ''', (barcode,)).fetchone()
+            
+            if item:
+                return jsonify({
+                    'valid': True,
+                    'data': dict(item)
+                })
+            return jsonify({'valid': False})
+    except Exception as e:
+        print(f"Fehler: {str(e)}")
+        return jsonify({'valid': False, 'error': str(e)})
+
+@app.route('/api/process_consumable', methods=['POST'])
+def process_consumable():
+    try:
+        data = request.get_json()
+        worker_barcode = data.get('worker_barcode')
+        consumable_barcode = data.get('consumable_barcode')
+        quantity = data.get('quantity')
+
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            # Prüfe Bestand
+            item = conn.execute('''
+                SELECT * FROM consumables 
+                WHERE barcode = ?
+            ''', (consumable_barcode,)).fetchone()
+
+            if not item:
+                return jsonify({
+                    'success': False,
+                    'error': 'Verbrauchsmaterial nicht gefunden'
+                })
+
+            if item['bestand'] < quantity:
+                return jsonify({
+                    'success': False,
+                    'error': 'Nicht genügend Bestand verfügbar'
+                })
+
+            # Bestand reduzieren
+            conn.execute('''
+                UPDATE consumables 
+                SET bestand = bestand - ? 
+                WHERE barcode = ?
+            ''', (quantity, consumable_barcode))
+
+            # Historie eintragen
+            conn.execute('''
+                INSERT INTO consumables_history
+                (consumable_barcode, action, worker_barcode, timestamp, quantity)
+                VALUES (?, 'entnehmen', ?, CURRENT_TIMESTAMP, ?)
+            ''', (consumable_barcode, worker_barcode, quantity))
+
+            conn.commit()
+
+            return jsonify({
+                'success': True,
+                'message': f"{quantity} {item['einheit'] or 'Stk'} {item['bezeichnung']} entnommen"
+            })
+
+    except Exception as e:
+        print(f"Fehler beim Verarbeiten: {str(e)}")
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/api/process_tool', methods=['POST'])
+def process_tool():
+    try:
+        data = request.get_json()
+        worker_barcode = data.get('worker_barcode')
+        tool_barcode = data.get('tool_barcode')
+        action = data.get('action')
+
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            item = conn.execute('''
+                SELECT * FROM tools 
+                WHERE barcode = ?
+            ''', (tool_barcode,)).fetchone()
+
+            if not item:
+                return jsonify({
+                    'success': False,
+                    'error': 'Werkzeug nicht gefunden'
+                })
+
+            new_status = 'Ausgeliehen' if action == 'ausleihen' else 'Verfügbar'
+
+            # Status aktualisieren
+            conn.execute('''
+                UPDATE tools 
+                SET status = ? 
+                WHERE barcode = ?
+            ''', (new_status, tool_barcode))
+
+            # Historie eintragen
+            conn.execute('''
+                INSERT INTO tool_status_history
+                (tool_barcode, action, worker_barcode, timestamp)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+            ''', (tool_barcode, action, worker_barcode))
+
+            conn.commit()
+
+            return jsonify({
+                'success': True,
+                'message': f"{item['gegenstand']} wurde {action}"
+            })
+
+    except Exception as e:
+        print(f"Fehler beim Verarbeiten: {str(e)}")
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+def init_db():
+    # Bestehender Code für Tabellenerstellung
+    
+    # Neue Spalte zur consumables_history hinzufügen
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        try:
+            conn.execute('''
+                ALTER TABLE consumables_history
+                ADD COLUMN amount INTEGER DEFAULT 0;
+            ''')
+            conn.commit()
+            print("Spalte 'amount' erfolgreich hinzugefügt")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e):
+                print("Spalte 'amount' existiert bereits")
+            else:
+                print(f"Fehler beim Hinzufügen der Spalte: {e}")
+
+@app.route('/add_amount_column', methods=['GET'])
+@login_required
+@admin_required
+def add_amount_column():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        try:
+            conn.execute('''
+                ALTER TABLE consumables_history
+                ADD COLUMN amount INTEGER DEFAULT 0;
+            ''')
+            conn.commit()
+            flash('Spalte "amount" erfolgreich hinzugefügt', 'success')
+            return redirect(url_for('admin_panel'))
+        except sqlite3.OperationalError as e:
+            flash(f'Fehler: {str(e)}', 'error')
+            return redirect(url_for('admin_panel'))
+

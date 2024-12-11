@@ -1,12 +1,14 @@
-import sqlite3
-import logging
-
-def get_db_connection(db_path):
-    """Erstellt eine neue Datenbankverbindung"""
-    try:
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        return conn
-    except Exception as e:
-        logging.error(f"Fehler beim Verbindungsaufbau zu {db_path}: {str(e)}")
-        raise 
+def add_amount_column():
+    with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+        try:
+            conn.execute('''
+                ALTER TABLE consumables_history
+                ADD COLUMN amount INTEGER DEFAULT 0;
+            ''')
+            conn.commit()
+            print("Spalte 'amount' erfolgreich hinzugefügt")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e):
+                print("Spalte 'amount' existiert bereits")
+            else:
+                raise e
