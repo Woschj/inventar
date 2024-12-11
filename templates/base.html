@@ -654,10 +654,12 @@
             }
         }
 
+        // Globaler Barcode Handler
         let barcodeBuffer = '';
         let lastKeyTime = 0;
-        let lastBarcode = '';
         const BARCODE_DELAY = 50;
+        let lastScannedCode = '';
+        let scanCount = 0;
 
         document.addEventListener('keypress', function(e) {
             const currentTime = new Date().getTime();
@@ -668,23 +670,24 @@
             
             if (e.key === 'Enter') {
                 if (barcodeBuffer) {
-                    // Finde aktives Eingabefeld
-                    const activeElement = document.activeElement;
-                    const barcodeInput = document.getElementById('barcodeInput');
-                    
-                    if (barcodeInput) {
-                        // Wenn wir auf einer Add-Seite sind
-                        barcodeInput.value = barcodeBuffer;
-                        const submitButton = barcodeInput.closest('form').querySelector('button[type="submit"]');
-                        if (submitButton) {
-                            submitButton.click();
-                        }
-                    } else {
-                        // Wenn wir auf der Hauptseite sind, QuickScan öffnen
+                    const modal = document.getElementById('quickScanModal');
+            
+                    // Wenn Modal noch nicht offen ist
+                    if (!modal.open) {
                         showQuickScan();
                         processBarcode(barcodeBuffer);
+                    } else {
+                        // Wenn Modal bereits offen
+                        if (barcodeBuffer === lastScannedCode) {
+                            // Gleicher Code wurde nochmal gescannt -> Bestätigen auslösen
+                            submitProcess();
+                        } else {
+                            // Neuer Code wurde gescannt
+                            processBarcode(barcodeBuffer);
+                        }
                     }
-                    
+            
+                    lastScannedCode = barcodeBuffer;
                     barcodeBuffer = '';
                 }
             } else {
@@ -694,6 +697,19 @@
             lastKeyTime = currentTime;
         });
 
+        function showQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            if (modal) {
+                modal.showModal();
+                // Fokus auf das Barcode-Eingabefeld setzen
+                const barcodeInput = document.getElementById('barcode-input');
+                if (barcodeInput) {
+                    barcodeInput.focus();
+                }
+            }
+        }
+
+        // Bestehende processBarcode Funktion anpassen
         async function processBarcode(barcode) {
             try {
                 // Zuerst prüfen ob es ein Mitarbeiter ist
@@ -701,10 +717,11 @@
                 const workerData = await workerResponse.json();
                 
                 if (workerData.valid) {
-                    console.log('Verarbeite Mitarbeiter-Barcode:', barcode);
                     scannedWorker = workerData.data;
                     updateWorkerPreview(workerData.data);
                     document.getElementById('worker-card').style.backgroundColor = '#fff3cd';
+                    // Fokus zurück auf Barcode-Eingabe
+                    document.getElementById('barcode-input').focus();
                     return;
                 }
 
@@ -745,6 +762,8 @@
             } catch (error) {
                 console.error('Fehler:', error);
                 showError('Fehler beim Scannen');
+                // Fokus zurück auf Barcode-Eingabe
+                document.getElementById('barcode-input').focus();
             }
         }
 
@@ -825,36 +844,126 @@
 
         function updateToolPreview(tool) {
             const preview = document.getElementById('tool-preview');
+            const toolCard = document.getElementById('tool-card');
             const quantityContainer = document.getElementById('quantity-container');
             
-            if (!preview) return;
+            if (!preview || !toolCard) return;
             
-            console.log('Update Tool Preview:', tool); // Debug-Ausgabe
+            console.log('Update Tool Preview:', tool);
+            
+            // Direkte Hintergrundfarbe setzen
+            toolCard.style.backgroundColor = '#d1fae5'; // Helles Grün
             
             preview.innerHTML = `
-                <div class="p-4 rounded-lg">
-                    <h3 class="font-bold">${tool.source === 'consumables' ? tool.bezeichnung : tool.gegenstand}</h3>
-                    <p class="text-sm">Barcode: ${tool.barcode}</p>
-                    ${tool.source === 'consumables' 
-                        ? `<p class="text-sm">Bestand: ${tool.bestand} ${tool.einheit || 'Stk'}</p>`
-                        : `<p class="text-sm">Status: ${tool.status}</p>`
-                    }
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-${tool.type === 'consumable' ? 'box-open' : 'tools'} text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-bold">${tool.gegenstand || tool.bezeichnung}</p>
+                                <p class="text-sm">Barcode: ${tool.barcode}</p>
+                                ${tool.type === 'consumable' 
+                                    ? `<p class="text-sm">Bestand: ${tool.bestand || tool.aktueller_bestand} ${tool.einheit || 'Stk'}</p>`
+                                    : `<p class="text-sm">Status: ${tool.status || ''}</p>`
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
 
-            // Mengenfeld für Verbrauchsmaterial
+            // Mengenfeld-Logik...
+        }
+
+        function updateWorkerPreview(worker) {
+            const preview = document.getElementById('worker-preview');
+            const workerCard = document.getElementById('worker-card');
+            
+            if (!preview || !workerCard) return;
+            
+            // Direkte Hintergrundfarbe setzen
+            workerCard.style.backgroundColor = '#d1fae5'; // Helles Grün
+            
+            preview.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-user text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-bold">${worker.name} ${worker.lastname || ''}</p>
+                                <p class="text-sm">Barcode: ${worker.barcode}</p>
+                                <p class="text-sm">Bereich: ${worker.bereich || ''}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Reset-Funktion für das QuickScan Modal
+        function resetQuickScan() {
+            const toolCard = document.getElementById('tool-card');
+            const workerCard = document.getElementById('worker-card');
+            
+            // Zurücksetzen der Hintergrundfarben
+            if (toolCard) {
+                toolCard.style.backgroundColor = '#f0f0f0'; // Ursprüngliche Farbe
+            }
+            if (workerCard) {
+                workerCard.style.backgroundColor = '#f0f0f0'; // Ursprüngliche Farbe
+            }
+            
+            // Reset der Previews
+            const toolPreview = document.getElementById('tool-preview');
+            const workerPreview = document.getElementById('worker-preview');
+            if (toolPreview) {
+                toolPreview.innerHTML = `
+                    <div id="tool-details">
+                        <i class="fas fa-tools text-4xl"></i>
+                        <p class="mt-2">Warten auf Scan...</p>
+                    </div>
+                `;
+            }
+            if (workerPreview) {
+                workerPreview.innerHTML = `
+                    <div id="worker-details">
+                        <i class="fas fa-user text-4xl"></i>
+                        <p class="mt-2">Warten auf Scan...</p>
+                    </div>
+                `;
+            }
+            
+            // Reset des Mengenfelds
+            const quantityContainer = document.getElementById('quantity-container');
             if (quantityContainer) {
-                if (tool.source === 'consumables') {
-                    quantityContainer.classList.remove('hidden');
-                    const unitLabel = document.getElementById('unit-label');
-                    if (unitLabel) {
-                        unitLabel.textContent = tool.einheit || 'Stk';
-                    }
-                } else {
-                    quantityContainer.classList.add('hidden');
-                }
+                quantityContainer.classList.add('hidden');
+            }
+            
+            // Reset der globalen Variablen
+            scannedTool = null;
+            scannedWorker = null;
+            currentStep = 'tool';
+        }
+
+        // Modal schließen Funktion anpassen
+        function closeQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            if (modal) {
+                modal.close();
+                resetQuickScan();
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('quickScanModal');
+            if (modal) {
+                modal.addEventListener('close', resetQuickScan);
+            }
+        });
     </script>
 
     <style>
@@ -928,9 +1037,11 @@
             const modal = document.getElementById('quickScanModal');
             if (modal) {
                 modal.showModal();
-                startScanning();
-            } else {
-                console.error('Modal nicht gefunden');
+                // Fokus auf das Barcode-Eingabefeld setzen
+                const barcodeInput = document.getElementById('barcode-input');
+                if (barcodeInput) {
+                    barcodeInput.focus();
+                }
             }
         }
     </script>
