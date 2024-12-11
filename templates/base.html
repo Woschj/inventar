@@ -668,14 +668,24 @@
             
             if (e.key === 'Enter') {
                 if (barcodeBuffer) {
-                    // Wenn es ein doppelter Mitarbeiter-Scan ist und alles vollständig ist
-                    if (scannedWorker && 
-                        scannedTool && 
-                        barcodeBuffer === scannedWorker.barcode && 
-                        barcodeBuffer === lastBarcode) {
-                        submitProcess(); // Löst die Bestätigung aus
+                    // Finde aktives Eingabefeld
+                    const activeElement = document.activeElement;
+                    const barcodeInput = document.getElementById('barcodeInput');
+                    
+                    if (barcodeInput) {
+                        // Wenn wir auf einer Add-Seite sind
+                        barcodeInput.value = barcodeBuffer;
+                        const submitButton = barcodeInput.closest('form').querySelector('button[type="submit"]');
+                        if (submitButton) {
+                            submitButton.click();
+                        }
+                    } else {
+                        // Wenn wir auf der Hauptseite sind, QuickScan öffnen
+                        showQuickScan();
+                        processBarcode(barcodeBuffer);
                     }
-                    // ... restlicher bestehender Code ...
+                    
+                    barcodeBuffer = '';
                 }
             } else {
                 barcodeBuffer += e.key;

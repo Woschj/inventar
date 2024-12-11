@@ -11,14 +11,12 @@
         <form method="post" enctype="multipart/form-data" class="space-y-4">
             <div class="mb-4">
                 <label class="block text-sm font-medium">Barcode</label>
-                <div class="relative">
-                    <input type="text" name="barcode" id="barcodeInput" required
-                           class="input input-bordered w-full pr-16">
-                    <button type="button" onclick="startBarcodeScanner()"
-                            class="btn btn-primary absolute right-0 top-0">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                </div>
+                <input type="text" 
+                       name="barcode" 
+                       id="barcodeInput" 
+                       required
+                       class="input input-bordered w-full"
+                       autocomplete="off">
             </div>
             <div>
                 <label class="block text-sm font-medium">Bezeichnung</label>
@@ -36,9 +34,14 @@
                        class="input input-bordered w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium">Bild</label>
-                <input type="file" name="image" accept="image/*"
-                       class="file-input file-input-bordered w-full">
+                <label class="block text-sm font-medium">Bild (max. 200KB)</label>
+                <input type="file" 
+                       name="image" 
+                       id="imageInput"
+                       accept="image/*"
+                       class="file-input file-input-bordered w-full"
+                       onchange="handleImageUpload(this)">
+                <div id="imagePreview" class="mt-2"></div>
             </div>
             <button type="submit" 
                     class="btn bg-[#5b69a7] hover:bg-[#4c5789] text-white">
@@ -218,6 +221,85 @@ function showScannerSuccess(message) {
     successDiv.textContent = message;
     document.body.appendChild(successDiv);
     setTimeout(() => successDiv.remove(), 3000);
+}
+
+async function processImage(file) {
+    return new Promise((resolve, reject) => {
+        const maxWidth = 400;   // Maximale Breite
+        const maxHeight = 400;  // Maximale Höhe
+        const maxSizeKB = 200;  // Maximale Dateigröße in KB
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Größenverhältnis beibehalten
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                let quality = 0.9;
+                let dataUrl;
+                do {
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    quality -= 0.1;
+                } while (dataUrl.length > maxSizeKB * 1024 && quality > 0.1);
+                
+                resolve(dataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+async function handleImageUpload(input) {
+    if (input.files && input.files[0]) {
+        try {
+            const processedImage = await processImage(input.files[0]);
+            
+            // Preview anzeigen
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = `
+                <img src="${processedImage}" 
+                     class="max-w-[200px] rounded-lg shadow-lg" 
+                     alt="Vorschau">
+            `;
+            
+            // Processed image als Hidden Input speichern
+            let hiddenInput = document.getElementById('processedImage');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'processed_image';
+                hiddenInput.id = 'processedImage';
+                input.parentNode.appendChild(hiddenInput);
+            }
+            hiddenInput.value = processedImage;
+        } catch (error) {
+            console.error('Fehler bei der Bildverarbeitung:', error);
+            alert('Fehler bei der Bildverarbeitung. Bitte versuchen Sie es erneut.');
+        }
+    }
 }
 </script>
 {% endblock %}
