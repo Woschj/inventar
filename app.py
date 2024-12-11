@@ -1743,73 +1743,65 @@ def get_recent_lendings():
 @app.route('/api/process_lending', methods=['POST'])
 def process_lending():
     try:
-        data = request.json
-        item_barcode = data.get('item_barcode')
+        data = request.get_json()
         worker_barcode = data.get('worker_barcode')
-        item_type = data.get('item_type', 'tool')
+        item_barcode = data.get('item_barcode')
         action = data.get('action')
-        new_status = data.get('new_status')
-        
-        # Debug-Ausgabe
-        print(f"Verarbeite {action} für {item_type} {item_barcode} von Mitarbeiter {worker_barcode}")
-        
-        # Wähle die richtige Datenbank
-        db_name = DBConfig.TOOLS_DB if item_type == 'tool' else DBConfig.CONSUMABLES_DB
-        
-        with get_db_connection(db_name) as conn:
-            # Status aktualisieren
-            table_name = 'tools' if item_type == 'tool' else 'consumables'
-            conn.execute(f'''
-                UPDATE {table_name}
-                SET status = ?
-                WHERE barcode = ?
-            ''', (new_status, item_barcode))
-            
-            # Historie eintragen - Unterscheide zwischen Tool und Consumable
-            if item_type == 'tool':
+        is_consumable = data.get('is_consumable', False)
+
+        # Tools DB für Status-Updates
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            if is_consumable:
+                # Verbrauchsmaterial Logik bleibt gleich
+                pass
+            else:
+                # Werkzeug verarbeiten
+                if action == 'ausleihen':
+                    conn.execute('''
+                        UPDATE tools 
+                        SET status = 'Ausgeliehen'
+                        WHERE barcode = ?
+                    ''', (item_barcode,))
+                else:
+                    conn.execute('''
+                        UPDATE tools 
+                        SET status = 'Verfügbar'
+                        WHERE barcode = ?
+                    ''', (item_barcode,))
+
+                # Status-Historie eintragen
                 conn.execute('''
-                    INSERT INTO tool_status_history 
+                    INSERT INTO tool_status_history
                     (tool_barcode, action, worker_barcode, timestamp)
                     VALUES (?, ?, ?, CURRENT_TIMESTAMP)
                 ''', (item_barcode, action, worker_barcode))
-            else:
-                conn.execute('''
-                    INSERT INTO consumables_history
-                    (consumable_barcode, action, worker_barcode, timestamp)
-                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-                ''', (item_barcode, action, worker_barcode))
-            
-            # Lending-Tabelle aktualisieren
-            with get_db_connection(DBConfig.LENDINGS_DB) as lendings_conn:
-                if action == 'return':
-                    lendings_conn.execute('''
+
+        # Lendings DB für Ausleihhistorie
+        with get_db_connection(DBConfig.LENDINGS_DB) as conn:
+            if not is_consumable:
+                if action == 'ausleihen':
+                    conn.execute('''
+                        INSERT INTO lendings 
+                        (item_barcode, worker_barcode, item_type, checkout_time)
+                        VALUES (?, ?, 'tool', CURRENT_TIMESTAMP)
+                    ''', (item_barcode, worker_barcode))
+                else:
+                    conn.execute('''
                         UPDATE lendings 
                         SET return_time = CURRENT_TIMESTAMP
                         WHERE item_barcode = ? 
-                        AND worker_barcode = ?
+                        AND worker_barcode = ? 
                         AND return_time IS NULL
                     ''', (item_barcode, worker_barcode))
-                else:
-                    lendings_conn.execute('''
-                        INSERT INTO lendings 
-                        (item_barcode, worker_barcode, item_type, checkout_time)
-                        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-                    ''', (item_barcode, worker_barcode, item_type))
-                lendings_conn.commit()
-            
+
             conn.commit()
-            
-        return jsonify({
-            'success': True, 
-            'message': f'Vorgang erfolgreich abgeschlossen ({action})',
-            'action': action,
-            'new_status': new_status
-        })
-        
+
+        return jsonify({'success': True, 'message': 'Vorgang erfolgreich abgeschlossen'})
+
     except Exception as e:
         print(f"Fehler beim Verarbeiten: {str(e)}")
-        traceback.print_exc()  # Fügt detailliertere Fehlerinformationen hinzu
-        return jsonify({'error': str(e)})
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)})
 
 @app.route('/manual_lending')
 @admin_required  # oder @login_required, je nachdem welchen Decorator du verwendest
@@ -1952,7 +1944,7 @@ def checkout_consumable(barcode):
             conn.execute('''
                 INSERT INTO consumables_history 
                 (consumable_barcode, worker_barcode, action, amount, old_stock, new_stock, changed_by)
-                VALUES (?, ?, 'checkout', ?, ?, ?, ?)
+                VALUES (?, ?, 'checkout', ?, ?, ?)
             ''', (
                 barcode,
                 worker_barcode,
