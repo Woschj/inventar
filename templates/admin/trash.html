@@ -154,25 +154,26 @@
                     </tr>
                 </thead>
                 <tbody class="bg-base-100 divide-y divide-base-200">
-                    {% for item in deleted_items.workers %}
+                    {% for worker in deleted_items.workers %}
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">
-                            {{ item.name }} {{ item.lastname }}
+                            {{ worker.name }} {{ worker.lastname }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ item.barcode }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ item.bereich }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ item.email }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ item.deleted_at_local }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ item.deleted_by }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="confirmRestore('worker', {{ item.id }})" 
-                                    class="text-primary hover:text-primary-focus mr-3">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ worker.barcode }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ worker.bereich }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ worker.email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ worker.deleted_at_local }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-base-content">{{ worker.deleted_by }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ url_for('restore_worker', id=worker.id) }}" 
+                               class="text-blue-600 hover:text-blue-800 mr-3">
                                 Wiederherstellen
-                            </button>
-                            <button onclick="confirmPermanentDelete('worker', {{ item.id }})" 
-                                    class="text-red-600 hover:text-red-900">
-                                Endgültig löschen
-                            </button>
+                            </a>
+                            <a href="{{ url_for('worker_permanent_delete', id=worker.id) }}" 
+                               class="text-red-600 hover:text-red-800"
+                               onclick="return confirm('Möchten Sie diesen Mitarbeiter wirklich permanent löschen?');">
+                                Permanent löschen
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}

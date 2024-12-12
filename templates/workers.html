@@ -98,17 +98,14 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ worker.email }}</td>
                         {% if session.get('is_admin') %}
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <form action="{{ url_for('delete_worker', barcode=worker.barcode) }}" method="POST" class="inline">
-                                <button type="submit" 
-                                        class="text-red-600 hover:text-red-800"
-                                        onclick="return confirm('Möchten Sie diesen Mitarbeiter wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.');">
-                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" 
-                                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" 
-                                              clip-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                            </form>
+                            <button onclick="confirmDelete('worker', '{{ worker.barcode }}')" 
+                                    class="text-red-600 hover:text-red-800">
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" 
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" 
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </button>
                         </td>
                         {% endif %}
                     </tr>
@@ -120,13 +117,17 @@
 </div>
 
 <!-- Delete Modal -->
-<div id="deleteModal" class="modal" role="dialog">
-    <div class="modal-box">
-        <h3 class="font-bold text-lg mb-4">Löschen bestätigen</h3>
-        <p id="deleteModalText" class="mb-6">Möchten Sie diesen Mitarbeiter wirklich in den Papierkorb verschieben?</p>
-        <div class="modal-action">
-            <button onclick="closeDeleteModal()" class="btn">Abbrechen</button>
-            <button onclick="executeDelete()" class="btn btn-error">
+<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-xl">
+        <h3 class="text-lg font-bold mb-4">Löschen bestätigen</h3>
+        <p id="deleteModalText" class="mb-6">Möchten Sie diesen Mitarbeiter wirklich löschen?</p>
+        <div class="flex justify-end space-x-4">
+            <button onclick="closeDeleteModal()" 
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                Abbrechen
+            </button>
+            <button onclick="executeDelete()" 
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
                 Löschen
             </button>
         </div>
@@ -165,7 +166,12 @@ function closeDeleteModal() {
 
 function executeDelete() {
     if (currentDeleteUrl) {
-        window.location.href = currentDeleteUrl;
+        // Erstelle ein verstecktes Formular für die POST-Anfrage
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = currentDeleteUrl;
+        document.body.appendChild(form);
+        form.submit();
     }
 }
 
@@ -371,5 +377,13 @@ function closeBarcodeModal() {
 window.onload = function() {
     JsBarcode(".barcode").init();
 }
+
+// Event-Listener für Klicks außerhalb des Modals
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target === modal) {
+        closeDeleteModal();
+    }
+});
 </script>
 {% endblock %}

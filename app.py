@@ -1330,7 +1330,7 @@ def edit_worker(barcode):
         flash('Fehler beim Bearbeiten des Mitarbeiters', 'error')
         return redirect(url_for('workers'))
 
-@app.route('/worker/delete/<string:barcode>', methods=['POST'])
+@app.route('/worker/delete/<string:barcode>', methods=['GET', 'POST'])
 @admin_required
 def delete_worker(barcode):
     """Mitarbeiter löschen"""
@@ -1496,6 +1496,7 @@ def restore_worker(id):
     """Mitarbeiter aus dem Papierkorb wiederherstellen"""
     try:
         with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            # Hole den gelöschten Mitarbeiter
             item = conn.execute(
                 'SELECT * FROM deleted_workers WHERE id=?', (id,)
             ).fetchone()
@@ -1503,19 +1504,23 @@ def restore_worker(id):
             if item:
                 # Prüfen ob Barcode bereits wieder existiert
                 existing = conn.execute(
-                    'SELECT 1 FROM workers WHERE barcode=?', ((item['barcode'],))
+                    'SELECT 1 FROM workers WHERE barcode=?', (item['barcode'],)
                 ).fetchone()
                 
                 if existing:
                     flash('Ein Mitarbeiter mit diesem Barcode existiert bereits', 'error')
                     return redirect(url_for('trash'))
                 
+                # Mitarbeiter wiederherstellen
                 conn.execute('''
                     INSERT INTO workers 
                     (name, lastname, barcode, bereich, email)
                     VALUES (?, ?, ?, ?, ?)
                 ''', (item['name'], item['lastname'], item['barcode'],
                       item['bereich'], item['email']))
+                
+                # Aus dem Papierkorb löschen
+                conn.execute('DELETE FROM deleted_workers WHERE id=?', (id,))
                 conn.commit()
                 
                 flash('Mitarbeiter wiederhergestellt', 'success')
@@ -1523,8 +1528,7 @@ def restore_worker(id):
                 flash('Gelöschter Mitarbeiter nicht gefunden', 'error')
                 
     except Exception as e:
-        print(f"Fehler bei Wiederherstellung: {str(e)}")
-        traceback.print_exc()
+        logging.error(f"Fehler bei Wiederherstellung: {str(e)}")
         flash('Fehler bei der Wiederherstellung', 'error')
         
     return redirect(url_for('trash'))
@@ -2099,6 +2103,34 @@ def search_worker(barcode):
     except Exception as e:
         print(f"Fehler bei der Mitarbeitersuche: {str(e)}")  # Debug-Ausgabe
         return jsonify({'error': 'Fehler bei der Suche nach dem Mitarbeiter'})
+
+@app.route('/admin/trash/worker/permanent_delete/<int:id>', methods=['GET', 'POST'])
+@admin_required
+@log_route
+def worker_permanent_delete(id):  # Funktionsname muss mit dem Endpunkt übereinstimmen
+    """Mitarbeiter permanent aus dem Papierkorb löschen"""
+    try:
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            worker = conn.execute(
+                'SELECT * FROM deleted_workers WHERE id = ?', (id,)
+            ).fetchone()
+            
+            if not worker:
+                flash('Mitarbeiter nicht gefunden', 'error')
+                return redirect(url_for('trash'))
+            
+            conn.execute('DELETE FROM deleted_workers WHERE id = ?', (id,))
+            conn.commit()
+            
+            flash('Mitarbeiter wurde permanent gelöscht', 'success')
+            
+    except sqlite3.Error as e:
+        logging.error(f"Datenbankfehler beim permanenten Löschen: {str(e)}")
+        flash('Fehler beim Löschen des Mitarbeiters', 'error')
+        
+    return redirect(url_for('trash'))
+
+
 
 @app.route('/admin/permanent_delete/tool/<int:id>')
 @admin_required
@@ -3050,3 +3082,5 @@ def add_amount_column():
             flash(f'Fehler: {str(e)}', 'error')
             return redirect(url_for('admin_panel'))
 
+# Eindeutige Route für das Löschen von Mitarbeitern aus dem Papierkorb
+# Route für das permanente Löschen von Mitarbeitern
