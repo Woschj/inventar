@@ -196,6 +196,11 @@
     <!-- QuickScan Modal -->
     <dialog id="quickScanModal" class="modal">
         <form method="dialog" class="modal-box">
+            <input type="text" 
+                   id="hidden-barcode-input" 
+                   class="opacity-0 h-0 w-0 absolute" 
+                   autocomplete="off">
+            
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-lg">QuickScan</h3>
                 <button class="btn btn-sm btn-circle">✕</button>
@@ -250,6 +255,138 @@
         const BARCODE_DELAY = 50;
         let scannerActive = true;  // Neue Variable für Scanner-Status
         let activeModal = null;    // Speichert das aktive Modal
+        const BARCODE_CONFIRM_CHAR = '#';
+        const BARCODE_MIN_LENGTH = 5;  // Minimale Länge für gültigen Barcode
+        let scanTimeout = null;
+
+        // Verbesserte Barcode-Verarbeitung
+        document.addEventListener('keypress', function(e) {
+            const currentTime = new Date().getTime();
+            const modal = document.getElementById('quickScanModal');
+            
+            // Nur verarbeiten wenn Modal offen
+            if (!modal?.open) return;
+            
+            if (currentTime - lastKeyTime > BARCODE_DELAY) {
+                barcodeBuffer = '';
+            }
+            
+            // Bestätigung oder automatische Verarbeitung nach Timeout
+            if (e.key === BARCODE_CONFIRM_CHAR || e.key === 'Enter') {
+                e.preventDefault();
+                if (barcodeBuffer && barcodeBuffer.length >= BARCODE_MIN_LENGTH) {
+                    processBarcodeWithFeedback(barcodeBuffer);
+                }
+                barcodeBuffer = '';
+                clearTimeout(scanTimeout);
+            } else {
+                barcodeBuffer += e.key;
+                
+                // Automatische Verarbeitung nach kurzem Timeout
+                clearTimeout(scanTimeout);
+                scanTimeout = setTimeout(() => {
+                    if (barcodeBuffer.length >= BARCODE_MIN_LENGTH) {
+                        processBarcodeWithFeedback(barcodeBuffer);
+                        barcodeBuffer = '';
+                    }
+                }, 100);
+            }
+            
+            lastKeyTime = currentTime;
+        });
+
+        // Verbesserte Barcode-Verarbeitung mit Feedback
+        async function processBarcodeWithFeedback(barcode) {
+            try {
+                showScanAnimation();
+                const barcodeType = await detectBarcodeType(barcode);
+                
+                if (barcodeType.type === 'error' || barcodeType.type === 'unknown') {
+                    showFeedback('Ungültiger Barcode', 'error');
+                    playSound('error');
+                    return;
+                }
+
+                // Erfolgreicher Scan
+                showFeedback(`${barcodeType.type} erkannt: ${barcode}`, 'success');
+                playSound('success');
+                updateScanPreview(barcodeType);
+                processBarcode(barcode);  // Bestehende Verarbeitung
+                
+            } catch (error) {
+                console.error('Scan-Fehler:', error);
+                showFeedback('Scan fehlgeschlagen', 'error');
+                playSound('error');
+            }
+        }
+
+        // Visuelles Feedback
+        function showFeedback(message, type = 'info') {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `alert alert-${type} fixed bottom-4 right-4 z-50 animate-fade-in`;
+            feedbackDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(feedbackDiv);
+            
+            setTimeout(() => {
+                feedbackDiv.classList.add('animate-fade-out');
+                setTimeout(() => feedbackDiv.remove(), 300);
+            }, 2000);
+        }
+
+        // Scan-Animation
+        function showScanAnimation() {
+            const previewElement = document.getElementById(currentStep === 'tool' ? 'tool-preview' : 'worker-preview');
+            if (previewElement) {
+                previewElement.classList.add('scanning');
+                setTimeout(() => previewElement.classList.remove('scanning'), 500);
+            }
+        }
+
+        // Audio-Feedback
+        function playSound(type) {
+            const audio = new Audio();
+            audio.src = type === 'success' ? 
+                '/static/sounds/success.mp3' : 
+                '/static/sounds/error.mp3';
+            audio.play().catch(() => {}); // Ignoriere Fehler wenn Audio deaktiviert
+        }
+
+        // CSS für Animationen
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fade-in {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes fade-out {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(20px); }
+            }
+            
+            @keyframes scanning {
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.05); opacity: 0.8; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+            
+            .animate-fade-in {
+                animation: fade-in 0.3s ease-out;
+            }
+            
+            .animate-fade-out {
+                animation: fade-out 0.3s ease-out;
+            }
+            
+            .scanning {
+                animation: scanning 0.5s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
 
         // QR Code für den Button generieren
         document.addEventListener('DOMContentLoaded', function() {
@@ -274,11 +411,14 @@
         // Modal öffnen und Scanner starten
         function showQuickScan() {
             const modal = document.getElementById('quickScanModal');
+            const hiddenInput = document.getElementById('hidden-barcode-input');
+            
             if (modal) {
-                resetScanState();
                 modal.showModal();
-            } else {
-                console.error('Modal nicht gefunden');
+                // Fokus auf verstecktes Input-Feld setzen
+                if (hiddenInput) {
+                    hiddenInput.focus();
+                }
             }
         }
 
@@ -689,20 +829,11 @@
                 barcodeBuffer = '';
             }
             
-            if (e.key === BARCODE_CONFIRM_CHAR) {
+            if (e.key === BARCODE_CONFIRM_CHAR || e.key === 'Enter') {
                 if (barcodeBuffer && scannerActive) {
-                    e.preventDefault();  // Verhindert # im Input-Feld
+                    e.preventDefault();
                     processBarcode(barcodeBuffer);
-                }
-                barcodeBuffer = '';
-            } else if (e.key === BARCODE_CANCEL_CHAR) {
-                e.preventDefault();
-                barcodeBuffer = '';  // Löscht den aktuellen Scan
-                showMessage('Scan abgebrochen', 'warning');
-            } else if (e.key === 'Enter') {
-                // Optional: Enter kann weiterhin als Backup verwendet werden
-                if (barcodeBuffer && scannerActive) {
-                    processBarcode(barcodeBuffer);
+                    console.log('Barcode erkannt:', barcodeBuffer); // Debug-Info
                 }
                 barcodeBuffer = '';
             } else {
@@ -849,6 +980,52 @@
                 quickScanModal.addEventListener('close', stopScanning);
             }
         });
+
+        // Fokus wiederherstellen, wenn er verloren geht
+        document.getElementById('quickScanModal').addEventListener('click', function() {
+            const hiddenInput = document.getElementById('hidden-barcode-input');
+            if (hiddenInput) {
+                hiddenInput.focus();
+            }
+        });
+
+        // Automatische Fokussierung des versteckten Input-Felds
+        function showQuickScan() {
+            const modal = document.getElementById('quickScanModal');
+            const hiddenInput = document.getElementById('hidden-barcode-input');
+            
+            if (modal) {
+                modal.showModal();
+                if (hiddenInput) {
+                    hiddenInput.focus();
+                    console.log('QuickScan Modal geöffnet und Fokus gesetzt'); // Debug-Info
+                }
+            }
+        }
+
+        // Fokus wiederherstellen
+        document.getElementById('quickScanModal').addEventListener('click', function() {
+            const hiddenInput = document.getElementById('hidden-barcode-input');
+            if (hiddenInput) {
+                hiddenInput.focus();
+                console.log('Fokus wiederhergestellt'); // Debug-Info
+            }
+        });
+
+        // Feedback für erfolgreichen Scan
+        function showScanFeedback(success = true) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `alert ${success ? 'alert-success' : 'alert-error'} fixed bottom-4 right-4 z-50`;
+            feedbackDiv.innerHTML = success ? 
+                '<i class="fas fa-check-circle mr-2"></i>Barcode erfolgreich gescannt' : 
+                '<i class="fas fa-exclamation-circle mr-2"></i>Scan fehlgeschlagen';
+            
+            document.body.appendChild(feedbackDiv);
+            
+            setTimeout(() => {
+                feedbackDiv.remove();
+            }, 2000);
+        }
     </script>
 
     <style>
@@ -920,12 +1097,13 @@
 
         function showQuickScan() {
             const modal = document.getElementById('quickScanModal');
+            const hiddenInput = document.getElementById('hidden-barcode-input');
+            
             if (modal) {
                 modal.showModal();
-                // Fokus auf das Barcode-Eingabefeld setzen
-                const barcodeInput = document.getElementById('barcode-input');
-                if (barcodeInput) {
-                    barcodeInput.focus();
+                // Fokus auf verstecktes Input-Feld setzen
+                if (hiddenInput) {
+                    hiddenInput.focus();
                 }
             }
         }
