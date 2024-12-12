@@ -164,43 +164,57 @@
 document.addEventListener('DOMContentLoaded', function() {
     const itemTypeSelect = document.getElementById('itemTypeSelect');
     const itemBarcodeSelect = document.getElementById('itemBarcodeSelect');
-    const amountDiv = document.getElementById('amountField');
+    const amountField = document.getElementById('amountField');
     
     // Werkzeuge und Verbrauchsmaterial aus dem Template
     const tools = {{ tools|tojson|safe }};
     const consumables = {{ consumables|tojson|safe }};
     
-    function updateItemSelect(type) {
-        // Lösche bestehende Optionen
-        itemBarcodeSelect.innerHTML = '<option value="">Artikel auswählen...</option>';
+    function updateItemSelect() {
+        // Alle Optionen ausblenden
+        Array.from(itemBarcodeSelect.options).forEach(option => {
+            option.style.display = 'none';
+        });
         
-        if (type === 'tool') {
-            tools.forEach(tool => {
-                const option = document.createElement('option');
-                option.value = tool.barcode;
-                option.textContent = tool.gegenstand;
-                itemBarcodeSelect.appendChild(option);
-            });
-            amountDiv.classList.add('hidden');
-            document.getElementById('amountInput').removeAttribute('required');
+        // Nur relevante Optionen anzeigen
+        const selectedType = itemTypeSelect.value;
+        Array.from(itemBarcodeSelect.options).forEach(option => {
+            if (option.dataset.type === selectedType || option.value === '') {
+                option.style.display = '';
+            }
+        });
+        
+        // Mengenfeld ein-/ausblenden
+        if (selectedType === 'consumable') {
+            amountField.classList.remove('hidden');
+            const amountInput = amountField.querySelector('input[name="amount"]');
+            if (amountInput) {
+                amountInput.removeAttribute('disabled');
+                amountInput.setAttribute('required', 'required');
+            }
         } else {
-            consumables.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.barcode;
-                option.textContent = item.bezeichnung;
-                itemBarcodeSelect.appendChild(option);
-            });
-            amountDiv.classList.remove('hidden');
-            document.getElementById('amountInput').setAttribute('required', 'required');
+            amountField.classList.add('hidden');
+            const amountInput = amountField.querySelector('input[name="amount"]');
+            if (amountInput) {
+                amountInput.value = '1';
+                amountInput.setAttribute('disabled', 'disabled');
+                amountInput.removeAttribute('required');
+            }
+        }
+        
+        // Erste passende Option auswählen
+        itemBarcodeSelect.value = '';
+        const firstVisibleOption = Array.from(itemBarcodeSelect.options).find(
+            option => option.style.display !== 'none'
+        );
+        if (firstVisibleOption) {
+            firstVisibleOption.selected = true;
         }
     }
     
-    itemTypeSelect.addEventListener('change', function() {
-        updateItemSelect(this.value);
-    });
-    
-    // Initial auslösen
-    updateItemSelect(itemTypeSelect.value);
+    itemTypeSelect.addEventListener('change', updateItemSelect);
+    // Initial ausführen
+    updateItemSelect();
 });
 
 function switchTab(tabName) {

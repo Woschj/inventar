@@ -1103,3 +1103,27 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_
 2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "[33mGET /static/js/theme.js HTTP/1.1[0m" 404 -
 2024-12-05 22:41:30 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:30] "[36mGET /static/images/Logo-BTZ-WEISS.svg HTTP/1.1[0m" 304 -
 2024-12-05 22:41:31 - INFO - 127.0.0.1 - - [05/Dec/2024 22:41:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-12 16:08:31 - ERROR - Fehler in index: 'csrf_token' is undefined
+Traceback (most recent call last):
+  File "/Users/woschj/Downloads/technik/inventar/app.py", line 92, in decorated_function
+    result = f(*args, **kwargs)
+  File "/Users/woschj/Downloads/technik/inventar/app.py", line 694, in index
+    return render_template('index.html', tools=tools, active_filter=filter_status)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/templating.py", line 152, in render_template
+    return _render(app, template, context)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/flask/templating.py", line 133, in _render
+    rv = template.render(context)
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/woschj/Downloads/technik/inventar/templates/index.html", line 2, in top-level template code
+    {% extends "base.html" %}
+  File "/Users/woschj/Downloads/technik/inventar/templates/base.html", line 85, in top-level template code
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/woschj/Downloads/technik/inventar/venv/lib/python3.13/site-packages/jinja2/utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'csrf_token' is undefined
