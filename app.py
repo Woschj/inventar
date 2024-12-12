@@ -1006,15 +1006,20 @@ def add_consumable():
     return render_template('add_consumable.html')
 
 
+def check_table_structure(table_name):
+    """Überprüft die Struktur einer Tabelle und gibt die Spaltennamen zurück"""
+    try:
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            columns = conn.execute(f"PRAGMA table_info({table_name})").fetchall()
+            return [col[1] for col in columns]  # Gibt Liste der Spaltennamen zurück
+    except Exception as e:
+        logging.error(f"Fehler beim Prüfen der Tabellenstruktur von {table_name}: {str(e)}")
+        return []
+
 @app.route('/consumable/delete/<barcode>', methods=['POST'])
 @log_db_operation("Verbrauchsmaterial löschen")
 def delete_consumable(barcode):
     try:
-        # Debug: Prüfe Tabellenstruktur
-        logging.info("Überprüfe Tabellenstruktur...")
-        deleted_columns = check_table_structure('deleted_consumables')
-        consumables_columns = check_table_structure('consumables')
-        
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
             conn.row_factory = sqlite3.Row
             
@@ -1028,36 +1033,32 @@ def delete_consumable(barcode):
                 logging.error(f"Verbrauchsmaterial mit Barcode {barcode} nicht gefunden")
                 return jsonify({'error': 'Verbrauchsmaterial nicht gefunden'})
             
-            # Debug: Zeige gefundenes Verbrauchsmaterial
-            logging.info(f"Gefundenes Verbrauchsmaterial: {dict(consumable)}")
-            
             # Verschiebe in deleted_consumables
             conn.execute('''
                 INSERT INTO deleted_consumables 
                 (barcode, bezeichnung, ort, typ, mindestbestand, 
-                 letzter_bestand, einheit, deleted_by)
+                 aktueller_bestand, einheit, deleted_by)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                consumable['barcode'],
-                consumable['bezeichnung'],
-                consumable['ort'],
-                consumable['typ'],
-                consumable['mindestbestand'],
-                consumable['aktueller_bestand'],
-                consumable['einheit'],
-                session.get('username', 'System')
+                consumable['barcode'],          # barcode
+                consumable['bezeichnung'],       # bezeichnung
+                consumable['ort'],              # ort
+                consumable['typ'],              # typ
+                consumable['mindestbestand'],   # mindestbestand
+                consumable['aktueller_bestand'], # aktueller_bestand
+                consumable['einheit'],          # einheit
+                session.get('username', 'System') # deleted_by
             ))
             
             # Lösche das Original
             conn.execute('DELETE FROM consumables WHERE barcode = ?', (barcode,))
             conn.commit()
             
-            logging.info(f"Verbrauchsmaterial {barcode} erfolgreich gelöscht")
             return jsonify({'success': True})
             
     except Exception as e:
         logging.error(f"Fehler beim Löschen: {str(e)}")
-        logging.error(traceback.format_exc())  # Fügt Stack Trace hinzu
+        logging.error(traceback.format_exc())
         return jsonify({'error': 'Datenbankfehler'})
 
 @app.route('/consumables/<barcode>/adjust', methods=['POST'])
