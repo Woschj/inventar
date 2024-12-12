@@ -14,19 +14,19 @@
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Gesamt:</span>
-                    <a href="{{ url_for('index') }}" class="text-primary hover:text-primary-focus">{{ data.total_tools }}</a>
+                    <a href="{{ url_for('index') }}" class="text-primary hover:text-primary-focus">{{ stats.total_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Ausgeliehen:</span>
-                    <a href="{{ url_for('index', filter='ausgeliehen') }}" class="text-yellow-600 hover:text-yellow-800">{{ data.borrowed_tools }}</a>
+                    <a href="{{ url_for('index', filter='ausgeliehen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.borrowed_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Defekt:</span>
-                    <a href="{{ url_for('index', filter='defekt') }}" class="text-red-600 hover:text-red-800">{{ data.defect_tools }}</a>
+                    <a href="{{ url_for('index', filter='defekt') }}" class="text-red-600 hover:text-red-800">{{ stats.defect_tools }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ data.deleted_tools }}</a>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_tools }}</a>
                 </li>
             </ul>
         </div>
@@ -37,19 +37,19 @@
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Gesamt:</span>
-                    <a href="{{ url_for('consumables') }}" class="text-primary hover:text-primary-focus">{{ data.total_consumables }}</a>
+                    <a href="{{ url_for('consumables') }}" class="text-primary hover:text-primary-focus">{{ stats.total_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Nachzubestellen:</span>
-                    <a href="{{ url_for('consumables', filter='Nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ data.reorder_consumables }}</a>
+                    <a href="{{ url_for('consumables', filter='Nachbestellen') }}" class="text-yellow-600 hover:text-yellow-800">{{ stats.reorder_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Leer:</span>
-                    <a href="{{ url_for('consumables', filter='Leer') }}" class="text-red-600 hover:text-red-800">{{ data.empty_consumables }}</a>
+                    <a href="{{ url_for('consumables', filter='Leer') }}" class="text-red-600 hover:text-red-800">{{ stats.empty_consumables }}</a>
                 </li>
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ data.deleted_consumables }}</a>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_consumables }}</a>
                 </li>
             </ul>
         </div>
@@ -60,9 +60,9 @@
             <ul class="space-y-3">
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Gesamt:</span>
-                    <a href="{{ url_for('workers') }}" class="text-primary hover:text-primary-focus">{{ data.total_workers }}</a>
+                    <a href="{{ url_for('workers') }}" class="text-primary hover:text-primary-focus">{{ stats.total_workers }}</a>
                 </li>
-                {% for area in data.workers_by_area %}
+                {% for area in stats.workers_by_area %}
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">{{ area[0] }}:</span>
                     <a href="{{ url_for('workers', filter_bereich=area[0]) }}" class="text-primary hover:text-primary-focus">{{ area[1] }}</a>
@@ -70,7 +70,7 @@
                 {% endfor %}
                 <li class="flex justify-between items-center">
                     <span class="text-base-content">Im Papierkorb:</span>
-                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ data.deleted_workers }}</a>
+                    <a href="{{ url_for('trash') }}" class="text-base-content hover:text-base-content">{{ stats.deleted_workers }}</a>
                 </li>
             </ul>
         </div>

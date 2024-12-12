@@ -577,7 +577,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('is_admin'):
-            flash('Bitte melden Sie sich als Administrator an', 'error')
+            flash('Bitte melden Sie sich an, um diese Funktion zu nutzen.', 'error')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -697,33 +697,108 @@ def index():
         flash('Fehler beim Laden der Werkzeuge', 'error')
         return redirect(url_for('index'))
 
-@app.route('/admin_panel')
-@admin_required  # Sicherstellen, dass nur Administratoren Zugriff haben
+@app.route('/admin')
+@admin_required
 def admin_panel():
-    try:
-        # Hier sollte die Logik sein, um die Daten zu laden
-        data = load_admin_data()  # Beispiel für das Laden von Daten
-        return render_template('admin/dashboard.html', data=data)  # Stelle sicher, dass der Pfad korrekt ist
-    except Exception as e:
-        # Logge den Fehler und rendere die Fehlerseite
-        app.logger.error(f"Fehler im Admin-Panel: {str(e)}")
-        return render_template('error.html', error_message=str(e))
-
-def load_admin_data():
-    # Beispiel für das Laden von Statistiken oder anderen Daten
     stats = {
-        'total_tools': 100,
-        'borrowed_tools': 20,
-        'defect_tools': 5,
-        'deleted_tools': 10,
-        'total_consumables': 50,
-        'reorder_consumables': 5,
-        'empty_consumables': 2,
-        'total_workers': 30,
-        'deleted_workers': 3,
-        'workers_by_area': [('IT', 10), ('HR', 5), ('Sales', 15)]
+        'total_tools': 0,
+        'borrowed_tools': 0,
+        'defect_tools': 0,
+        'deleted_tools': 0,
+        'total_consumables': 0,
+        'reorder_consumables': 0,
+        'empty_consumables': 0,
+        'deleted_consumables': 0,
+        'total_workers': 0,
+        'deleted_workers': 0,
+        'workers_by_area': []
     }
-    return stats
+    
+    try:
+        # Werkzeug-Statistiken
+        with get_db_connection(DBConfig.TOOLS_DB) as conn:
+            stats['total_tools'] = conn.execute(
+                'SELECT COUNT(*) FROM tools'
+            ).fetchone()[0]
+            
+            stats['borrowed_tools'] = conn.execute(
+                "SELECT COUNT(*) FROM tools WHERE status = 'Ausgeliehen'"
+            ).fetchone()[0]
+            
+            stats['defect_tools'] = conn.execute(
+                "SELECT COUNT(*) FROM tools WHERE status = 'Defekt'"
+            ).fetchone()[0]
+            
+            # Gelöschte Werkzeuge
+            try:
+                stats['deleted_tools'] = conn.execute(
+                    'SELECT COUNT(*) FROM deleted_tools'
+                ).fetchone()[0]
+            except sqlite3.OperationalError:
+                stats['deleted_tools'] = 0
+                
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Werkzeug-Statistiken: {str(e)}")
+        
+    try:
+        # Verbrauchsmaterial-Statistiken
+        with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
+            stats['total_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables'
+            ).fetchone()[0]
+            
+            stats['reorder_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables WHERE aktueller_bestand <= mindestbestand'
+            ).fetchone()[0]
+            
+            stats['empty_consumables'] = conn.execute(
+                'SELECT COUNT(*) FROM consumables WHERE aktueller_bestand = 0'
+            ).fetchone()[0]
+            
+            # Gelöschtes Verbrauchsmaterial
+            try:
+                stats['deleted_consumables'] = conn.execute(
+                    'SELECT COUNT(*) FROM deleted_consumables'
+                ).fetchone()[0]
+            except sqlite3.OperationalError:
+                stats['deleted_consumables'] = 0
+                
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Verbrauchsmaterial-Statistiken: {str(e)}")
+        
+    try:
+        # Mitarbeiter-Statistiken
+        with get_db_connection(DBConfig.WORKERS_DB) as conn:
+            stats['total_workers'] = conn.execute(
+                'SELECT COUNT(*) FROM workers'
+            ).fetchone()[0]
+            
+            # Mitarbeiter nach Bereich
+            workers_by_area = conn.execute('''
+                SELECT bereich, COUNT(*) as count 
+                FROM workers 
+                WHERE bereich IS NOT NULL 
+                GROUP BY bereich
+            ''').fetchall()
+            
+            stats['workers_by_area'] = [
+                (row['bereich'], row['count']) 
+                for row in workers_by_area
+            ]
+            
+            # Gelöschte Mitarbeiter
+            try:
+                stats['deleted_workers'] = conn.execute(
+                    'SELECT COUNT(*) FROM deleted_workers'
+                ).fetchone()[0]
+            except sqlite3.OperationalError:
+                stats['deleted_workers'] = 0
+                
+    except Exception as e:
+        logging.error(f"Fehler beim Laden der Mitarbeiter-Statistiken: {str(e)}")
+    
+    # Auch wenn es Fehler gab, zeigen wir die Seite mit den verfügbaren Daten an
+    return render_template('admin/dashboard.html', stats=stats)
 
 @app.route('/workers')
 @admin_required
@@ -788,16 +863,6 @@ def consumables():
         logging.error(traceback.format_exc())
         flash('Fehler beim Laden der Verbrauchsmaterialien', 'error')
         return redirect(url_for('index'))
-
-# Neue Decorator-Funktion für Login-Erfordernis
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('is_admin'):
-            flash('Bitte melden Sie sich an, um diese Funktion zu nutzen.', 'error')
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 @app.route('/consumables/<barcode>')
 @admin_required  # Sicherstellen, dass nur Admins Zugriff haben
