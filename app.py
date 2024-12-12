@@ -14,6 +14,7 @@ import sqlite3
 import logging
 import traceback
 from flask import jsonify, session
+import time
 
 
 
@@ -1085,43 +1086,52 @@ def adjust_quantity(barcode):
 
 @app.route('/admin/restore/consumable/<int:id>')
 @admin_required
+@log_route
 def restore_consumable(id):
-    """Verbrauchsmaterial aus dem Papierkorb wiederherstellen"""
     try:
         with get_db_connection(DBConfig.CONSUMABLES_DB) as conn:
-            item = conn.execute(
-                'SELECT * FROM deleted_consumables WHERE id=?', (id,)
+            # Hole gelöschtes Item
+            deleted_item = conn.execute(
+                'SELECT * FROM deleted_consumables WHERE id = ?', 
+                (id,)
             ).fetchone()
             
-            if not item:
-                flash('Verbrauchsmaterial nicht im Papierkorb gefunden', 'error')
+            if not deleted_item:
+                flash('Gelöschter Artikel nicht gefunden', 'error')
                 return redirect(url_for('trash'))
-            
-            # Prüfen ob Barcode bereits wieder existiert
+                
+            # Prüfe ob Barcode bereits existiert
             existing = conn.execute(
-                'SELECT 1 FROM consumables WHERE barcode=?', (item['barcode'],))
+                'SELECT barcode FROM consumables WHERE barcode = ?',
+                (deleted_item['barcode'],)
+            ).fetchone()
             
             if existing:
-                flash('Barcode bereits vergeben', 'error')
-                return redirect(url_for('trash'))
+                # Generiere neuen Barcode
+                new_barcode = f"{deleted_item['barcode']}_restored_{int(time.time())}"
+                flash(f'Barcode bereits vergeben. Neuer Barcode: {new_barcode}', 'warning')
+            else:
+                new_barcode = deleted_item['barcode']
             
+            # Stelle Item wieder her
             conn.execute('''
                 INSERT INTO consumables 
-                (barcode, bezeichnung, ort, typ, status,
-                 mindestbestand, aktueller_bestand, einheit)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (item['barcode'], item['bezeichnung'], item['ort'],
-                  item['typ'], 'Verfügbar', item['mindestbestand'],
-                  item['aktueller_bestand'], item['einheit']))
+                (barcode, bezeichnung, typ, ort, aktueller_bestand, 
+                mindestbestand, einheit)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (new_barcode, deleted_item['bezeichnung'], deleted_item['typ'],
+                  deleted_item['ort'], deleted_item['aktueller_bestand'],
+                  deleted_item['mindestbestand'], deleted_item['einheit']))
             
-            conn.execute('DELETE FROM deleted_consumables WHERE id=?', (id,))
+            # Lösche aus deleted_consumables
+            conn.execute('DELETE FROM deleted_consumables WHERE id = ?', (id,))
             conn.commit()
             
-            flash('Verbrauchsmaterial wiederhergestellt', 'success')
+            flash('Artikel erfolgreich wiederhergestellt', 'success')
             
     except Exception as e:
-        logging.error(f"Fehler bei Wiederherstellung: {str(e)}")
-        flash('Fehler bei der Wiederherstellung', 'error')
+        logging.error(f"Fehler beim Wiederherstellen: {str(e)}")
+        flash('Fehler beim Wiederherstellen des Artikels', 'error')
         
     return redirect(url_for('trash'))
 
@@ -1532,6 +1542,50 @@ def restore_worker(id):
         flash('Fehler bei der Wiederherstellung', 'error')
         
     return redirect(url_for('trash'))
+
+
+@app.route('/admin/permanent_delete/<string:type>/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def permanent_delete(type, id):  # Entfernen Sie @log_route hier, wenn es Probleme verursacht
+    """Element permanent aus dem Papierkorb löschen"""
+    try:
+        if type == 'consumable':
+            db_path = DBConfig.CONSUMABLES_DB
+            table = 'deleted_consumables'
+            item_type = 'Verbrauchsmaterial'
+        elif type == 'tool':
+            db_path = DBConfig.TOOLS_DB
+            table = 'deleted_tools'
+            item_type = 'Werkzeug'
+        elif type == 'worker':
+            db_path = DBConfig.WORKERS_DB
+            table = 'deleted_workers'
+            item_type = 'Mitarbeiter'
+        else:
+            flash('Ungültiger Elementtyp', 'error')
+            return redirect(url_for('trash'))
+
+        with get_db_connection(db_path) as conn:
+            item = conn.execute(
+                f'SELECT * FROM {table} WHERE id = ?', 
+                (id,)
+            ).fetchone()
+            
+            if not item:
+                flash(f'{item_type} nicht gefunden', 'error')
+                return redirect(url_for('trash'))
+            
+            conn.execute(f'DELETE FROM {table} WHERE id = ?', (id,))
+            conn.commit()
+            
+            flash(f'{item_type} wurde permanent gelöscht', 'success')
+            
+    except Exception as e:
+        logging.error(f"Fehler beim permanenten Löschen: {str(e)}")
+        flash('Fehler beim Löschen', 'error')
+        
+    return redirect(url_for('trash'))
+
 
 @app.route('/admin/trash/empty', methods=['POST'])
 @admin_required
@@ -2104,53 +2158,6 @@ def search_worker(barcode):
         print(f"Fehler bei der Mitarbeitersuche: {str(e)}")  # Debug-Ausgabe
         return jsonify({'error': 'Fehler bei der Suche nach dem Mitarbeiter'})
 
-@app.route('/admin/trash/worker/permanent_delete/<int:id>', methods=['GET', 'POST'])
-@admin_required
-@log_route
-def worker_permanent_delete(id):  # Funktionsname muss mit dem Endpunkt übereinstimmen
-    """Mitarbeiter permanent aus dem Papierkorb löschen"""
-    try:
-        with get_db_connection(DBConfig.WORKERS_DB) as conn:
-            worker = conn.execute(
-                'SELECT * FROM deleted_workers WHERE id = ?', (id,)
-            ).fetchone()
-            
-            if not worker:
-                flash('Mitarbeiter nicht gefunden', 'error')
-                return redirect(url_for('trash'))
-            
-            conn.execute('DELETE FROM deleted_workers WHERE id = ?', (id,))
-            conn.commit()
-            
-            flash('Mitarbeiter wurde permanent gelöscht', 'success')
-            
-    except sqlite3.Error as e:
-        logging.error(f"Datenbankfehler beim permanenten Löschen: {str(e)}")
-        flash('Fehler beim Löschen des Mitarbeiters', 'error')
-        
-    return redirect(url_for('trash'))
-
-
-
-@app.route('/admin/permanent_delete/tool/<int:id>')
-@admin_required
-def permanent_delete_tool(id):
-    """Werkzeug endgültig aus dem Papierkorb löschen"""
-    try:
-        with get_db_connection(DBConfig.TOOLS_DB) as conn:
-            result = conn.execute('DELETE FROM deleted_tools WHERE id=?', (id,))
-            conn.commit()
-            
-            if result.rowcount > 0:
-                flash('Werkzeug endgültig gelöscht', 'success')
-            else:
-                flash('Werkzeug nicht gefunden', 'error')
-            
-    except Exception as e:
-        logging.error(f"Fehler beim endgültigen Lschen: {str(e)}")
-        flash('Fehler beim Löschen', 'error')
-        
-    return redirect(url_for('trash'))
 
 @app.route('/admin/system_logs')
 @admin_required
@@ -3081,6 +3088,3 @@ def add_amount_column():
         except sqlite3.OperationalError as e:
             flash(f'Fehler: {str(e)}', 'error')
             return redirect(url_for('admin_panel'))
-
-# Eindeutige Route für das Löschen von Mitarbeitern aus dem Papierkorb
-# Route für das permanente Löschen von Mitarbeitern
