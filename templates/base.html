@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="light">
+<html lang="de" data-theme="winter">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>    
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#5b69a7',  // BTZ Blau beibehalten
+                    }
+                }
+            },
+            daisyui: {
+                themes: [
+                    {
+                        winter: {
+                            ...require("daisyui/src/theming/themes")["[data-theme=winter]"],
+                            "primary": "#5b69a7",
+                            "primary-focus": "#4a5796",
+                        }
+                    }
+                ]
+            }
+        }
+    </script>
+
     <style>
         .logo-light {
             filter: brightness(0) saturate(100%) invert(19%) sepia(92%) 
@@ -170,97 +193,31 @@
         </div>
     </div>
 
-    <!-- Quick-Scan Modal -->
+    <!-- QuickScan Modal -->
     <dialog id="quickScanModal" class="modal">
-        <div class="modal-box max-w-2xl">
-            <div class="flex flex-col">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold" id="scan-title">Werkzeug scannen</h3>
-                        <p class="text-base-content/60 text-sm mt-1" id="scan-subtitle">
-                            Scannen Sie den Barcode des Werkzeugs
-                        </p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="resetCamera()" 
-                                class="btn btn-ghost btn-circle">
-                            <i class="fas fa-camera-rotate"></i>
-                        </button>
-                        <button onclick="closeQuickScan()" 
-                                class="btn btn-ghost btn-circle">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Scanner -->
-                <div class="space-y-6">
-                    <!-- Manueller Input -->
-                    <div class="join w-full mb-4">
-                        <input type="text" 
-                               id="barcode-input" 
-                               class="input input-bordered w-full pl-10 join-item" 
-                               placeholder="Barcode manuell eingeben">
-                        <button onclick="submitManualBarcode()" 
-                                class="btn join-item"
-                                style="background-color: #005CA9; color: white;">
-                            Bestätigen
-                        </button>
-                    </div>
-
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Artikel Info -->
-                        <div id="tool-card" class="card shadow-lg transition-all duration-300" style="background-color: #f0f0f0;">
-                            <div class="card-body">
-                                <h3 class="card-title text-lg">Artikel</h3>
-                                <div id="tool-preview" class="min-h-[100px] flex items-center justify-center text-base-content/50">
-                                    <div id="tool-details">
-                                        <i class="fas fa-tools text-4xl"></i>
-                                        <p class="mt-2">Warten auf Scan...</p>
-                                    </div>
-                                </div>
-                                <!-- Mengenfeld -->
-                                <div id="quantity-container" class="hidden mt-4">
-                                    <label class="label">Menge:</label>
-                                    <div class="join">
-                                        <input type="number" 
-                                               id="quantity-input" 
-                                               class="input input-bordered w-24 join-item" 
-                                               min="1" 
-                                               value="1">
-                                        <span id="unit-label" class="join-item btn btn-disabled">Stk</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mitarbeiter Info -->
-                        <div id="worker-card" class="card shadow-lg transition-all duration-300" style="background-color: #f0f0f0;">
-                            <div class="card-body">
-                                <h3 class="card-title text-lg">Mitarbeiter</h3>
-                                <div id="worker-preview" class="min-h-[100px] flex items-center justify-center text-base-content/50">
-                                    <div id="worker-details">
-                                        <i class="fas fa-user text-4xl"></i>
-                                        <p class="mt-2">Warten auf Mitarbeiter-Scan...</p>
-                                    </div>
-                                </div>
-                            </div>
+        <form method="dialog" class="modal-box">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">QuickScan</h3>
+                <button class="btn btn-sm btn-circle">✕</button>
+            </div>
+            <div id="scan-content" class="mb-4">
+                <!-- Scan Preview Bereich -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div id="tool-preview" class="p-4 bg-base-200 rounded-lg text-center">
+                        <div id="tool-details">
+                            <i class="fas fa-tools text-4xl"></i>
+                            <p class="mt-2">Warten auf Scan...</p>
                         </div>
                     </div>
-
-                    <!-- Bestätigungsbutton -->
-                    <div class="flex justify-end">
-                        <button id="confirm-button" 
-                                class="btn"
-                                style="background-color: #005CA9; color: white;">
-                            Vorgang bestätigen
-                        </button>
+                    <div id="worker-preview" class="p-4 bg-base-200 rounded-lg text-center">
+                        <div id="worker-details">
+                            <i class="fas fa-user text-4xl"></i>
+                            <p class="mt-2">Warten auf Scan...</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </dialog>
 
     <!-- QR-Code Modal -->
@@ -288,6 +245,11 @@
         let currentStep = 'tool';
         let scannedTool = null;
         let scannedWorker = null;
+        let barcodeBuffer = '';
+        let lastKeyTime = 0;
+        const BARCODE_DELAY = 50;
+        let scannerActive = true;  // Neue Variable für Scanner-Status
+        let activeModal = null;    // Speichert das aktive Modal
 
         // QR Code für den Button generieren
         document.addEventListener('DOMContentLoaded', function() {
@@ -453,9 +415,11 @@
 
         // Modal schließen
         function closeQuickScan() {
-            stopScanning();
             const modal = document.getElementById('quickScanModal');
-            if (modal) modal.close();
+            if (modal) {
+                modal.close();
+                resetQuickScan();
+            }
         }
 
         // Kamera neu starten
@@ -654,13 +618,70 @@
             }
         }
 
-        // Globaler Barcode Handler
-        let barcodeBuffer = '';
-        let lastKeyTime = 0;
-        const BARCODE_DELAY = 50;
-        let lastScannedCode = '';
-        let scanCount = 0;
+        // Funktion zum Prüfen ob ein Modal offen ist
+        function isAnyModalOpen() {
+            const modals = ['addToolModal', 'addWorkerModal', 'addConsumablesModal'];
+            return modals.some(id => document.getElementById(id)?.open);
+        }
 
+        // Barcode-Typ erkennen
+        function detectBarcodeType(barcode) {
+            // Hier die Logik zum Erkennen des Barcode-Typs
+            // Beispiel: Basierend auf Präfixen oder API-Abfrage
+            return new Promise(async (resolve) => {
+                try {
+                    // Prüfe erst ob es ein Mitarbeiter ist
+                    const workerResponse = await fetch(`/api/get_worker/${barcode}`);
+                    const workerData = await workerResponse.json();
+                    if (!workerData.error) {
+                        return resolve({ type: 'worker', data: workerData });
+                    }
+
+                    // Prüfe ob es ein Werkzeug ist
+                    const toolResponse = await fetch(`/api/get_item/${barcode}`);
+                    const toolData = await toolResponse.json();
+                    if (!toolData.error) {
+                        return resolve({ type: 'tool', data: toolData });
+                    }
+
+                    // Prüfe ob es Verbrauchsmaterial ist
+                    const consumableResponse = await fetch(`/api/get_consumable/${barcode}`);
+                    const consumableData = await consumableResponse.json();
+                    if (!consumableData.error) {
+                        return resolve({ type: 'consumable', data: consumableData });
+                    }
+
+                    resolve({ type: 'unknown', data: null });
+                } catch (error) {
+                    console.error('Fehler beim Erkennen des Barcode-Typs:', error);
+                    resolve({ type: 'error', data: null });
+                }
+            });
+        }
+
+        // Scanner-Status aktualisieren
+        function updateScannerStatus() {
+            scannerActive = !isAnyModalOpen();
+        }
+
+        // Event Listener für Modal-Öffnen/Schließen
+        document.addEventListener('DOMContentLoaded', function() {
+            const modals = ['addToolModal', 'addWorkerModal', 'addConsumablesModal', 'quickScanModal'];
+            modals.forEach(id => {
+                const modal = document.getElementById(id);
+                if (modal) {
+                    modal.addEventListener('close', updateScannerStatus);
+                    modal.addEventListener('open', updateScannerStatus);
+                }
+            });
+        });
+
+        // Barcode-Konstanten
+        const BARCODE_DELAY = 50;
+        const BARCODE_CONFIRM_CHAR = '#';  // Bestätigungszeichen
+        const BARCODE_CANCEL_CHAR = '*';   // Abbruchzeichen
+
+        // Verbesserte Barcode-Eingabe
         document.addEventListener('keypress', function(e) {
             const currentTime = new Date().getTime();
             
@@ -668,28 +689,22 @@
                 barcodeBuffer = '';
             }
             
-            if (e.key === 'Enter') {
-                if (barcodeBuffer) {
-                    const modal = document.getElementById('quickScanModal');
-            
-                    // Wenn Modal noch nicht offen ist
-                    if (!modal.open) {
-                        showQuickScan();
-                        processBarcode(barcodeBuffer);
-                    } else {
-                        // Wenn Modal bereits offen
-                        if (barcodeBuffer === lastScannedCode) {
-                            // Gleicher Code wurde nochmal gescannt -> Bestätigen auslösen
-                            submitProcess();
-                        } else {
-                            // Neuer Code wurde gescannt
-                            processBarcode(barcodeBuffer);
-                        }
-                    }
-            
-                    lastScannedCode = barcodeBuffer;
-                    barcodeBuffer = '';
+            if (e.key === BARCODE_CONFIRM_CHAR) {
+                if (barcodeBuffer && scannerActive) {
+                    e.preventDefault();  // Verhindert # im Input-Feld
+                    processBarcode(barcodeBuffer);
                 }
+                barcodeBuffer = '';
+            } else if (e.key === BARCODE_CANCEL_CHAR) {
+                e.preventDefault();
+                barcodeBuffer = '';  // Löscht den aktuellen Scan
+                showMessage('Scan abgebrochen', 'warning');
+            } else if (e.key === 'Enter') {
+                // Optional: Enter kann weiterhin als Backup verwendet werden
+                if (barcodeBuffer && scannerActive) {
+                    processBarcode(barcodeBuffer);
+                }
+                barcodeBuffer = '';
             } else {
                 barcodeBuffer += e.key;
             }
@@ -697,211 +712,73 @@
             lastKeyTime = currentTime;
         });
 
-        function showQuickScan() {
-            const modal = document.getElementById('quickScanModal');
-            if (modal) {
-                modal.showModal();
-                // Fokus auf das Barcode-Eingabefeld setzen
-                const barcodeInput = document.getElementById('barcode-input');
-                if (barcodeInput) {
-                    barcodeInput.focus();
+        // Hilfsfunktion für Nachrichten
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `alert alert-${type} fade show`;
+            messageDiv.role = 'alert';
+            messageDiv.innerHTML = message;
+            
+            const container = document.querySelector('.message-container') || document.body;
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Verbesserte processBarcode Funktion
+        async function processBarcode(barcode) {
+            if (!barcode) return;
+            
+            // Entferne mögliche Bestätigungszeichen am Ende
+            barcode = barcode.replace(/[#*]$/, '');
+            
+            try {
+                const barcodeType = await detectBarcodeType(barcode);
+                
+                if (!barcodeType.type || barcodeType.type === 'error') {
+                    showMessage('Ungültiger Barcode', 'error');
+                    return;
                 }
+                
+                // Zeige Feedback über erkannten Barcode-Typ
+                showMessage(`${barcodeType.type.toUpperCase()} erkannt`, 'success');
+                
+                // Weitere Verarbeitung wie gehabt...
+                handleBarcode(barcode, barcodeType);
+                
+            } catch (error) {
+                console.error('Fehler bei der Barcode-Verarbeitung:', error);
+                showMessage('Fehler bei der Verarbeitung', 'error');
             }
         }
 
-        // Bestehende processBarcode Funktion anpassen
-        async function processBarcode(barcode) {
+        // Verbesserte handleBarcode Funktion
+        async function handleBarcode(barcode, barcodeType) {
             try {
-                // Zuerst prüfen ob es ein Mitarbeiter ist
-                const workerResponse = await fetch(`/api/get_worker/${barcode}`);
-                const workerData = await workerResponse.json();
-                
-                if (workerData.valid) {
-                    scannedWorker = workerData.data;
-                    updateWorkerPreview(workerData.data);
-                    document.getElementById('worker-card').style.backgroundColor = '#fff3cd';
-                    // Fokus zurück auf Barcode-Eingabe
-                    document.getElementById('barcode-input').focus();
-                    return;
+                if (currentStep === 'tool' && barcodeType.type === 'tool') {
+                    displayToolDetails(barcodeType.data);
+                    scannedTool = barcodeType.data;
+                    currentStep = 'worker';
+                    updateScanTitle();
+                    showMessage('Werkzeug erfasst - Bitte Mitarbeiter scannen', 'info');
+                } else if (currentStep === 'worker' && barcodeType.type === 'worker') {
+                    await processWorkerBarcode(barcode);
+                    showMessage('Mitarbeiter erfasst - Vorgang abgeschlossen', 'success');
+                } else if (currentStep === 'tool' && barcodeType.type === 'worker') {
+                    displayWorkerDetails(barcodeType.data);
+                    scannedWorker = barcodeType.data;
+                    currentStep = 'tool';
+                    updateScanTitle();
+                    showMessage('Mitarbeiter erfasst - Bitte Werkzeug scannen', 'info');
+                } else {
+                    showMessage('Ungültiger Scan-Schritt', 'error');
                 }
-
-                // Dann prüfen ob es ein Verbrauchsmaterial ist
-                const consumableResponse = await fetch(`/api/get_consumable/${barcode}`);
-                const consumableData = await consumableResponse.json();
-                
-                if (consumableData.valid) {
-                    console.log('Verarbeite Verbrauchsmaterial-Barcode:', barcode);
-                    scannedTool = {
-                        ...consumableData.data,
-                        source: 'consumables',
-                        isConsumable: true
-                    };
-                    console.log('Gescanntes Verbrauchsmaterial:', scannedTool);
-                    updateToolPreview(scannedTool);
-                    document.getElementById('tool-card').style.backgroundColor = '#fff3cd';
-                    return;
-                }
-
-                // Zuletzt prüfen ob es ein Werkzeug ist
-                const toolResponse = await fetch(`/api/get_tool/${barcode}`);
-                const toolData = await toolResponse.json();
-                
-                if (toolData.valid) {
-                    console.log('Verarbeite Werkzeug-Barcode:', barcode);
-                    scannedTool = {
-                        ...toolData.data,
-                        source: 'tools',
-                        isConsumable: false
-                    };
-                    updateToolPreview(scannedTool);
-                    document.getElementById('tool-card').style.backgroundColor = '#fff3cd';
-                    return;
-                }
-
-                showError('Ungültiger Barcode');
             } catch (error) {
                 console.error('Fehler:', error);
-                showError('Fehler beim Scannen');
-                // Fokus zurück auf Barcode-Eingabe
-                document.getElementById('barcode-input').focus();
+                showMessage('Fehler bei der Verarbeitung', 'error');
             }
-        }
-
-        // Event-Listener erst hinzufügen, wenn das DOM geladen ist
-        document.addEventListener('DOMContentLoaded', function() {
-            const confirmButton = document.getElementById('confirm-button');
-            if (confirmButton) {
-                confirmButton.addEventListener('click', submitProcess);
-            }
-        });
-
-        async function submitProcess() {
-            if (!scannedWorker || !scannedTool) {
-                showError('Bitte erst Artikel und Mitarbeiter scannen');
-                return;
-            }
-
-            try {
-                console.log('ScannedTool:', scannedTool); // Debug-Ausgabe
-
-                let requestData = {
-                    worker_barcode: scannedWorker.barcode,
-                    item_barcode: scannedTool.barcode,
-                    is_consumable: scannedTool.type === 'consumable'
-                };
-
-                if (scannedTool.type === 'consumable') {
-                    const quantityInput = document.getElementById('quantity-input');
-                    if (!quantityInput) {
-                        showError('Mengenfeld nicht gefunden');
-                        return;
-                    }
-
-                    const quantity = parseInt(quantityInput.value);
-                    if (!quantity || quantity < 1) {
-                        showError('Bitte geben Sie eine gültige Menge ein');
-                        return;
-                    }
-                    if (quantity > scannedTool.bestand) {
-                        showError('Nicht genügend Bestand verfügbar');
-                        return;
-                    }
-                    requestData.quantity = quantity;
-                } else {
-                    requestData.action = scannedTool.status === 'Verfügbar' ? 'ausleihen' : 'zurückgeben';
-                }
-
-                console.log('Sende Daten:', requestData);
-
-                const response = await fetch('/api/process_lending', {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                });
-
-                const data = await response.json();
-                console.log('Server Antwort:', data);
-
-                if (data.success) {
-                    showSuccess(data.message);
-                    setTimeout(() => {
-                        resetScanState();
-                        const modal = document.getElementById('quickScanModal');
-                        if (modal) modal.close();
-                        window.location.reload();
-                    }, 1500);
-                } else {
-                    showError(data.error || 'Fehler beim Speichern');
-                }
-            } catch (error) {
-                console.error('Detaillierter Fehler:', error);
-                showError(`Fehler bei der Verarbeitung: ${error.message}`);
-            }
-        }
-
-        function updateToolPreview(tool) {
-            const preview = document.getElementById('tool-preview');
-            const toolCard = document.getElementById('tool-card');
-            const quantityContainer = document.getElementById('quantity-container');
-            
-            if (!preview || !toolCard) return;
-            
-            console.log('Update Tool Preview:', tool);
-            
-            // Direkte Hintergrundfarbe setzen
-            toolCard.style.backgroundColor = '#d1fae5'; // Helles Grün
-            
-            preview.innerHTML = `
-                <div class="card">
-                    <div class="card-body">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-${tool.type === 'consumable' ? 'box-open' : 'tools'} text-2xl"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-bold">${tool.gegenstand || tool.bezeichnung}</p>
-                                <p class="text-sm">Barcode: ${tool.barcode}</p>
-                                ${tool.type === 'consumable' 
-                                    ? `<p class="text-sm">Bestand: ${tool.bestand || tool.aktueller_bestand} ${tool.einheit || 'Stk'}</p>`
-                                    : `<p class="text-sm">Status: ${tool.status || ''}</p>`
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Mengenfeld-Logik...
-        }
-
-        function updateWorkerPreview(worker) {
-            const preview = document.getElementById('worker-preview');
-            const workerCard = document.getElementById('worker-card');
-            
-            if (!preview || !workerCard) return;
-            
-            // Direkte Hintergrundfarbe setzen
-            workerCard.style.backgroundColor = '#d1fae5'; // Helles Grün
-            
-            preview.innerHTML = `
-                <div class="card">
-                    <div class="card-body">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-user text-2xl"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-bold">${worker.name} ${worker.lastname || ''}</p>
-                                <p class="text-sm">Barcode: ${worker.barcode}</p>
-                                <p class="text-sm">Bereich: ${worker.bereich || ''}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
         }
 
         // Reset-Funktion für das QuickScan Modal
@@ -962,6 +839,14 @@
             const modal = document.getElementById('quickScanModal');
             if (modal) {
                 modal.addEventListener('close', resetQuickScan);
+            }
+        });
+
+        // Event Listener für das Schließen des Modals
+        document.addEventListener('DOMContentLoaded', function() {
+            const quickScanModal = document.getElementById('quickScanModal');
+            if (quickScanModal) {
+                quickScanModal.addEventListener('close', stopScanning);
             }
         });
     </script>
